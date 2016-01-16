@@ -1,9 +1,11 @@
-Unfortunately I do not have a functioning demo for this app, since it is designed to work within a local network and having access to the backend server on that network. 
+Unfortunately I do not have a functioning demo for this app, since it is designed to work within a local network and having access to the backend server on that network. This folder does not have a webserver. 
 
 
 This project was actually built off of a seed Angular project, and there are a few relic folder/files still floating around from that project, either as useful components of the app, or non-useful garbage folders.
 
 The important files/folders that were written by Jonathan are:
+
+index.html -- mostly boilerplate and script loading.
 
 app/ -- contains important files for the overall bootstrapping and running of the app.
 
