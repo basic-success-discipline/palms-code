@@ -1,0 +1,60 @@
+﻿<div class="modal-header">
+    <h3 translate>Add New User</h3>
+</div>
+<div class="modal-body">
+    <form name="NewUserForm">
+
+        <div class="row">
+            <div class="col-md-6">
+                <div class="form-label">
+                    <label for="firstName" class="required-label" translate>First Name</label>
+                </div>
+                <div class="form-field">
+                    <input class="form-control" id="firstName" name="firstName" required type="text" data-hd-focus-me="true" data-ng-model="userModel.firstName" />
+                    <div class="error" data-ng-show="NewUserForm.firstName.$dirty && NewUserForm.firstName.$invalid" transalte>First Name is required</div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-label">
+                    <label for="lastName" class="required-label" translate>Last Name</label>
+                </div>
+                <div class="form-field">
+                    <input class="form-control" id="lastName" name="lastName" required="required" type="text" data-ng-model="userModel.lastName" />
+                    <div class="error" data-ng-show="NewUserForm.lastName.$dirty && NewUserForm.lastName.$invalid" translate>Last Name is required</div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <div class="form-label">
+                    <label for="email" class="required-label" translate>Email</label>
+                </div>
+                <div class="form-field">
+                    <input class="form-control" id="email" name="email" required="required" type="email" data-ng-model="userModel.email" />
+                    <div class="error" data-ng-show="NewUserForm.email.$dirty && NewUserForm.email.$invalid" translate>Email is required</div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6">
+                <div class="form-label">
+                    <label for="role" class="required-label" transalte>Role</label>
+                </div>
+                <div class="form-field">
+                    <select class="form-control" id="role" name="role" required="required" data-ng-model="userModel.roleId" data-ng-options="r.roleId as r.roleName for r in roles"></select>
+                    <div class="error" data-ng-show="NewUserForm.role.$dirty && NewUserForm.role.$invalid" translate>Role is required</div>
+                </div>
+            </div>
+
+        </div>
+    </form>
+</div>
+<div class="modal-footer">
+    <div class="row">
+        <div class="col-md-6"></div>
+        <div class="col-md-6">
+            <button type="button" class="btn btn-primary" data-ng-click="ok()" data-ng-disabled="NewUserForm.$invalid || !NewUserForm.$dirty" translate>OK</button>
+            <button type="button" class="btn btn-default" data-ng-click="cancel()" translate>Cancel</button>
+        </div>
+    </div>
+</div>

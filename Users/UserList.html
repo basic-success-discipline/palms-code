@@ -1,0 +1,20 @@
+﻿<div style="position: relative;">
+    <div class="page-title" translate>
+        Users
+        <hr />
+    </div>
+    <button type="button" class="btn btn-primary" data-ng-click="open()" palms-permission-group="User Management" palms-role-permission="Add User">
+        <span translate>Add</span> <i class="fa fa-plus"></i>
+    </button>
+    <button type="button" class="btn btn-default" data-ng-click="editSelected()" data-ng-disabled="selectedUsers.length !== 1" palms-permission-group="User Management" palms-role-permission="Edit User" palms-permission-behavior="hide">
+        <span translate>Edit</span> <i class="fa fa-pencil"></i>
+    </button>
+    <button type="button" class="btn btn-warning" palms-permission-group="User Management" palms-role-permission="Remove User" palms-permission-behavior="hide" data-ng-click="deleteSelected()" data-ng-disabled="selectedUsers.length === 0">
+        <span translate>Remove</span> <i class="fa fa-trash-o"></i>
+    </button>
+
+    <div class="grid-pane" style="position: relative;min-height: 450px;">
+        <div loading-overlay ng-show="loadingItems"></div>
+        <div class="gridStyle" ng-grid="gridOptions" style="min-height:350px"></div>
+    </div>
+</div>

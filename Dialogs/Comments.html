@@ -1,0 +1,29 @@
+﻿<div class="modal-header">
+    <h3 class="modal-title">{{title}}</h3>
+</div>
+<div class="modal-body">
+    <div class="container">
+        <div class="row" ng-repeat="comment in comments">
+            <div class="col-md-6">
+                <div class="form-label">
+                    <div>
+                        <span class="font-bold">{{ comment.name }} </span> added comment - <span class="font-bold">{{ comment.date | Date:"MM/dd/yyyy h:mm a"}}</span>
+                    </div>
+                    <div>
+                        {{ comment.content }}
+                    </div>
+                    <hr>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal-footer">
+    <div>
+        <textarea class="form-control" name="comment" data-ng-model="output.comment" placeholder="Add New Comment Here"></textarea>
+    </div>
+    <div class="pad-top">
+        <button ng-disabled="output.comment === undefined" class="btn btn-primary" ng-click="add()">Add</button>
+        <button class="btn btn-warning" ng-click="cancel()">Cancel</button>
+    </div>
+</div>

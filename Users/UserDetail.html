@@ -1,0 +1,128 @@
+﻿<form name="UserDetailForm">
+    <div class="row">
+        <div class="col-md-8" style="padding-left:0px;">
+            <div class="header-bar"><h3><span translate>User</span>: <span>{{user.firstName}} {{user.lastName}}</span></h3></div>
+        </div>
+    </div>
+    <br />
+    <div class="row">
+        <tabset>
+            <tab heading="{{tabAccLabel}}">
+                <div class="row">
+                    <div class="col-md-4">
+                        <div class="form-label">
+                            <label for="firstName" class="required-label" translate>First Name</label>
+                        </div>
+                        <div class="form-field">
+                            <input class="form-control" required="required" type="text" id="firstName" name="firstName" data-ng-model="user.firstName" />
+                            <div class="error" data-ng-show="UserDetailForm.firstName.$dirty && UserDetailForm.firstName.$invalid" translate>First Name is required</div>
+                        </div>
+
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-label">
+                            <label for="lastName" class="required-label" translate>Last Name</label>
+                        </div>
+                        <div class="form-field">
+                            <input class="form-control" required="required" type="text" id="lastName" name="lastName" data-ng-model="user.lastName" />
+                            <div class="error" data-ng-show="UserDetailForm.lastName.$dirty && UserDetailForm.lastName.$invalid" translate>Last Name is required</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-4">
+                        <div class="form-label">
+                            <label for="officeNumber" translate>Office Number</label>
+                        </div>
+                        <div class="form-field">
+                            <input type="text" id="officeNumber" name="officeNumber" class="form-control" data-ng-model="officePhone.number" />
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-label">
+                            <label for="email" translate>Email Address</label>
+                        </div>
+                        <div class="form-field">
+                            <input type="text" id="email" name="email" class="form-control" data-ng-model="user.email" disabled />
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-4">
+                        <div class="form-label">
+                            <label for="address1" translate>Address 1</label>
+                        </div>
+                        <div class="form-field">
+                            <input type="text" id="address1" name="address1" class="form-control" data-ng-model="officeAddress.address1" />
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-label">
+                            <label for="address2" translate>Address 2</label>
+                        </div>
+                        <div class="form-field">
+                            <input type="text" id="address2" name="address2" class="form-control" data-ng-model="officeAddress.address2" />
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-4">
+                        <div class="form-label">
+                            <label for="city" translate>City</label>
+                        </div>
+                        <div class="form-field">
+                            <input type="text" id="city" name="city" class="form-control" data-ng-model="officeAddress.city" />
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-label">
+                            <label for="state" translate>State</label>
+                        </div>
+                        <div class="form-field">
+                            <input type="text" id="state" name="state" class="form-control" data-ng-model="officeAddress.state" data-typeahead="state for state in getStates($viewValue) | limitTo:12" data-typeahead-loading="loadingStates" />
+                            <div class="typeahead-loading-indicator fa fa-cloud-download" data-ng-show="loadingStates"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-4">
+                        <div class="form-label">
+                            <label for="postalCode" translate>Postal/ZIP code</label>
+                        </div>
+                        <div class="form-field">
+                            <input type="text" id="postalCode" name="postalCode" class="form-control" data-ng-model="officeAddress.postalCode" />
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-4">&nbsp;</div>
+                    <div class="col-md-4">
+                        <div class="form-footer">
+                            <button type="button" class="btn btn-primary" data-ng-click="ok(UserDetailForm.$dirty)" data-ng-disabled="UserDetailForm.$invalid || !UserDetailForm.$dirty" translate>OK</button>
+                        </div>
+                    </div>
+                </div>
+
+            </tab>
+            <tab heading="{{tabPermissionLabel}}">
+                <div class="col-md-10">
+                    <div class="pad-top" style="position: relative;">
+                        <h3 translate>Last Activity Date</h3>
+                        <div>
+                            <span>{{user.authentications[0].lastLoginDate | date:'medium'}}</span>
+                        </div>
+                        <hr />
+                        <button type="button" class="btn btn-default" data-ng-click="disableEnable()">{{enableText}} User Account</button>
+                        <hr />
+                        <button type="button" class="btn btn-default" data-ng-click="open()"><i class="fa fa-plus"></i></button>
+                        <button type="button" class="btn btn-default" data-ng-click="remove()" data-ng-disabled="selectedRoles.length === 0"><i class="fa fa-trash-o"></i></button>
+                        <div class="grid-pane" style="position: relative;min-height: 500px;">
+                            <div class="gridStyle" style="min-height: 200px; height: 200px" ng-grid="gridRoleOptions"></div>
+                        </div>
+                    </div>
+                </div>
+            </tab>
+
+        </tabset>
+    </div>
+</form>

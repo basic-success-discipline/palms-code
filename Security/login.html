@@ -1,0 +1,79 @@
+﻿<form name="loginform" id="loginForm" data-ng-init="details={}" data-ng-submit="process(details)" novalidate>
+    <div class="col-md-2"></div>
+    <div class="col-md-8">
+        <div class="">
+            <div class="panel-heading">
+                <h1 style="color:#0070C0">WIFA PALMS</h1>
+            </div>
+            <div class="panel-body">
+                <div class="row">
+                    <div class="col-md-1"></div>
+                    <div class="col-md-10">
+                        <div id="errorContainer" class=" alert alert-danger" data-ng-bind="process.error.message" data-ng-show="process.error"></div>
+                    </div>
+                    <div class="col-md-1"></div>
+                </div>
+                <div class="row">
+                    <div class="col-md-1"></div>
+                    <div class="col-md-3 text-right no-padding">
+                        <div>
+                            <label for="userName" class="no-padding" translate>Please enter your user name:</label>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-field">
+                            <input class="form-control" placeholder="Email" type="text" id="userName" name="userName" data-ng-model="details.emailAddress" />
+                        </div>
+                    </div>
+                    <div class="col-md-4S"></div>
+                </div>
+                <div class="row">
+                    <div class="col-md-1"></div>
+                    <div class="col-md-3 text-right no-padding  pad-top">
+                        <div>
+                            <label for="password" class="no-padding" translate>Please enter your password:</label>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-field pad-top">
+                            <input class="form-control" placeholder="Password" type="password" id="password" name="password" data-ng-model="details.password" />
+                        </div>
+                    </div>
+                    <div class="col-md-1"></div>
+                </div>
+                <div class="row">
+                    <div class="col-md-1"></div>
+                    <div class="col-md-3 text-right no-padding  pad-top">
+                        <div>
+                            <label for="remember" class="pad-bottom-small">Remember Me:</label>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-field form-label pad-top float-left">
+                            <input type="checkbox" data-ng-model="details.persistent" data-ng-init="details.persistent=false" id="remember" name="remember" />
+                        </div>
+                        <div class="align-right pad-top">
+                            <button type="submit" class="btn btn-primary" id="btnSignin">
+                                <i data-ng-show="process.executing" class="fa fa-spinner fa-spin inline"></i>
+                                <span translate>Login</span>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="col-md-1"></div>
+                </div>
+                <div class="row">
+                    <div class="col-md-1"></div>
+                    <div class="col-md-3 text-right no-padding  pad-top">
+                        <div>
+                            <a href="#!/password-reset" translate>Can't access your account?</a>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                    </div>
+                    <div class="col-md-1"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4"></div>
+</form>

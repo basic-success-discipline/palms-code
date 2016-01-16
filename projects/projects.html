@@ -1,0 +1,103 @@
+﻿
+<!-- <page-status begun="true" complete="true"></page-status> -->
+<div class="projects-wrapper">
+
+  <div class="col-md-3">
+  <div class="form-group">
+      <label >Recipient:</label>
+      <select chosen ng-model="search.recipientId" ng-options="recipient.recipientId as recipient.recipient_name for recipient in lookups['recipient']" data-placeholder="Select Recipient" class="form-control" disable-search-threshold="10" allow-single-deselect="true" ng-change="checkForNullSearchProperty('recipientId')">
+        <option value=""></option>
+      </select>
+    </div>
+    <div class="form-group">
+      <label >Assigned Staff: </label>
+        <select chosen ng-model="assignedStaff" ng-options="option.userId as optionString('assignedStaff', option) for option in lookups['assigned_staff']" data-placeholder="Select Staff" class="form-control" disable-search-threshold="10" allow-single-deselect="true" >
+          <option value=""></option>
+        </select>
+    </div>
+    <div class="form-group">
+      <label >Search by text: </label>
+        <input class="form-control" type="text" ng-model="searchText" style="max-width: 300px">
+          <option value=""></option>
+        </select>
+    </div>
+  </div>
+  <div class="col-md-3">
+    <div class="form-group">
+      <label >Funding Program</label>
+        <select chosen class="form-control" data-placeholder="Select Program" ng-options="program.programId as program.program_name for program in lookups['funding_program']" ng-model="search.programId" disable-search-threshold="10" allow-single-deselect="true" ng-change="checkForNullSearchProperty('programId')">
+          <option value=""></option>
+        </select>
+    </div>
+    <div class="form-group">
+      <label>Project Status</label>
+        <select chosen data-placeholder="Select Status" class="form-control"  ng-options="option.componentLookUpId as option.componentName for option in lookups['project_status']" ng-model="search.overallProjectStatusId" disable-search-threshold="10" allow-single-deselect="true" ng-change="checkForNullSearchProperty('overallProjectStatusId')">
+          <option value=""></option>
+        </select>
+    </div>
+    <div class = "form group center">
+    <label style="opacity: 0">Easter egg</label>
+      <div class="checkbox">
+      <label><input type="checkbox" ng-model="excludeFullyPaid" >Exclude projects that are fully paid?</label>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-3">
+    <div class="form-group">
+      <label >Disbursement Status</label>
+        <select chosen data-placeholder="Select Status" class="form-control" ng-options="option.componentLookUpId as option.componentName for option in lookups['disbursement_status']" ng-model="search.disbursementStatusId" disable-search-threshold="10" allow-single-deselect="true" ng-change="checkForNullSearchProperty('disbursementStatusId')">
+          <option value=""></option>
+        </select>
+    </div>
+    <div class="form-group">
+      <label >Admin Completion Status</label>
+        <select chosen data-placeholder="Select Status" class="form-control" ng-options="option.componentLookUpId as option.componentName for option in lookups['admin_completion_status']" ng-model="search.adminCompletionId" disable-search-threshold="10" allow-single-deselect="true" ng-change="checkForNullSearchProperty('adminCompletionId')">
+          <option value=""></option>
+        </select>
+    </div>
+    <div class="form-group">
+      <label >Repayment Status</label>
+        <select chosen data-placeholder="Select Status" class="form-control" ng-options="option.componentLookUpId as option.componentName for option in lookups['repayment_status']" ng-model="search.repaymentStatusId" disable-search-threshold="10" allow-single-deselect="true" ng-change="checkForNullSearchProperty('repaymentStatusId')">
+          <option value=""></option>
+        </select>
+    </div>
+  </div>
+  
+  <div class="col-md-3 center">
+    <div class="form group">
+    <label style="opacity: 0">Easter egg</label>
+    <button class="btn btn-primary center" style="display: block" ng-click="resetFilters()">Reset Filters</button>
+    </div>
+    <div class="form group">
+    <br>
+    <label ng-hide="loading">{{filtered.length}} Projects</label>
+    </div>
+  </div>
+<div class="col-md-12">
+<div ng-if="loading" class="loading-spinner fadein">
+    <i class="fa fa-refresh fa-spin fa-5x" ></i>
+  </div>
+  <table class="table table-hover" ng-hide="loading">
+    <thead>
+      <tr class="sort-by-thead">
+        <th><a href="javascript:;" ng-click="setSortOption('recipient.recipient_name')">Recipient Name<i ng-class="sortDescending ? 'fa fa-sort-alpha-desc' : 'fa fa-sort-alpha-asc'" ng-if="sortOption=='recipient.recipient_name'"></i></a></th>
+        <th><a href="javascript:;" ng-click="setSortOption('project_name')">Project Name<i ng-class="sortDescending ? 'fa fa-sort-alpha-desc' : 'fa fa-sort-alpha-asc'" ng-if="sortOption=='project_name'"></i></th>
+        <th><a href="javascript:;" ng-click="setSortOption('project_number')">Project Number<i ng-class="sortDescending ? 'fa fa-sort-numeric-desc' : 'fa fa-sort-numeric-asc'" ng-if="sortOption=='project_number'"></i></th>
+        <th><a href="javascript:;" ng-click="setSortOption('agreement_number')">Agreement Number<i ng-class="sortDescending ? 'fa fa-sort-numeric-desc' : 'fa fa-sort-numeric-asc'" ng-if="sortOption=='agreement_number'"></th>
+        <th><a href="javascript:;" ng-click="setSortOption('obligatedAmount')">Obligated Amount<i ng-class="sortDescending ? 'fa fa-sort-numeric-desc' : 'fa fa-sort-numeric-asc'" ng-if="sortOption=='obligatedAmount'"></th>
+        <th><a href="javascript:;" ng-click="setSortOption('program.program_name')">Funding Program<i ng-class="sortDescending ? 'fa fa-sort-alpha-desc' : 'fa fa-sort-alpha-asc'" ng-if="sortOption=='program.program_name'"></th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr ng-repeat="project in filtered = (projects | filter:search:true | filter:searchText | filterAssignedStaff:assignedStaff | excludeFullyPaidFilter:excludeFullyPaid) | orderBy:sortOption:sortDescending" ng-click="openProject(project.projectId)" class="pointer highlight-on-hover">
+        <td>{{project.recipient.recipient_name}}</td>
+        <td><a href="javascript:;" ng-click="openProject(project.projectId)">{{project.project_name}}</a></td>
+        <td>{{project.project_number}}</td>
+        <td>{{project.agreement_number}}</td>
+        <td ng-class="{red: project.obligatedAmount<0}">{{money(project.obligatedAmount)}}</td>
+        <td>{{project.fundingProgram.program_name}}</td>
+      </tr>
+    </tbody>
+  </table>
+  </div>
+</div>

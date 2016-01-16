@@ -1,0 +1,9 @@
+﻿<div class="modal-header">
+    <h4 ng-bind="title"></h4>
+</div>
+<div class="modal-body">
+    <p ng-bind-html-unsafe="message | lineBreaks"></p>
+</div>
+<div class="modal-footer">
+    <a href="" class="btn btn-primary" ng-click="close()" ng-bind="closeText"></a>
+</div>

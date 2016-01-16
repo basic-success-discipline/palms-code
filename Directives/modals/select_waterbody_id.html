@@ -1,0 +1,46 @@
+ <div class="modal-header" >
+  <h3 class="modal-title">Select Waterbody Id</h3>
+</div>
+<div class="modal-body" >
+  <table class="table no-lines">
+    <tbody>
+      <tr>
+        <td class="text-align-right">
+          <label >Region:</label><br>
+        </td>
+        <td>
+          <select chosen data-placeholder="Select Region" class="form-control" disable-search-threshold="10" ng-options="option.regionId as optionString('region', option) for option in regions" ng-model="region" ng-change="getBasins(region)"></select>
+        </td>
+      </tr>
+      <tr>
+       <td class="text-align-right">
+        <label >Basin: </label><br>
+      </td>
+      <td>
+        <select chosen  data-placeholder="Select Basin" class="form-control" disable-search-threshold="10" ng-options="option.basinId as optionString('basin', option) for option in basins" ng-model="basin" ng-change="gethucs(basin)"></select>
+      </td>
+    </tr>
+    <tr>
+      <td class="text-align-right">
+        <label >HUC:</label><br>
+      </td>
+      <td>
+        <select chosen  data-placeholder="Select HUC" class="form-control" disable-search-threshold="10" ng-options="option.hucId as optionString('huc', option) for option in hucs" ng-model="huc" ng-change="getWaterbodies(huc)"></select>
+      </td>
+    </tr>
+    <tr>
+      <td class="text-align-right">
+        <label >Waterbody: </label><br>
+      </td>
+      <td>
+        <select chosen data-placeholder="Select Waterbody" class="form-control" disable-search-threshold="10"  ng-options="option as optionString('waterbody', option) for option in waterbodies" ng-model="waterbody"></select>
+      </td>
+    </tr>
+  </tbody>
+</table>
+</div>
+<div class="modal-footer">
+  <span  class="green bold" style="margin-right: 20px">{{waterbody ? 'Select ID: ' + waterbody.waterbodyId : ''}}</span>
+  <button class="btn btn-primary" ng-click="ok()" ng-disabled="!waterbody">Ok</button>
+  <button class="btn btn-warning" ng-click="cancel()">Cancel</button>
+</div>

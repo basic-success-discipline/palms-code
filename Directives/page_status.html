@@ -1,0 +1,12 @@
+<h3 ng-if="!begun && !complete" class="red">Work on this page's API has not yet begun</h3>
+<ul ng-if="begun && !complete ">
+  <li class="red">Red means API is not correct or not present for this field</li>
+  <li class="blue">Blue means API is correct, but there is no valid test data</li>
+  <li class="green">Green means lookup value must be plugged in</li>
+  <li class="orange">Orange means lookup API is not correct or not present for this field</li>
+  <li class="purple">Purple means non-API-related front end work must be done</li>
+</ul>
+<div ng-if="begun && complete" class="green">
+  <h3 >Page is marked as complete!</h3>
+  <p > If you find an error, please notify the <a href="mailto:jonathan.cobb.1988@gmail.com">front end developer</a></p>
+</div>

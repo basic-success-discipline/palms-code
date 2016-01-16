@@ -1,0 +1,171 @@
+<!-- <page-status begun="true" complete="true"></page-status> -->
+<div class="funding-auth loanFA" ng-if="showLoanFA">
+  <h1 class="view-title">Funding Authorization (Loan)</h1>
+  <a href="javascript:;" class="refresh-btn"  ng-click="loadData()" title="Refresh"><i class="fa fa-refresh " ng-if="unsavedChanges"></i><i class="fa fa-check " ng-if="!unsavedChanges && justSaved"></i></a>
+  <button class="btn btn-primary save-btn"  ng-click="save()"  ng-disabled="loading || !unsavedChanges">Save Project</button>
+
+  <div class="clear">
+ 
+  <div class="clear col-md-12 top">
+  <span class="col-md-6">
+    <label>Total Cost: </label>
+    <input type="text" ui-maskmoney data-prefix="" data-decimal="." data-thousands="," data-allow-negative="false" data-allow-zero="true" class="form-control" ng-model="project.total_project_cost" ng-change="indicateProjectSaveNeeded()">
+  </span>
+  <span class="col-md-6">
+    <label>Amount to Obligate (Eligible Cost): </label>
+    <input type="text" ui-maskmoney data-prefix="" data-decimal="." data-thousands="," data-allow-negative="false" data-allow-zero="true" class="form-control" ng-model="project.amount_to_obligate" ng-change="indicateProjectSaveNeeded()">
+  </span>
+  </div>
+
+
+  <table class="table no-lines table-striped contract-line-items" >
+    <thead>
+      <tr>
+        <th>Contract Actions</th>
+        <th>Cost Category</th>
+        <th>Line Item Description</th>
+        <th class="center">Cost</th>
+        <th class="center">Eligible Cost</th>
+        <th>Notes</th>
+        <th class="delete-col bold" ng-click="addRecord('contractLineItem',loanFA)" > Add Row</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr ng-repeat="row in loanFA" ng-if="row.action!='delete'">
+        <td colspan="7" class="no-padding">
+          <table class="table transparent contract-line-items">
+            <tbody>
+              <tr>
+
+                <td ><button class="btn btn-primary" type="button" ng-click="togglePanel(row)" style="width: 80px;">{{row.contractActionsOpen ? 'Close' : 'Open'}}</button></td>
+                <td ><select chosen class="form-control" disable-search-threshold="10" ng-model="row.costCategoryId" ng-options="option.componentLookUpId as option.componentName for option in lookups['cost_category'] | availableOptions:loanFA:row:'costCategoryId' | orderBy:'componentOrder'" ng-change="updateAction(row)"><option value=""></option></select></td>
+                <td ><input type="text" class="form-control" ng-model="row.line_item_description" ng-change="updateAction(row)"></td>
+                <td ng-class="['text-align-right', row.contractActionsOpen ? 'bold ' : '']">{{money(row.total_cost)}}</td>
+                <!-- <td class="line-item-col-4">{{row.action}}</td> -->
+                <td ng-class="['text-align-right', row.contractActionsOpen ? 'bold ' : '']">{{money(row.eligible_cost)}}</td>
+                <td><textarea msd-elastic  rows="1" class="form-control" ng-model="row.notes" ng-change="updateAction(row)"></textarea></td>
+                <td class="delete-col">
+                  <button type="delete" class="btn btn-danger" ng-click="deleteRecord(loanFA, $index); updateLoanTotal();">Delete</button>
+                </td>
+                
+              </tr>
+
+            </tbody>
+          </table>
+
+          <div class="contract-actions" ng-if="row.contractActionsOpen">
+            <h4 style="float:left">Contract Actions <a ng-click="addRecord('contractAction', row.contractActions, row.fundingAuthorizationId); updateAction(row);" href="javascript:;" class="add-row"> <i class="fa fa-plus"> Add Row</i></a></h4>
+            <table class="table table-striped">
+              <thead>
+                <tr>
+                  <th>Date Received</th>
+                  <th>Type of Action</th>
+                  <th>Cost</th>
+                  <th>Eligible Cost</th>
+                  <th>Percent Eligible</th>
+                  <th>Status of Request and Approved Amount</th>
+                  <th>Decision Date</th>
+                  <th>Decision By</th>
+                  <th></th>
+                  <!-- <th class="delete-col" ng-click="addRecord('contractAction', row.contractActions, row.fundingAuthorizationId); updateAction(row);" > Add Row</th> -->
+                </tr>
+              </thead>
+              <tbody>
+                <tr ng-repeat="contractAction in row.contractActions" ng-if="contractAction.action!='delete'">
+                  <td class="date-col"><input date-input-two class="form-control" ng-model="contractAction.date_received" ng-change="updateAction(contractAction); updateAction(row); "></td>
+                  <td><select chosen class="form-control" disable-search-threshold="10" ng-model="contractAction.actionId" ng-options="option.componentLookUpId as option.componentName for option in lookups['contract_action_type'] | availableOptions:row.contractActions:contractAction:'actionId'" ng-change="updateAction(contractAction); updateAction(row)"><option value=""></option></select></td>
+                  <td class="money-col"><input type="text" ui-maskmoney data-prefix="" data-decimal="." data-thousands="," data-allow-negative="true"data-allow-zero="true" class="form-control" ng-model="contractAction.total_cost" ng-change="updateLoanTotal(row); updateAction(contractAction); updateAction(row)"></td>
+                  <td class="money-col"><input type="text" ui-maskmoney data-prefix="" data-decimal="." data-thousands="," data-allow-negative="true" data-allow-zero="true"class="form-control"  ng-model="contractAction.eligible_cost" ng-change="updateLoanTotal(row); updateAction(contractAction); updateAction(row)" ></td>
+                  <td class="text-align-right">{{percent(contractAction.eligible_cost/contractAction.total_cost)}}</td>
+                  <td><select chosen class="form-control" disable-search-threshold="10" ng-model="contractAction.statusId" ng-options="option.componentLookUpId as option.componentName for option in lookups['status_of_request']" ng-change="updateAction(contractAction); updateAction(row)"><option value=""></option></select></td>
+                  <td class="date-col"><input date-input-two class="form-control" ng-model="contractAction.decision_date" ng-change="updateAction(contractAction); updateAction(row)"></td>
+                  <td><select chosen class="form-control" ng-model="contractAction.decisionByUserId" disable-search-threshold="10" ng-options="option.userId as optionString('assignedStaff', option) for option in lookups['assigned_staff']" ng-change="updateAction(contractAction); updateAction(row)"><option value=""></option></select></td>
+                  <td class="delete-col"><a href="javascript:;" style="text-align: center; color: #c0392b"><i class="fa fa-close" ng-click="deleteRecord(row.contractActions, $index); updateAction(row); updateLoanTotal(row);"></i></a></td>
+                  <!-- <td>{{contractAction.action}}</td> -->
+                </tr>
+                <tr >
+                  <td colspan="2" class="text-align-right">Line Item Total:</td>
+                  <td class="bold border-top text-align-right total-pad-right">{{money(row.total_cost)}}</td>
+                  <td class="bold border-top text-align-right total-pad-right">{{money(row.eligible_cost)}}</td>
+                  <td class="border-top text-align-right">{{percent(row.eligible_cost/row.total_cost)}}</td>
+                  <td colspan="4"></td>
+                </tr>
+
+              </tbody>
+            </table>
+            <!-- <button type="add" class="btn btn-default" style="margin: 8px" ng-click="addRecord('contractAction', row.contractActions, row.fundingAuthorizationId); updateAction(row);">Add Record</button> -->
+            <div class="shim"></div>
+          </div>
+          <table ng-if="showContractBidItems">
+            <tbody>
+              <tr>
+                <td >Contract Bid Items</td>
+              </tr>
+            </tbody>
+          </table>
+        </td>
+      </tr>
+      <tr >
+        <td colspan="2"></td>
+        <td class="bold text-align-right">Total Project Cost:</td>
+        <td class="bold text-align-right border-top">{{money(total_cost)}}</td>
+        <td ng-class="['bold', 'text-align-right', 'border-top', eligible_cost==project.amount_to_obligate ? 'green' : 'red']">{{money(eligible_cost)}}</td>
+        <td colspan="4"></td>
+      </tr>
+    </tbody>
+  </table>
+  <p class="purple">What kind of client-side validation do we want on Funding Auth?</p>
+<!--   <button type="add" class="btn btn-default" style="margin: 8px" ng-click="addRecord('contractLineItem',loanFA)">Add Record</button> -->
+</div>
+</div>
+
+<div class="funding-auth TAFA" ng-if="showTAFA">
+  <h1 class="view-title">Funding Authorization (Technical Assistance) </h1>
+  <a href="javascript:;" class="refresh-btn"  ng-click="loadData()"  ng-hide="!unsavedChanges" title="Refresh"><i class="fa fa-refresh "></i></a>
+  <button class="btn btn-primary save-btn"  ng-click="save()"  ng-disabled="loading || !unsavedChanges">Save Project</button>
+
+  <div class="clear col-md-12 top">
+  <span class="col-md-6">
+    <label>Total Cost: </label>
+    <input type="text" ui-maskmoney data-prefix="" data-decimal="." data-thousands="," data-allow-negative="false" data-allow-zero="true" class="form-control" ng-model="project.total_project_cost" ng-change="indicateProjectSaveNeeded()">
+  </span>
+  <span class="col-md-6">
+    <label>Amount to Obligate (Eligible Cost): </label>
+    <input type="text" ui-maskmoney data-prefix="" data-decimal="." data-thousands="," data-allow-negative="false" data-allow-zero="true" class="form-control" ng-model="project.amount_to_obligate" ng-change="indicateProjectSaveNeeded()">
+  </span>
+  </div>
+
+  <table class="table no-lines table-striped" >
+    <thead>
+      <tr>
+        <th>Item Description</th>
+        <th>WIFA Cost</th>
+        <th>Match Cost</th>
+        <th>Total Amount</th>
+        <th class="delete-col" ng-click="addRecord('budgetItem', TAFA);"> Add Row</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr ng-repeat="row in TAFA" ng-if="row.action!='delete'">
+        <td style="width:50%"><input type="text" class="form-control" ng-model="row.description" ng-change="updateAction(row)"></td>
+        <td><input type="text" ui-maskmoney data-prefix="" data-decimal="." data-thousands="," data-allow-zero="true" class="form-control text-align-right" ng-model="row.agency_cost" ng-change="updateTATotal(); updateAction(row)"></td>
+        <td><input type="text" ui-maskmoney data-prefix="" data-decimal="." data-thousands="," data-allow-zero="true" class="form-control text-align-right" ng-model="row.recipient_cost" ng-change="updateTATotal(); updateAction(row);"></td>
+        <td class=" text-align-right">{{money(row.agency_cost + row.recipient_cost)}}</td>
+        <td class="delete-col"><button type="delete" class="btn btn-danger" ng-click="deleteRecord(TAFA, $index); updateTATotal();">Delete</button></td>
+        <!-- <td>{{row.action}}</td> -->
+      </tr>
+      <tr>
+        <td class="bold text-align-right">Total:</td>
+        <td ng-class="['text-align-right', 'total-pad-right', agency_cost==project.eligible_cost ? 'green': 'red']">{{money(agency_cost)}}</td>
+        <td class=" text-align-right total-pad-right">{{money(recipient_cost)}}</td>
+        <td  ng-class="['text-align-right', 'bold', agency_cost + recipient_cost==project.total_project_cost ? 'green': 'red']">{{money(agency_cost + recipient_cost)}}</td>
+        <td></td>
+      </tr>
+      <tr class="transparent">
+        <td class="text-align-right bold">Percent Funded By WIFA:</td>
+        <td class="center">{{percent(agency_cost/(agency_cost + recipient_cost))}}</td>
+      </tr>
+    </tbody>
+  </table>
+  <p class="purple">Total grant amount is first entered here as total of budget items</p>
+</div> 

@@ -1,0 +1,43 @@
+<page-status begun="true" complete="true"></page-status>
+<div class="funding-sources">
+  <h1 class="view-title">Funding Sources</h1>
+  <button class="btn btn-primary save-btn"  ng-click="save()"  ng-disabled="loading  || !unsavedChanges">Save Project</button>
+  <a href="javascript:;" class="refresh-btn"  ng-click="loadData()" title="Refresh"><i class="fa fa-refresh " ng-if="unsavedChanges"></i><i class="fa fa-check " ng-if="!unsavedChanges && justSaved"></i></a>
+  <table class="table no-lines table-striped" >
+      <thead>
+        <tr>
+          <th>Program</th>
+          <th>List Year</th>
+          <th>Primary Funding Source</th>
+          <th>Planned Amount to Fund</th>
+          <th>Binding Commitment Date</th>
+          <th>Total Project Cost</th>
+          <th>Amount to Obligate</th>
+          <th>Notes</th>
+          <th class="delete-col" ng-click="addRecord('funding source', sources);" > Add Row</th>        
+        </tr>
+      </thead>
+      <tbody>
+        <tr ng-repeat="row in sources" ng-if="row.action!='delete'">
+          <td><select chosen class="form-control" disable-search-threshold="10" ng-model="row.programId" ng-options="option.programId as option.programName for option in lookups['funding_program']" ng-change="updateAction(row)"><option value=""></option></select></td>
+          <td>{{row.listYear}}</td>
+          <td><input type="checkbox" ng-model="row.primaryFundingSource" ng-change="updateAction(row)"></td>
+          <td class="text-align-right">{{money(plannedAmountToFund)}}</td>
+          <td><input type="text" date-input placeholder="mm/dd/yyyy"  class="form-control" ng-model="row.bindingCommitmentDate" ng-change="updateAction(row)"></td>
+          <td><input type="text" ui-maskmoney data-prefix="$" data-decimal="." data-thousands="," data-allow-zero="true" class="form-control" ng-model="row.cost" ng-change="updateAction(row); updateTotals();"></td>
+          <td><input type="text" ui-maskmoney data-prefix="$" data-decimal="." data-thousands="," data-allow-zero="true" class="form-control" ng-model="row.amountToObligate" ng-change="updateAction(row); updateTotals();"></td>
+          <td><textarea class="form-control" rows="1" ng-model="row.notes" ng-change="updateAction(row)"></textarea></td>
+          <td class="delete-col"><button type="delete" class="btn btn-danger" ng-click="deleteRecord(sources, $index); updateTotals();">Delete</button></td>
+        </tr>
+        <tr>
+          <td class="bold text-align-right" colspan="3">Total:</td>
+          <td class=" text-align-right border-top">{{money(totals.plannedAmountToFund)}}</td>
+          <td class="border-top"></td>
+          <td class=" text-align-right total-pad-right border-top">{{money(totals.cost)}}</td>
+          <td class=" text-align-right total-pad-right border-top">{{money(totals.amountToObligate)}}</td>
+          <td colspan="2"></td>
+
+        </tr>
+      </tbody>
+    </table>
+</div>

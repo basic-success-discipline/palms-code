@@ -1,0 +1,38 @@
+<nav class="navbar navbar-default navbar-fixed-top" ng-if="show">
+  <div class="container-fluid" >
+    <!-- Brand and toggle get grouped for better mobile display -->
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" ui-sref="home">PALMS</a>
+    </div>
+
+    <!-- Collect the nav links, forms, and other content for toggling -->
+    <div class="wrapper">
+    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+      <ul class="nav navbar-nav">
+        <li class="dropdown">
+          <a href="javascript:;" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">{{nav.paths[nav.current]['title']}}<span class="caret"></span></a>
+          <ul class="dropdown-menu" role="menu">
+            <li ng-repeat="option in nav.paths ">
+            <a ui-sref="{{option.state}}" ng-class="{active: option.title == nav.current}" >{{option.title}}</a>
+            </li>
+          </ul>
+        </li>
+
+        <li ng-repeat="option in nav.paths[nav.current].nav.paths " ng-show="showProject" ng-class="{active: option.title == nav.paths[nav.current].nav.current}">
+          <a ui-sref="{{option.state}}" >{{option.title}}</a>
+        </li>
+        <li ng-repeat="option in nav.paths[nav.current].nav.paths " ng-show="showParty" ng-class="{active: option.title == nav.paths[nav.current].nav.current}">
+          <a ui-sref="{{option.state}}" >{{option.title}}</a>
+        </li>
+ 
+      </ul>
+    </div><!-- /.navbar-collapse -->
+    <div><toaster-container></toaster-container></div>
+  </div><!-- /.container-fluid -->
+</nav>

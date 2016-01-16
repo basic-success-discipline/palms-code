@@ -1,0 +1,151 @@
+﻿<div class="row">
+    <div class="col-md-4 head-divide">
+        <h3 translate>My Profile</h3>
+    </div>
+</div>
+<form id="UserProfileForm" name="UserProfileForm">
+    <div class="row">
+        <div class="col-md-2">
+            <div class="pad-top-larger">
+               
+            </div>
+        </div>
+        <div class="col-md-5 pad-top-large">
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-label">
+                        <label for="firstName" class="required-label" translate>First Name</label>
+                    </div>
+                    <div class="form-field">
+                        <input class="form-control" required="required" type="text" id="firstName" name="firstName" data-ng-model="user.firstName" value="{{user.firstName}}" />
+                        <div class="error" data-ng-show="UserProfileForm.firstName.$dirty && UserProfileForm.firstName.$invalid" translate>First Name is required</div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-7">
+                    <div class="form-label">
+                        <label for="lastName" class="required-label" translate>Last Name</label>
+                    </div>
+                    <div class="form-field">
+                        <input class="form-control" required="required" type="text" id="lastName" name="lastName" data-ng-model="user.lastName" value="{{user.lastName}}" />
+                        <div class="error" data-ng-show="UserProfileForm.lastName.$dirty && UserProfileForm.lastName.$invalid" translate>Last Name is required</div>
+                    </div>
+                </div>
+            </div>
+            <div class="row pad-top-large">
+                <div class="col-md-7">
+                    <div class="form-label">
+                        <a href="#!/ChangePassword/{{user.userId}}/0" translate>Change password</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-7 head-divide">
+            <h3 translate>Professional</h3>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-2"></div>
+        <div class="col-md-5">
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-label">
+                        <label for="title" translate>Job Title</label>
+                    </div>
+                    <div class="form-field">
+                        <input type="text" id="title" name="title" class="form-control" ng-model="user.title" value="{{user.title}}" />
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-label">
+                        <label for="officeNumber" translate>Office Phone</label>
+                    </div>
+                    <div class="form-field">
+                        <input type="text" id="officeNumber" name="officeNumber" class="form-control" data-ng-model="officePhone.number" />
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-label">
+                        <label for="mobileNumber" translate>Mobile Phone</label>
+                    </div>
+                    <div class="form-field">
+                        <input type="text" id="mobileNumber" name="mobileNumber" class="form-control" data-ng-model="mobilePhone.number" />
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-label">
+                        <label for="faxNumber" translate>Fax Phone</label>
+                    </div>
+                    <div class="form-field">
+                        <input type="text" id="faxNumber" name="faxNumber" class="form-control" data-ng-model="faxPhone.number" />
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-label">
+                        <label for="address1" translate>Address 1</label>
+                    </div>
+                    <div class="form-field">
+                        <input type="text" id="address1" name="address1" class="form-control" data-ng-model="officeAddress.address1" />
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-label">
+                        <label for="address2" translate>Address 2</label>
+                    </div>
+                    <div class="form-field">
+                        <input type="text" id="address2" name="address2" class="form-control" data-ng-model="officeAddress.address2" />
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-label">
+                        <label for="city" translate>City</label>
+                    </div>
+                    <div class="form-field">
+                        <input type="text" id="city" name="city" class="form-control" data-ng-model="officeAddress.city" />
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-label">
+                        <label for="state" translate>State</label>
+                    </div>
+                    <div class="form-field">
+                        <input type="text" id="state" name="state" class="form-control" data-ng-model="officeAddress.state" data-typeahead="state for state in getStates($viewValue) | limitTo:12" data-typeahead-loading="loadingStates" />
+                        <div class="typeahead-loading-indicator fa fa-cloud-download" data-ng-show="loadingStates"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-3">
+                    <div class="form-label">
+                        <label for="postalCode" translate>Postal Code</label>
+                    </div>
+                    <div class="form-field">
+                        <input type="text" id="postalCode" name="postalCode" class="form-control" data-ng-model="officeAddress.postalCode" />
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-7">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="form-footer">
+                        <button id="btnCancel" class="btn btn-default" ng-click="cancel()" translate>
+                            Cancel</a>
+                            <button type="button" class="btn btn-primary" palms-permission-group="Profile Management" palms-role-permission="Edit Personal Profile" palms-permission-behavior="hide" data-ng-click="ok()" data-ng-disabled="UserProfileForm.$invalid || !UserProfileForm.$dirty" translate>OK</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>

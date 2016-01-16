@@ -1,0 +1,135 @@
+﻿<div class="row">
+    <div class="col-md-6">
+        <form id="RoleDetailForm" name="RoleDetailForm">
+            <div class="alert alert-danger" data-ng-show="message !== ''">
+                {{message}}
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <h3>{{title}}</h3>
+                    <hr />
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-label">
+                        <label for="roleName" class="required-label" translate>Role Name</label>
+                    </div>
+                    <div class="form-field">
+                        <input class="form-control" required="required" type="text" id="roleName" name="roleName" data-ng-model="role.roleName" />
+                        <div class="error" data-ng-show="RoleDetailForm.roleName.$dirty && RoleDetailForm.roleName.$invalid" translate>Role Name is required</div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-label">
+                        <label for="roleDescription" translate>Role Description</label>
+                    </div>
+                    <div class="form-field">
+                        <textarea class="form-control" type="text" id="roleDescription" name="roleDescription" cols="40" rows="4" data-ng-model="role.roleDescription"></textarea>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="om-form-footer"></div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <h3 translate>Permissions</h3>
+                    <hr />
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <accordion close-others="true">
+                        <accordion-group data-ng-repeat="group in groups | orderBy: 'groupName'" is-open="isopen">
+                            <accordion-heading id="groupHeader_{{group.permissionGroupId}}" >
+                                <div>
+                                    <span>{{group.groupName}}</span> <i class="pull-left" data-ng-class="{'fa fa-chevron-down': isopen, 'fa fa-chevron-right': !isopen}"></i>
+
+                                    <div style="float: right">
+                                        <input type="checkbox" data-ng-checked="includedGroups(group.permissionGroupId) > -1" data-ng-click="selectGroup($event, group.permissionGroupId)" />
+                                    </div>
+                                </div>
+                            </accordion-heading>
+                            <div>
+                                <div class="role-permission-header"><span translate>Permission</span></div>
+                                <div class="role-permission-header-grant"><span translate>Grant</span></div>
+
+
+                                <div id=group_{{group.permissionGroupId}} class="group_collapse animate-hide">
+                                    <div class="permission" data-ng-repeat="permission in group.permissions | orderBy: 'permissionName'">
+                                        <div id=permission_{{permission.permissionId}} class="role-permission-name">{{permission.permissionName}}</div>
+                                        <div class="role-permission-check">
+                                            <input type="checkbox" data-ng-checked="includedPermissionIds.indexOf(permission.permissionId) > -1" data-ng-click="includePermission($event, permission.permissionId)" />
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </accordion-group>
+                    </accordion>
+                </div>
+            </div>
+            <div class="row pad-top-large">
+                <div class="col-md-12">
+                    <h3 translate>Assignable Roles</h3>
+                    <hr />
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <accordion close-others="true">
+                        <accordion-group is-open="isopen">
+                            <accordion-heading>
+                                Roles <i class="pull-left" data-ng-class="{'fa fa-chevron-down': isopen, 'fa fa-chevron-right': !isopen}"></i>
+                            </accordion-heading>
+                            <div>
+                                <div class="role-permission-header"><span translate>Role</span></div>
+                                <div class="role-permission-header-grant"><span translate>Grant</span></div>
+                                <div class="permission" data-ng-repeat="role in roles">
+                                    <div id=role_{{role.RoleId}} class="role-permission-name">{{role.roleName}}</div>
+                                    <div class="role-permission-check">
+                                        <input type="checkbox" data-ng-checked="includedRoleIds.indexOf(role.roleId) > -1" data-ng-click="includeRole($event, role.roleId)" />
+                                    </div>
+                                </div>
+                            </div>
+                        </accordion-group>
+                    </accordion>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6">&nbsp;</div>
+                <div class="col-md-6">
+                    <div om-button-container class="om-form-footer">
+                        <button type="button" class="btn btn-primary om-button-confirm" ng-show="role.systemRole == true" om-permission-group="Role Management" om-role-permission="Edit System Role" om-permission-behavior="hide" style="margin:5px" data-ng-click="ok()" data-ng-disabled="RoleDetailForm.$invalid || !RoleDetailForm.$dirty">{{permission}}</button>
+                        <button type="button" class="btn btn-primary om-button-confirm" ng-show="role.systemRole == false" om-permission-group="Role Management" om-role-permission="Edit Role" om-permission-behavior="hide" style="margin:5px" data-ng-click="ok()" data-ng-disabled="RoleDetailForm.$invalid || !RoleDetailForm.$dirty">{{permission}}</button>
+                        <button type="button" class="btn btn-default om-button-dismiss" data-ng-click="cancel()">Cancel</button>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+    <div class="col-md-6">
+        <div class="row">
+            <div class="col-md-8 pad-top-larger">
+                <div class="panel panel-default">
+                    <div class="panel-heading">Role Permission Summary</div>
+                    <div class="panel-body">
+                        <ul class="permissionSummary" data-ng-repeat="summaryGroup in summaryGroups">
+
+                            <ul data-ng-repeat="permissionGroup in summaryGroup.permissionGroups | orderBy: 'groupName'">
+                                <li class="permissionGroup">
+                                    {{permissionGroup.permissionGroupName}}
+                                    <ul data-ng-repeat="permission in permissionGroup.permissions | orderBy: permissionName">
+                                        <li id="permission_{{permission.permissionId}}" class="{{permission.uiClass}}">{{permission.permissionName}}</li>
+                                    </ul>
+                                </li>
+                            </ul>
+
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,91 @@
+﻿
+<form id="RegistrationForm" name="RegistrationForm">
+    <!--<div class="col-md-8">-->
+    <h3 translate>Registration</h3>
+    <div class="row">
+        <div class="col-md-10">
+            <div class="col-md-8">
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-label">
+                            <label for="FirstName" class="required-label" translate>First Name</label>
+                        </div>
+                        <div class="form-label">
+                            <input class="form-control" required="required" type="text" id="FirstName" name="FirstName" data-ng-model="user.firstName" value="{{user.firstName}}" />
+                            <div class="error" data-ng-show="RegistrationForm.FirstName.$dirty && RegistrationForm.FirstName.$invalid" translate>First Name is required</div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-label">
+                            <label for="LastName" class="required-label" translate>Last Name</label>
+                        </div>
+                        <div class="form-field">
+                            <input class="form-control" required="required" type="text" id="LastName" name="LastName" data-ng-model="user.lastName" value="{{user.lastName}}" />
+                            <div class="error" data-ng-show="RegistrationForm.LastName.$dirty && RegistrationForm.LastName.$invalid" translate>Last Name is required</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-label">
+                            <label for="Email" class="required-label" translate>Email</label>
+                        </div>
+                        <div class="form-field">
+                            <input class="form-control" required="required" type="text" id="Email" name="Email" data-ng-model="user.email" value="{{user.email}}" />
+                            <div class="error" data-ng-show="RegistrationForm.Email.$dirty && RegistrationForm.Email.$invalid" translate>Email is required</div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-label">
+                            <label for="Title" class="required-label" translate>Title</label>
+                        </div>
+                        <div class="form-field">
+                            <input class="form-control" required="required" type="text" id="Email" name="Title" data-ng-model="user.title" value="{{user.title}}" />
+                            <div class="error" data-ng-show="RegistrationForm.Title.$dirty && RegistrationForm.Title.$invalid" translate>Title is required</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-label">
+                            <label class="required-label" for="Password" translate>Password</label>
+                        </div>
+                        <div class="form-label">
+                            <input class="form-control" required="required" type="password" id="Password" name="Password" data-ng-model="pwdModel.NewPwd" />
+                            <div class="error" data-ng-show="RegistrationForm.Password.$dirty && RegistrationForm.Password.$invalid" translate>Please meet password requirements</div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-label">
+                            <label for="PasswordRpt" class="required-label" translate>Confirm Password</label>
+                        </div>
+                        <div class="form-field">
+                            <input class="form-control" required="required" type="password" id="PasswordRpt" name="PasswordRpt" data-ng-model="pwdModel.NewPwdRepeat" />
+                            <div class="error" data-ng-show="RegistrationForm.PasswordRpt.$dirty && RegistrationForm.PasswordRpt.$invalid" translate>Please enter your new password a second time</div>
+                            <div class="error" data-ng-show="RegistrationForm.PasswordRpt.$dirty && RegistrationForm.Password.$modelValue !== RegistrationForm.PasswordRpt.$modelValue && RegistrationForm.PasswordRpt.$valid" translate>Your passwords do not match</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4" style="padding-top: 70px;">
+                <span>
+                    <palms-password-strength data-title="Password Requirements" data-password="pwdModel.NewPwd" data-on-validation-check="pwdValidationCheck(isValid)"></palms-password-strength>
+                </span>
+            </div>
+        </div>
+    </div>
+    <div class="pad-bottom-large clear-both"></div>
+    <div>
+        <div class="row pad-top-large">
+            <div class="col-md-4"></div>
+            <div class="col-md-4 text-right">
+                <button type="button" class="btn btn-primary" data-ng-click="register()" data-ng-disabled="RegistrationForm.$invalid || !RegistrationForm.$dirty" translate>Register</button>
+                &nbsp;&nbsp;
+                <a href="#!/login" class="btn btn-default" translate>Cancel</a>
+            </div>
+        </div>
+
+    </div>
+
+
+</form>

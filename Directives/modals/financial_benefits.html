@@ -1,0 +1,49 @@
+ <div class="modal-header" >
+  <h3 class="modal-title">Financial Benefits Reporting</h3>
+</div>
+<div class="modal-body" >
+
+
+<table class="table no-lines">
+<thead>
+<tr>
+<th></th>
+<th>Initial Amount</th>
+<th>Final Amount</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Total Assistance:</td>
+<td><input type="text" ui-maskmoney data-prefix="$" data-decimal="." data-thousands="," data-allow-zero="true" class="form-control" ng-model="terms.initial_total_assistance_amount"></td>
+<td><input type="text" ui-maskmoney data-prefix="$" data-decimal="." data-thousands="," data-allow-zero="true" class="form-control" ng-model="terms.final_total_assistance_amount"></td>
+</tr>
+<tr>
+<td>Additional Subsidy Provided?</td>
+<td><input type="checkbox" class="form-control" ng-model="terms.additional_subsidy_provided"></td>
+<tr>
+<td>Grant Amount:</td>
+<td><input type="text" ui-maskmoney data-prefix="$" data-decimal="." data-thousands="," data-allow-zero="true" class="form-control" ng-model="terms.initial_grant_amount"></td>
+<td><input type="text" ui-maskmoney data-prefix="$" data-decimal="." data-thousands="," data-allow-zero="true" class="form-control" ng-model="terms.final_grant_amount"></td>
+</tr>
+<tr>
+<td>Negative Interest:</td>
+<td><input type="text" ui-maskmoney data-prefix="$" data-decimal="." data-thousands="," data-allow-zero="true" class="form-control" ng-model="terms.initial_negative_interest"></td>
+<td><input type="text" ui-maskmoney data-prefix="$" data-decimal="." data-thousands="," data-allow-zero="true" class="form-control" ng-model="terms.final_negative_interest"></td>
+</tr>
+<tr>Principal Forgiveness:</tr>
+<td><input type="text" ui-maskmoney data-prefix="$" data-decimal="." data-thousands="," data-allow-zero="true" class="form-control" ng-model="terms.initial_principal_forgiveness"></td>
+<td><input type="text" ui-maskmoney data-prefix="$" data-decimal="." data-thousands="," data-allow-zero="true" class="form-control" ng-model="terms.final_principal_forgiveness"></td>
+<tr>Net Loan Amount</tr>
+<td>{{money(100000)}}</td>
+<td>{{money(100000)}}</td>
+</tr>
+</tbody>
+</table>
+
+
+
+</div>
+<div class="modal-footer">
+  <button class="btn btn-success" ng-click="ok()">Ok</button>
+</div>

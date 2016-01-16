@@ -1,0 +1,20 @@
+DWSRFComplianceObjective (new)
+
+NimsCategoryId 
+NimsCategoryObjectiveId 
+NimsObjectiveId 
+NumericValue
+PercentValue 
+
+
+
+
+NIMSCategory (new)
+
+"nimsCategoryId": 1,
+"numericValue": 1.0,
+"optionId": 3,
+"percentValue": 1.0,
+"projectId": 2,
+
+NIMS objective (new)

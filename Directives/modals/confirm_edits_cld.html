@@ -1,0 +1,29 @@
+ <div class="modal-header" >
+  <h3 class="modal-title">Confirm Edits</h3>
+</div>
+<div class="modal-body" >
+
+  <p><b>Do you want to change these fields for project: {{options.projectId}}?</b><br>(doing so may affect financial calculations)</p>
+
+  <table class="table no-lines">
+    <thead>
+      <tr>
+        <th>Field</th>
+        <th>Change in project record?</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr ng-repeat="(key, value) in options.fields">
+      <td>{{value.columnName}}</td>
+        <td><input type="checkbox" ng-model="value.changeInProject"></td>
+      </tr>
+    </tbody>
+  </table>
+
+
+
+</div>
+<div class="modal-footer">
+  <button class="btn btn-success" ng-click="ok()">Ok</button>
+  <button class="btn btn-warning" ng-click="cancel()">Cancel</button>
+</div>

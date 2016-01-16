@@ -1,0 +1,29 @@
+﻿<div class="modal-header">
+    <h3 translate>Add Role</h3>
+</div>
+<div class="modal-body">
+    <form name="UserRoleDetailForm">
+
+        <div class="row">
+
+            <div class="col-md-6">
+                <div class="form-label">
+                    <label for="role" class="required-label" translate>Role</label>
+                </div>
+                <div class="form-field">
+                    <select class="form-control" id="role" name="role" ng-model="selectedRole.roleId" required="required" ng-options="r.roleId as r.roleName for r in roles"></select>
+                    <div class="error" data-ng-show="UserRoleDetailForm.role.$dirty && UserRoleDetailForm.role.$invalid" translate>Role is required</div>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+<div class="modal-footer">
+    <div class="row">
+        <div class="col-md-6"></div>
+        <div class="col-md-6">
+            <button type="button" class="btn btn-primary" data-ng-click="ok()" data-ng-disabled="UserRoleDetailForm.$invalid || !UserRoleDetailForm.$dirty" translate>OK</button>
+            <button type="button" class="btn btn-default" data-ng-click="cancel()" translate>Cancel</button>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,18 @@
+<!-- <div class="amortization-wrapper">
+  <div class="side-menu-wrapper col-md-3">
+    <div ng-class="sideMenuShowing ? 'fixed' : 'absolute'">
+      <div class="list-group side-menu">
+        <a ui-sref="{{option.state}}" ng-repeat="option in nav.paths" ng-class="{active: option.title == nav.current}" class="list-group-item" ng-if="sideMenuShowing"> {{option.title}}</a>
+        <a href="javascript:;"ng-click="toggleSideMenu()" class="list-group-item bold ">{{sideMenuShowing ? 'Hide Menu' : 'Show Menu'}}</a>
+        <p class="purple padding">Maybe a better way to do this is to change "Loan Amortization" navigation bar item to "Loan Schedule". Then, show loan schedule full screen without sidebar, with loan terms as modal pop-up or single button next to "Save Project"</p>
+      </div> 
+    </div> 
+  </div>
+
+  <div style="width: 100%; height: 70px" ng-if="!sideMenuShowing"></div>
+  <div ng-class="sideMenuShowing ? 'table-cell col-md-9' : 'table-cell col-md-12  remove-pad-left'" ui-view></div>
+</div> -->
+
+<div class="amortization-wrapper">
+  <div  ui-view></div>
+</div>

@@ -1,0 +1,11 @@
+ <div class="modal-header">
+  <h3 class="modal-title">{{options.head ? options.head : options.message}}</h3>
+</div>
+<div class="modal-body" ng-if="options.head && options.message">
+  <p>{{options.message}}</p>
+</div>
+<div class="modal-footer">
+  <button class="btn btn-primary" ng-ifc="options.yes" ng-click="yes()">Yes</button>
+  <button class="btn btn-danger" ng-if="options.no" ng-click="no()">No</button>
+  <button class="btn btn-warning" ng-click="cancel()">Go back</button>
+</div>

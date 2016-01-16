@@ -1,0 +1,24 @@
+NimsCategoryObejctive (old)
+
+nimsCategoryId: 1
+nimsCategoryObjectiveId: 62
+nimsObjectiveId: 2
+numericValue: 0
+percentValue: null
+
+
+
+NimsCategory (old)
+
+nimsCategoryId: 1
+numericValue: 200000
+optionId: 165
+percentValue: 122.2
+projectId: 1
+
+
+NIms objective (old)
+
+nimsObjectiveId: 1
+optionId: 167
+projectId: 1

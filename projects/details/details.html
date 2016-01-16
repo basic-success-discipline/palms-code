@@ -1,0 +1,807 @@
+
+<div ng-if="loading" class="loading-spinner fadein">
+    <i class="fa fa-refresh fa-spin fa-5x" ></i>
+  </div>
+<div class="details-wrapper" ng-if="!loading">
+  <div class="side-menu-wrapper col-md-3">
+    <div ng-class="sideMenuShowing ? 'fixed' : 'absolute'">
+      <div class="list-group side-menu">
+        <a href="javascript:;" ng-click="scrollToElement(section.anchor)" du-scrollspy="{{section.anchor}}" offset="70" ng-repeat="section in sections" ng-class="{active: section.title == currentSection}" class="list-group-item" ng-if="sideMenuShowing && !section.hideIf">{{section.title}}</a>
+        <a href="javascript:;"ng-click="toggleSideMenu()" class="list-group-item bold ">{{sideMenuShowing ? 'Hide Menu' : 'Show Menu'}}</a> 
+      </div> 
+    </div> 
+  </div>
+
+  <div style="width: 100%; height: 70px" ng-if="!sideMenuShowing"></div>
+  <div ng-class="sideMenuShowing ? 'table-cell col-md-9' : 'table-cell col-md-12 remove-pad-left'">
+
+    <!-- <page-status begun="true" complete="false"></page-status> -->
+
+    <section id="general">
+      <h1 class="view-title">
+        General Information
+      </h1>
+      <div class="view-title-shim"></div>
+      <div class="view-title-btn btn"><label><input type="checkbox" ng-model="details.benefits_entry_complete" ng-change="updateAction()"> &nbsp Entry Complete</div>
+      <a href="javascript:;" class="refresh-btn"  ng-click="loadData()" title="Refresh"><i class="fa fa-refresh " ng-if="unsavedChanges"></i><i class="fa fa-check " ng-if="!unsavedChanges && justSaved"></i></a>
+      <button class="btn btn-primary save-btn"  ng-click="save()"  ng-disabled="loading || !unsavedChanges">Save Project</button>
+      <div class="col-md-6 left clear">
+        <table class="table no-lines">
+          <tbody>
+            <tr>
+              <td>Recipient Name</td>
+              <td>{{details.recipient.recipient_name}}</td>
+            </tr>
+            <tr>
+              <td>Project Name</td>
+              <td><input type="text" class="form-control" ng-model="details.project_name" ng-change="updateAction()"></td>
+            </tr>
+            <tr>
+              <td>Project Number</td>
+              <td><span style="line-height: 2.5;">{{project.fundingProgram.program_code}} &#8212; </span><input style="width: 85%; float: right; display: inline-block" type="text" class="form-control" ng-model="details.project_number" ng-change="updateAction()"></td>
+            </tr>
+            <tr>
+              <td>Agreement Number</td>
+              <td><input type="text" class="form-control" ng-model="details.agreement_number" ng-change="updateAction()"></td>
+            </tr>
+            <tr>
+              <td>Project Description</td>
+              <td><textarea msd-elastic rows="5" class="form-control" ng-model="details.project_description" ng-change="updateAction()"></textarea></td>
+            </tr>
+            <tr>
+              <td>Project Manager</td>
+              <td><select chosen class="form-control" ng-model="details.projectManagerUserId" ng-options="option.userId as optionString('assignedStaff', option) for option in lookups['assigned_staff']" disable-search-threshold="10" ng-change="updateAction()"><option value=""></option></select></td>
+            </tr>
+            <tr ng-if="loan">
+              <td>Loan Officer</td>
+              <td><select chosen class="form-control" ng-model="details.loanOfficerUserId" ng-options="option.userId as optionString('assignedStaff', option) for option in lookups['assigned_staff']" disable-search-threshold="10" ng-change="updateAction()"><option value=""></option></select></td>
+            </tr>
+
+          </tbody>
+        </table>
+      </div>
+      <div class="col-md-6 right">
+        <table class="table no-lines">
+          <tbody>
+           <tr>
+            <td>Population served by this project</td>
+            <td><input fcsa-number="{min: 0}" class="form-control" ng-model="details.population_served_by_project" ng-change="updateAction()"></td>
+          </tr>
+          <tr>
+            <td>Population served by this system</td>
+            <td><input fcsa-number="{min: 0}" class="form-control" ng-model="details.population_served_by_system" ng-change="updateAction()"></td>
+          </tr>
+          <tr>
+            <td>Population served by this community</td>
+            <td><input fcsa-number="{min: 0}" class="form-control" ng-model="details.population_served_by_community" ng-change="updateAction()"></td>
+          </tr>
+          <tr>
+            <td>Number of Connections</td>
+            <td><input fcsa-number="{min: 0}" class="form-control" ng-model="details.number_connections_by_system" ng-change="updateAction()"></td>
+          </tr>    
+          <tr ng-if="DW && loan">
+            <td>Compliance Purpose</td>
+            <td><select chosen class="form-control" disable-search-threshold="10" ng-model="details.projectComplianceId" ng-options="option.componentLookUpId as option.componentName for option in lookups['compliance_status']" ng-change="updateAction()"><option value=""></option></select></td>
+          </tr>
+          <tr ng-if="loan">
+            <td>IUP Year</td>
+            <td><input type="text" class="form-control" ng-model="details.iup_year" ng-change="updateAction()"></td>
+          </tr>
+          <tr ng-if="DW">
+            <td>PWS</td>
+            <td><input type="text" class="form-control" ng-model="details.pws" ng-change="updateAction()"></td>
+          </tr>
+          <tr ng-if="DW && loan">
+            <td>System type</td>
+            <td><select chosen class="form-control" disable-search-threshold="10" ng-model="details.systemTypeId" ng-options="option.componentLookUpId as option.componentName for option in lookups['system_type']" ng-change="updateAction()"><option value=""></option></select></td>
+          </tr>
+          <tr ng-if="loan && CW">
+            <td>Hardship Assistance</td>
+            <td><input type="checkbox" class="form-control" ng-model="details.cwsrfProjectDetail.hardship_assistance" ng-change="updateAction(details.cwsrfProjectDetail)"></td>
+          </tr>
+          <tr ng-if="loan && DW"> 
+            <td>Disadvantaged Assistance</td>
+            <td><input type="checkbox" class="form-control" ng-model="details.dwsrfProjectDetail.disadvantage_assistance" ng-change="updateAction(details.dwsrfProjectDetail)"></td>
+          </tr>
+          <tr ng-if="loan">
+            <td>Indian Tribe</td>
+            <td><input type="checkbox" class="form-control" ng-model="details.indian_tribe"></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="shim"></div>
+  </section>
+
+
+
+
+  <section id="location">
+    <h1>Project Location/Environmental Review</h1>
+    <div class="col-md-6 left">
+      <table class="table no-lines">
+        <tbody>
+          <tr >
+            <td>Street</td>
+            <td><input type="text" class="form-control" ng-model="details.address.address1" ng-change="updateAction(details.address)"></td>
+          </tr>
+          <tr>
+            <td>City</td>
+            <td><input type="text" class="form-control" ng-model="details.address.city" ng-change="updateAction(details.address)"></td>
+          </tr>
+          <tr>
+            <td>ZIP</td>
+            <td><input type="text" class="form-control" ng-model="details.address.postalCode" ng-change="updateAction(details.address)"></td>
+          </tr>    
+          <tr>
+            <td>County</td>
+            <td><select chosen class="form-control" ng-model="details.address.county" ng-options="option.countyName as optionString('county', option) for option in lookups['county']" disable-search-threshold="10" ng-change="updateAction(details.address)"><option value=""></option></select></td> 
+          </tr>
+          <tr ng-if="grant">
+            <td>Environmental Review Applicable?</td>
+            <td><input type="checkbox" ng-model="details.environmental_review_applicable" ng-change="updateAction()"></td>
+          </tr>
+          <tr>
+            <td>Environmental Review Date</td>
+              <td>
+              <input date-input class="form-control" ng-model="details.environmental_review_date" ng-change="updateAction()" />
+                  </td>
+          </tr>
+          
+        </tbody>
+      </table>
+    </div>
+    <div class="col-md-6 right">
+      <table class="table no-lines">
+        <tbody>
+          <tr>
+            <td>Legislative District(s)</td>
+            <td><select chosen multiple class="form-control" ng-model="details.legislativeDistrictIds" ng-options="option.componentLookUpId as option.componentName for option in lookups['legislative_districts']" disable-search-threshold="10" ng-change="updateAction(); processDistricts('change');"><option value=""></option></select></td>
+          </tr>
+          <tr>
+            <td>Congressional District(s)</td>
+            <td><select chosen multiple class="form-control" ng-model="details.congressionalDistrictIds" ng-options="option.componentLookUpId as option.componentName for option in lookups['congressional_districts']" disable-search-threshold="10" ng-change="updateAction(); processDistricts('change');"><option value=""></option></select></td>
+          </tr>
+          <tr>
+            <td>Latitude</td>
+            <td><input type="text" class="form-control" ng-model="details.address.latitude" ng-change="updateAction(details.address)"></td>
+          </tr>
+          <tr>
+            <td>Longitude</td>
+            <td><input type="text" class="form-control" ng-model="details.address.longitude" ng-change="updateAction(details.address)"></td>
+          </tr>
+          
+        </tbody>
+      </table>
+    </div>
+    <div class="shim"></div>
+  </section>
+
+
+  <section id='green_project_reserve' ng-if="loan">
+    <h1>
+      Green Project Reserve
+    </h1>
+    <div class="col-md-6 left">
+      <table class="table no-lines">
+        <tbody>
+          <tr>
+            <td>Project Includes Green Project Reserve (GPR) funding?</td>
+            <td><input type="checkbox" class="form-control" ng-model="details.includes_gpr_funding"></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="col-md-12" ng-if="details.includes_gpr_funding">
+      <table class="table no-lines">
+        <thead>
+          <tr>
+            <th>Amount Classified as:</th>
+            <th class="text-align-center">Amount ($)</th>
+            <th class="text-align-center purple">Funded From ARRA*</th>
+            <th class="delete-col center" ng-click="addRecord('greenProjectReserves')" > Add Row</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr ng-repeat="row in details.greenProjectReserves" ng-if="row.action!='delete'">
+            <td><select chosen class="form-control" disable-search-threshold="10" ng-model="row.greenProjectId" ng-options="option.componentLookUpId as option.componentName for option in lookups['green_project'] | availableOptions:details.greenProjectReserves:row:'greenProjectId'" ng-change="updateAction(row);"><option value=""></option></select></td>
+            <td><input type="text" ui-maskmoney data-prefix="" data-decimal="." data-thousands="," data-allow-negative="true"data-allow-zero="true" class="form-control" ng-model="row.srf_amount " ng-change="updateTotal('greenProjectReserves'); updateAction(row)"></td>
+            <td><input type="text" ui-maskmoney data-prefix="" data-decimal="." data-thousands="," data-allow-negative="true"data-allow-zero="true" class="form-control" ng-disabled="true" ng-model="row.arra_amount" ng-change="updateTotal('greenProjectReserves'); updateAction(row)"></td>
+            <td class="delete-col">
+              <button type="delete" class="btn btn-danger" ng-click="deleteRecord(details.greenProjectReserves, $index); updateTotal('greenProjectReserves') ">Delete</button>
+            </td>
+          </tr>
+          <tr >
+            <td class="bold text-align-right">Total GPR Funding:</td>
+            <td class="border-top text-align-right total-pad-right">{{money(details.gprTotals.srf)}}</td>
+            <td class="border-top text-align-right total-pad-right">{{money(details.gprTotals.arra)}}</td>
+          </tr>
+        </tbody>
+      </table>
+      <p class="purple">*Funded From Arra column only editable for ARRA projects</p>
+    </div>
+    <div class="shim"></div>
+  </section>
+
+
+
+
+  <!-- Assign to Federal Grant custom section -->
+  <section id='assign_to_federal_grant' ng-if="loan">
+    <h1>
+      Assign to Federal Grant
+    </h1>
+    <div class="col-md-6 left">
+      <table class="table no-lines">
+        <tbody>
+          <tr>
+            <td>DUNS Number</td>
+            <td><input type="text" class="form-control" ng-model="details.recipient.duns_number"></td>
+          </tr>
+          <tr>
+            <td>Assign to Federal Grant?</td>
+            <td><input type="checkbox" class="form-control" ng-model="details.assign_to_federal_grant"></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="federal_grant_assignments col-md-12" ng-if="details.assign_to_federal_grant">
+      <table class="table table-striped no-lines" >
+        <thead>
+          <tr class="no-border">
+            <th></th>
+            <th class="text-align-right total-pad-right">To Meet Grant Requirements</th>
+            <th class="text-align-right total-pad-right">For FFATA Reporting</th>
+          </tr>
+          <tr class="no-border normal-font-weight">
+            <th class="purple">Amount available to assign:*</th>
+            <th class="text-align-right total-pad-right">{{money(project.loanAmount)}}</th>
+            <th class="text-align-right total-pad-right">{{money(project.loanAmount)}}</th>
+            <th colspan="3"></th>
+
+          </tr>
+          <tr>
+            <th>Grant Year</th>
+            <th></th>
+            <th></th>
+            <!-- The ffata due date is calculated as the last day of the following month from the loan execution date (which is determined elsewhere) -->
+            <th class="purple">FFATA Due Date**</th>
+            <th>FFATA Report Date</th>
+            <th>Notes</th>
+            <th class="delete-col"  ng-click="addRecord('federalGrantAssignments')" > Add Row</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr ng-repeat="row in details.federalGrantAssignments" ng-if="row.action!='delete'">
+            <td><select chosen class="form-control" ng-model="row.grantYear" disable-search-threshold="10" ng-options="option as option for option in lookups['grant_year']"  ng-change="updateAction(row)"><option value=""></option></select></td>
+            <td ><input type="text" ui-maskmoney data-prefix="" data-decimal="." data-thousands="," data-allow-negative="true"data-allow-zero="true" class="form-control text-align-right" ng-model="row.meetGrantRequirements" ng-change="updateTotal('federalGrantAssignments'); updateAction(row)"></td>
+            <td><input type="text" ui-maskmoney data-prefix="" data-decimal="." data-thousands="," data-allow-negative="true"data-allow-zero="true" class="form-control text-align-right" ng-model="row.ffataReporting" ng-change="updateTotal('federalGrantAssignments'); updateAction(row)"></td>
+            <td><input date-input ng-disabled="true" class="form-control" ng-model="row.ffataDueDate" ng-change="updateAction(row)"></td>
+            <td><input date-input class="form-control" ng-model="row.ffataReportDate" ng-change="updateAction(row)"></td>
+            <td><textarea msd-elastic  rows="1" class="form-control"  ng-model="row.notes" ng-change="updateAction(row)"></textarea></td>
+            <td>
+              <button type="delete" class="btn btn-danger" ng-click="deleteRecord(details.federalGrantAssignments, $index); updateTotal('federalGrantAssignments') ">Delete</button>
+            </td>
+          </tr>
+          <tr class="transparent normal-font-weight">
+            <td>Assigned:</td>
+            <td class="border-top text-align-right total-pad-right">{{money(fga.assigned.meetGrantRequirements)}}</td>
+            <td class="border-top text-align-right total-pad-right">{{money(fga.assigned.ffataReporting)}}</td>
+          </tr>
+          <tr class="transparent normal-font-weight">
+            <td>Unassigned:</td>
+            <td ng-class="['text-align-right', 'total-pad-right', fga.unassigned.meetGrantRequirements == 0 ? 'green' : 'red']">{{money(fga.unassigned.meetGrantRequirements)}}</td>
+            <td ng-class="['text-align-right', 'total-pad-right', fga.unassigned.ffataReporting == 0 ? 'green' : 'red']">{{money(fga.unassigned.ffataReporting)}}</td> 
+          </tr>
+
+        </tbody>
+      </table>
+      <p class="purple">* Is Amount Available to assign always project.loanAmount?</p>
+      <p class="purple">** FFATA due date is calculated as the last day of the following month from when loan collection date is set (on a different screen)</p> 
+    </div>
+    <div class="shim"></div>
+  </section>
+
+
+
+
+  <section id="benefits_dw" ng-if="DW && loan">
+    <h1>Benefits</h1>
+    <div class="col-md-6 left">
+      <table class="table no-lines">
+        <tbody>
+         <tr >
+          <td>Assistance to Create New System</td>
+          <td><input type="checkbox" class="form-control" ng-model="details.dwsrfProjectDetail.create_new_system" ng-change="updateAction(details.dwsrfProjectDetail)"></td>
+        </tr>
+        <tr>
+          <td>Consolidation Project</td>
+          <td><input type="checkbox" class="form-control" ng-model="details.dwsrfProjectDetail.consolidation_project" ng-change="updateAction(details.dwsrfProjectDetail)"></td>
+        </tr>
+        <tr>
+          <td>Number of Systems Eliminated</td>
+          <td><input type="number" min="0" step="1" class="form-control"  ng-model="details.dwsrfProjectDetail.number_systems_eliminated" ng-change="updateAction(details.dwsrfProjectDetail)"></td>
+        </tr>
+        
+      </tbody>
+    </table>
+  </div>
+  <div class="col-md-6 right">
+    <table class="table no-lines">
+      <tbody>
+        <tr>
+          <td>Ownership Type</td>
+          <td><select chosen class="form-control" disable-search-threshold="10" ng-model="details.dwsrfProjectDetail.ownershipTypeId" ng-options="option.componentLookUpId as option.componentName for option in lookups['ownership_type']" ng-change="updateAction()"><option value=""></option></select></td>
+        </tr>
+        <tr>
+          <td>Public Health Impact</td>
+          <td><textarea msd-elastic  rows="5" class="form-control" ng-model="details.dwsrfProjectDetail.public_health_impact" ng-change="updateAction(details.dwsrfProjectDetail)"></textarea></td>
+        </tr>
+        <tr>
+          <td>Project project_number Date</td>
+          <td>{{details.project_start_date | date}}</td>
+        </tr>
+        <tr>
+          <td>Project Completion Date</td>
+          <td>{{details.project_completion_date | date}}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="shim"></div>
+</section>
+
+
+
+
+<section id="benefits_cw"  ng-if="CW && loan">
+  <h1>Benefits</h1>
+  <div class="col-md-6 left">
+    <table class="table no-lines">
+      <tbody>
+      <tr>
+        <td>NPS Project Number</td>
+        <td><input type="text" class="form-control"  ng-model="details.cwsrfProjectDetail.nps_project_number"  ng-change="updateAction(details.cwsrfProjectDetail)"></td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+<div class="col-md-6 right">
+  <table class="table no-lines">
+    <tbody>
+      
+      <tr>
+        <td>Project Start Date</td>
+        <td>{{details.project_start_date | date}}</td>
+      </tr>
+      <tr>
+        <td>Project Completion Date</td>
+        <td>{{details.project_completion_date | date}}</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<div class=" col-md-12 needs-categories">
+  <table class="table table-striped" >
+    <thead>
+      <tr>
+        <th>Needs Category</th>
+        <th class="text-align-right">%</th>
+        <th class="text-align-right">CWSRF Funded Amount</th>
+        <th>Percentage Solving an NPS Problem</th>
+        <th class="text-align-right delete-col" ng-click="addRecord('cwsrfNeedsCategories')" > Add Row</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr ng-repeat="row in details.cwsrfNeedsCategories" ng-if="row.action!='delete'">
+        <td><select chosen class="form-control" disable-search-threshold="10" ng-model="row.needsCategoryId" ng-options="option.componentLookUpId as option.componentName for option in lookups['cwsrf_needs_category']" ng-change="updateAction(row)"><option value=""></option></select></td>
+        <td><input type="number" max="100" min="0" class="form-control text-align-right" ng-model="row.percentage" ng-change="updateTotal('cwsrfNeedsCategories'); updateAction(row); "></td>
+        <td class="text-align-right">{{money(row.fundedAmount)}}</td>
+        <td><input type="number" max="100" min="0" class="form-control" ng-model="row.percentage_solving_nps" ng-change="updateAction(row)"></td>
+        <td><button type="delete" class="btn btn-danger" ng-click="deleteRecord(details.cwsrfNeedsCategories, $index);">Delete</button></td>
+      </tr>
+      <tr ng-class="needsTotals.valid ? '' : 'red'">
+        <td class="text-align-right">Total:</td>
+        <td class="border-top text-align-right">{{percent(needsTotals.percentage)}}</td>
+        <td class="border-top text-align-right">{{money(needsTotals.fundedAmount)}}</td>
+        <td colspan="2"></td>
+      </tr>
+    </tbody>
+  </table>
+
+</div>
+<div class="shim"></div>
+</section>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<section id='discharge_information'  ng-if="CW && loan">
+    <!-- <h2>
+      Discharge Information
+    </h2> -->
+    <div class="col-md-6">
+      <h3>
+        Discharge Affected:
+      </h3>
+      <div class="col-md-6">
+        <table class="table no-lines">
+          <tbody>
+            <tr>
+              <td>Wetland</td>
+              <td><input type="checkbox" class="form-control" ng-model="details.cwsrfProjectDetail.wetland" ng-change="updateAction(details.cwsrfProjectDetail)"></td>
+            </tr>
+            <tr>
+              <td>Surface Water</td>
+              <td><input type="checkbox" class="form-control" ng-model="details.cwsrfProjectDetail.surface_water" ng-change="updateAction(details.cwsrfProjectDetail)"></td>
+            </tr>
+            <tr>
+              <td>Groundwater</td>
+              <td><input type="checkbox" class="form-control" ng-model="details.cwsrfProjectDetail.groundwater" ng-change="updateAction(details.cwsrfProjectDetail)"></td>
+            </tr>
+            <tr>
+              <td>Land Application</td>
+              <td><input type="checkbox" class="form-control" ng-model="details.cwsrfProjectDetail.land_application" ng-change="updateAction(details.cwsrfProjectDetail)"></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="col-md-6">
+        <table class="table no-lines">
+          <tbody>
+            <tr>
+              <td>Other/Reuse</td>
+              <td><input type="checkbox" class="form-control" ng-model="details.cwsrfProjectDetail.other_reuse" ng-change="updateAction(details.cwsrfProjectDetail)"></td>
+            </tr>
+            <tr>
+              <td>Eliminates Discharge</td>
+              <td><input type="checkbox" class="form-control" ng-model="details.cwsrfProjectDetail.eliminates_discharge" ng-change="updateAction(details.cwsrfProjectDetail)"></td>
+            </tr>
+            <tr>
+              <td>No Change/No Discharge</td>
+              <td><input type="checkbox" class="form-control" ng-model="details.cwsrfProjectDetail.no_change_discharge" ng-change="updateAction(details.cwsrfProjectDetail)"></td>
+            </tr>
+            <tr>
+              <td>Seasonal Discharge</td>
+              <td><input type="checkbox" class="form-control" ng-model="details.cwsrfProjectDetail.seasonal_discharge" ng-change="updateAction(details.cwsrfProjectDetail)"></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <div class="col-md-6">
+      <h3>
+        Wastewater Volume:
+      </h3>
+
+      <table class="table no-lines">
+        <tbody>
+          <tr>
+            <td>Project Wastewater Volume</td>
+            <td><input type="number" step=".001" min="0" class="form-control" ng-model="details.cwsrfProjectDetail.project_wastewater_volume" ng-change="updateAction(details.cwsrfProjectDetail)"></td>
+            <td>mgd</td>
+          </tr>
+          <tr>
+            <td>System Wastewater Volume</td>
+            <td><input type="number" step=".001" min="0" class="form-control" ng-model="details.cwsrfProjectDetail.system_wastewater_volume" ng-change="updateAction(details.cwsrfProjectDetail)"></td>
+            <td>mgd</td>
+          </tr>
+          <tr>
+            <td>Wastewater volume conserved/eliminated by project</td>
+            <td><input type="number" step=".001" min="0" class="form-control" ng-model="details.cwsrfProjectDetail.wastewater_conserved_eliminated" ng-change="updateAction(details.cwsrfProjectDetail)"></td>
+            <td>mgd</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="permit_number_fields clear" >
+      <h3>
+        Permit information
+      </h3>
+      <div class="col-md-6 left">
+        <table class="table no-lines">
+          <tbody>
+            <tr >
+              <td>NPDES Permit:</td>
+              <td><select chosen class="form-control" ng-model="details.cwsrfProjectDetail.npdes_permit" ng-options="option.cwsrfnpdesId as optionString('npdes', option) for option in lookups['npdes_permit_number']" disable-search-threshold="10" ng-change="updateAction(details.cwsrfProjectDetail)" allow-single-deselect="true"><option value=""></option></select></td>
+            </tr>
+            <tr>
+              <td>No NPDES Permit</td>
+              <td><input type="checkbox" class="form-control" ng-model="details.cwsrfProjectDetail.no_npdes_permit" ng-change="updateAction(details.cwsrfProjectDetail)"></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="col-md-6 right">
+        <table class="table no-lines">
+          <tbody>
+            <tr>
+              <td>Other Permit Type:</td>
+              <td><input type="text" class="form-control" ng-model="details.cwsrfProjectDetail.other_permit_type" ng-change="updateAction(details.cwsrfProjectDetail)"></td>
+            </tr>
+            <tr>
+              <td>Other Permit Number:</td>
+              <td><input type="text" class="form-control" ng-model="details.cwsrfProjectDetail.other_permit_number" ng-change="updateAction(details.cwsrfProjectDetail)"></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <div class="waterbody_fields clear">
+      <h3>
+        Affected Waterbodies
+      </h3>
+      <div class="col-md-6 left">
+        <table class="table no-lines">
+          <tbody>
+            <tr>
+              <td >No Valid Waterbody Id</td>
+              <td ><input type="checkbox" class="form-control" ng-model="details.cwsrfProjectDetail.no_valid_waterbody_id" ng-change="updateAction(details.cwsrfProjectDetail)"></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="col-md-12">
+        <table class="table no-lines">
+          <thead>
+            <tr>
+              <th>Waterbody ID Type:</th>
+              <th>Waterbody Name</th>
+              <!-- this one needs to be broken up into its component pieces like in LGTS, because otherwise it will return 28k records! -->
+              <th>Waterbody ID</th>
+              <th>Receiving Waterbody?</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Primary Impacted</td>
+              <td><input type="text" class="form-control" ng-model="details.cwsrfProjectDetail.primary_impacted_waterbody_name" ng-change="updateAction(details.cwsrfProjectDetail)"></td>
+              <td><a href="javascript:;" ng-click="selectWaterbodyId(details.cwsrfProjectDetail.primary_impacted_waterbody_id, 'primary')">{{details.cwsrfProjectDetail.primary_impacted_waterbody_id ? details.cwsrfProjectDetail.primary_impacted_waterbody_id : 'Select Waterbody Id'}}</a></td>
+              <td><input type="checkbox" class="form-control" ng-model="details.cwsrfProjectDetail.primary_impacted_receiving_waterbody" ng-change="updateAction(details.cwsrfProjectDetail); "></td>
+            </tr>
+            <tr>
+              <td>Other Impacted</td>
+              <td><input type="text" class="form-control" ng-model="details.cwsrfProjectDetail.other_impacted_waterbody_name" ng-change="updateAction(details.cwsrfProjectDetail)"></td>
+              <td><a href="javascript:;" ng-click="selectWaterbodyId(details.cwsrfProjectDetail.other_impacted_waterbody_id, 'other')">{{details.cwsrfProjectDetail.other_impacted_waterbody_id ? details.cwsrfProjectDetail.other_impacted_waterbody_id : 'Select Waterbody Id'}}</a></td>
+              <td><input type="checkbox" class="form-control" ng-model="details.cwsrfProjectDetail.other_impacted_receiving_waterbody" ng-change="updateAction(details.cwsrfProjectDetail)"></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <div class="shim"></div>
+  </section>
+
+
+  <section id='project_improvement'  ng-if="CW && loan">
+    <h3>
+      Project Improvement
+    </h3>
+    <div class="col-md-6 left">
+      <table class="table no-lines">
+        <tbody>
+          <tr >
+            <td>Contributes to Water Quality...</td>
+            <td>
+              <select chosen class="form-control" ng-model="details.cwsrfProjectDetail.contributesWaterQualityId" ng-options="option.componentLookUpId as option.componentName for option in lookups['contributes_to_water_quality']" disable-search-threshold="10" ng-change="updateAction(details.cwsrfProjectDetail)"><option value=""></option></select>
+            </tr>
+            <tr >
+              <td>Allows System to...</td>
+              <td>
+                <select chosen class="form-control" ng-model="details.cwsrfProjectDetail.allowsSystemId" ng-options="option.componentLookUpId as option.componentName for option in lookups['allows_system_to']" disable-search-threshold="10" ng-change="updateAction(details.cwsrfProjectDetail)"><option value=""></option></select>
+              </td>
+            </tr>
+            <tr >
+              <td>Affected Waterbody Is...</td>
+              <td>
+                <select chosen class="form-control" ng-model="details.cwsrfProjectDetail.affectedWaterbodyId" ng-options="option.componentLookUpId as option.componentName for option in lookups['affected_waterbody_is']" disable-search-threshold="10" ng-change="updateAction(details.cwsrfProjectDetail)"><option value=""></option></select>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="col-md-6 right">
+        <table class="table no-lines">
+          <tbody>
+            <tr>
+              <td>Existing TMDL Addressed</td>
+              <td><input type="checkbox" class="form-control" ng-model="details.cwsrfProjectDetail.existing_tmdl_addressed" ng-change="updateAction(details.cwsrfProjectDetail)"></td>
+            </tr>
+            <tr>
+              <td>Projected TMDL Addressed</td>
+              <td><input type="checkbox" class="form-control" ng-model="details.cwsrfProjectDetail.projected_tmdl_addressed" ng-change="updateAction(details.cwsrfProjectDetail)"></td>
+            </tr>
+            <tr>
+              <td>Watershed Management Plan Addressed</td>
+              <td><input type="checkbox" class="form-control" ng-model="details.cwsrfProjectDetail.watershed_addressed" ng-change="updateAction(details.cwsrfProjectDetail)"></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="designated_water_uses col-md-12">
+      <p class="center underline">Contribution to Protection or Restoration of the Waterbody Use<p>
+        <table class="table table-striped" >
+          <thead>
+            <tr>
+              <th>Designated Water Use</th>
+              <th>Protection</th>
+              <th>Restoration</th>
+              <th class="text-align-right delete-col" ng-click="addRecord('designatedWaterUse')" >Add Row</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr ng-repeat="row in details.designatedWaterUses" ng-if="row.action!='delete'">
+              <td><select chosen class="form-control" ng-model="row.waterUseId" ng-options="option.componentLookUpId as option.componentName for option in lookups['designated_water_use'] | availableOptions:details.designatedWaterUses:row:'waterUseId'" disable-search-threshold="10" ng-change="updateAction(row, 'edit')"><option value=""></option></select></td>
+              <td><select chosen class="form-control" ng-model="row.protectionId" ng-options="option.componentLookUpId as option.componentName for option in lookups['protection']" disable-search-threshold="10" ng-change="updateAction(row, 'edit')"><option value=""></option></select></td>
+              <td><select chosen class="form-control" ng-model="row.restorationId" ng-options="option.componentLookUpId as option.componentName for option in lookups['restoration']" disable-search-threshold="10" ng-change="updateAction(row, 'edit')"><option value=""></option></select></td>
+              <td class="text-align-right delete-col"><button type="delete" class="btn btn-danger" ng-click="deleteRecord(details.designatedWaterUses, $index)">Delete</button></td>
+            </tr>
+          </tbody>
+        </table>
+
+
+      </div>
+
+      <div class="other_water_uses col-md-12">
+        <table class="table table-striped" >
+          <thead>
+            <tr>
+              <th>Other Water Use</th>
+              <th>Protection</th>
+              <th>Restoration</th>
+              <th class="text-align-right delete-col" ng-click="addRecord('otherWaterUse')" >Add Row</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr ng-repeat="row in details.otherWaterUses" ng-if="row.action!='delete'">
+              <td><select chosen class="form-control" ng-model="row.waterUseId" ng-options="option.componentLookUpId as option.componentName for option in lookups['other_water_use'] | availableOptions:details.otherWaterUses:row:'waterUseId'" disable-search-threshold="10" ng-change="updateAction(row, 'edit')"><option value=""></option></select></td>
+              <td><select chosen class="form-control" ng-model="row.protectionId" ng-options="option.componentLookUpId as option.componentName for option in lookups['protection']" disable-search-threshold="10" ng-change="updateAction(row, 'edit')"><option value=""></option></select></td>
+              <td><select chosen class="form-control" ng-model="row.restorationId" ng-options="option.componentLookUpId as option.componentName for option in lookups['restoration']" disable-search-threshold="10" ng-change="updateAction(row, 'edit')"><option value=""></option></select></td>
+              <td class="delete-col"><button type="delete" class="btn btn-danger" ng-click="deleteRecord(details.otherWaterUses, $index)">Delete</button></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="shim"></div>
+    </section>
+
+
+
+
+
+
+
+
+
+
+    <section id="nims_information"  ng-if="DW && loan" class="nims">
+      <h1>NIMS Information</h1>
+
+      <p class="center" style="margin: 30px">Total loan amount: <b>{{money(project.loanAmount)}}</b></p>
+      <table class="table no-lines table-striped nims" >
+        <thead>
+          <tr class="center">
+            <th class="line-item-col-1">NIMS Category</th>
+            <th class="line-item-col-2">Amount</th>
+            <th class="line-item-col-3">Percent</th>
+            <th class="line-item-col-4 center">Assign Compliance Objectives</th>
+            <th class="line-item-col-5 delete-col bold" ng-click="addRecord('nimsCategory', details.nims.categories);" > Add Row</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr ng-repeat="row in details.nims.categories" ng-if="row.action!='delete'">
+            <td colspan="5" class="no-padding">
+              <table class="table transparent nims">
+                <tbody>
+                  <tr>
+
+                    <td class="line-item-col-1">
+                      <select chosen class="form-control" ng-model="row.nimsCategoryId" ng-options="option.componentLookUpId as option.componentName for option in lookups['nims_categories'] | availableOptions:details.nims.categories:row:'nimsCategoryId'" disable-search-threshold="10" ng-change="updateAction(row);"><option value=""></option></select>
+                    </td>
+                    <td class="line-item-col-2">
+                      <input type="text" ui-maskmoney data-prefix="" data-decimal="." data-thousands="," data-allow-negative="true"data-allow-zero="true" class="form-control"  ng-model="row.amount" ng-change="updateTotal('nims'); updateAction(row);" >
+                    </td>
+                    <td class="line-item-col-3 text-align-right">
+                      {{percent(row.percentage)}}
+                    </td>
+                    <td class="line-item-col-4 center">
+                      <button class="btn btn-primary center" type="button" ng-click="toggleNIMSObjectives(row)">{{row.objectivesOpen ? 'Close' : 'Open'}}</button>
+                    </td>
+                    <td class="line-item-col-5 delete-col">
+                      <button type="delete" class="btn btn-danger" ng-click="deleteRecord(details.nims.categories, $index, 'nimsCategory'); updateTotal('nims');">Delete</button>
+                    </td>
+                  </tr>
+
+                </tbody>
+              </table>
+
+              <div class="compliance-objectives" ng-if="row.objectivesOpen">
+                <h4 style="float:left">Compliance Objectives</h4>
+                <table class="table table-striped">
+                  <thead>
+                    <tr>
+                      <th>Objective</th>
+                      <th>Amount</th>
+                      <th>Percent</th>
+                      <th class="delete-col" ng-click="addRecord('nimsObjective', row); updateAction(row);" > Add Row</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr ng-repeat="objective in row.objectives" ng-if="objective.action!='delete'">
+                      <td>
+                        <select chosen class="form-control" ng-model="objective.complianceObjectiveId" ng-options="option.componentLookUpId as option.componentName for option in lookups['compliance_objectives'] | availableOptions:row.objectives:objective:'complianceObjectiveId'" disable-search-threshold="10" ng-change="updateAction(objective); updateAction(row); updateTotal('nims');"><option value=""></option></select>
+                      </td>
+                      <td >
+                        <input type="text" ui-maskmoney data-prefix="" data-decimal="." data-thousands="," data-allow-negative="true"data-allow-zero="true" class="form-control"  ng-model="objective.amount" ng-change="updateTotal('nims'); updateAction(objective); updateAction(row);" >
+                      </td>
+                      <td class="text-align-right">
+                        {{percent(objective.percentage)}}
+                      </td>
+                      <td class="delete-col">
+                        <button type="delete" class="btn btn-danger" ng-click="deleteRecord(row.objectives, $index); updateTotal('nims'); updateAction(row);">Delete</button></td>
+                      </tr>
+                      <tr class="{{row.totals.amount==row.amount || row.totals.amount==0 ? 'green' : 'red'}}">
+                        <td class="text-align-right">Total:</td>
+                        <td class="bold border-top text-align-right total-pad-right">{{money(row.totals.amount)}}</td>
+                        <td class="bold border-top text-align-right">{{percent(row.totals.percentage)}}</td>
+                        <td></td>
+                      </tr>
+
+                    </tbody>
+                  </table>
+                  <div class="shim"></div>
+                </div>
+              </td>
+            </tr>
+            <tr class="{{nimsTotals.percentage == 100 ? 'green' : 'red'}}">
+              <td class="line-item-col-1 text-align-right bold">Total:</td>
+              <td class="line-item-col-2 bold border-top text-align-right total-pad-right">{{money(nimsTotals.amount)}}</td>
+              <td class="line-item-col-3 bold border-top text-align-right">{{percent(nimsTotals.percentage)}}</td>
+              <td colspan="2"></td>
+            </tr>
+          </tbody>
+        </table>
+
+
+          <!-- <table class="table nims-objectives table-striped">
+            <thead>
+              <tr>
+                <th>Compliance Objective Category</th>
+                <th>Amount</th>
+                <th>Percent</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr ng-repeat="objective in details.nims.objectives">
+                <td>{{objective.name}}</td>
+                <td class="text-align-right">{{money(objective.amount)}}</td>
+                <td class="text-align-right">{{percent(objective.percentage)}}</td>
+              </tr>
+              <tr class="{{objectiveTotals.percentage == 100 ? 'green' : 'red'}}">
+                <td class="bold">Total:</td>
+                <td class="bold border-top text-align-right total-pad-right">{{money(objectiveTotals.amount)}}</td>
+                 <td class="bold border-top text-align-right">{{percent(objectiveTotals.percentage)}}</td>
+              </tr>
+            </tbody>
+          </table> -->
+
+
+        </section>
+      </div>
+    </div>

@@ -1,0 +1,145 @@
+<table class="table no-lines nims">
+
+
+
+      <!-- Head -->
+      <thead>
+
+        <!-- Top row - labels -->
+        <tr>
+          <th class="compliance-col" rowspan="3">
+            <h5 class="center purple">Total Amount:</h5>
+            <!-- What is this amount supposed to be? -->
+            <p class="center">{{money(project.loanAmount)}}</p>
+          </th>
+        <!-- <th colspan="4" class="no-border"> NIMS Categories (required) <a href="javascript:;" class="add-btn" ng-click="addRecord('nimsCategory')"><i class="fa fa-plus"></i></a>
+      </th> -->
+      <th colspan="4" class="no-border"> NIMS Categories (required) <a href="javascript:;" class="add-btn" ng-click="addRecord('nimsCategory')"><i class="fa fa-plus"></i></a>
+      </th>
+      <th class="no-border"></th>
+      <th class="no-border"></th>
+    </tr>
+
+
+    <!-- Nims Category dropdowns -->
+    <tr>
+      <th ng-repeat="col in nimsCategories" class="nims-col no-border" ng-if="col.action!='delete'">
+        <table style="width:100%">
+          <tbody>
+            <tr>
+              <td>
+                <select chosen class="form-control" ng-model="col.optionId" ng-options="option.componentLookUpId as option.componentName for option in lookups['nims_categories'] | availableOptions:nimsCategories:col:'optionId'" disable-search-threshold="10" ng-change="updateAction(col); filter"></select>
+
+              </td>
+              <td> 
+                <a href="javascript:;" class="delete-btn" ng-click="deleteRecord(nimsCategories, $index, 'nimsCategories'); updateNims();"><i class="fa fa-close"></i></a>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </th>        
+      <th colspan="2" class="no-border center">Total</th>
+    </tr>
+
+
+    <!-- Nims Category Values + total -->
+    <tr >
+      <th ng-repeat="col in nimsCategories" style="font-weight:normal;" ng-if="col.action!='delete'">
+        <table class="percent-amount" style="width:100%">
+          <tbody>
+            <tr>
+              <td><input type="text" ui-maskmoney data-prefix="" data-decimal="." data-thousands="," data-allow-zero="true" class="form-control"  ng-model="col.numericValue" ng-change="setNimsCategory(col); updateNims(); updateAction(col)" ></td>
+              <td style="font-size: 12px; text-align:right" width="20%">
+                {{col.percentValue}}%</td>
+              </tr>
+            </tbody>
+          </table>
+        </th>
+        <th style="font-weight:normal;" ng-class="nimsTotals.top.amount == project.loanAmount ? '' : 'red'"> 
+          <table class="percent-amount" style="width:100%">
+            <tbody>
+              <tr>
+                <td><input type="text" ui-maskmoney data-prefix="" data-decimal="." data-thousands="," data-allow-zero="true" class="form-control"  ng-model="nimsTotals.top.amount" ></td>
+                <td style="font-size: 12px; text-align:right" width="20%">
+                  {{nimsTotals.top.percent}}%</td>
+                </tr>
+              </tbody>
+            </table>
+          </th>
+        </tr>
+      </thead>
+
+
+
+
+
+
+      <!-- Body -->
+      <tbody>
+
+        <!-- Compliance Objectives label -->
+        <!-- Comliance objectives (as a section) may be optional one day - so they are actually not required at a DB level, but for now they are expected on the frontend -->
+        <tr class="bold"><td colspan="5">Compliance Objectives <a href="javascript:;" class="add-btn" ng-click="addRecord('nimsObjective')"><i class="fa fa-plus"></i></a></td></tr>
+        
+
+        <!-- Collection of rows -->
+        <tr ng-repeat="row in details.nimsObjectives" ng-if="row.action!='delete'">
+
+          <!-- Compliance objective dropdown -->
+          <td class="compliance-col">
+            <table style="width:100%">
+              <tbody>
+                <tr>
+                  <td>
+                    <select chosen class="form-control" ng-model="row.optionId" ng-options="option.componentLookUpId as option.componentName for option in lookups['compliance_objectives'] | availableOptions:details.nimsObjectives:row:'optionId'" disable-search-threshold="10" ng-change="syncNimsObjectiveProperties(row); updateAction(row)"></select>
+                  </td>
+                  <td> 
+                    <a href="javascript:;" class="delete-btn" ng-click="deleteRecord(details.nimsObjectives, $index, 'nimsObjectives'); updateNims();"><i class="fa fa-close"></i></a>
+                  </td>
+                </tr>
+              </tbody>
+            </table> 
+          </td>
+
+          <!-- NIMS Category Objectives -->
+          <td ng-repeat="col in nimsCategories"  class="nims-col" ng-if="col.action!='delete'">
+            <input type="text" ui-maskmoney data-prefix="" data-decimal="." data-thousands="," data-allow-zero="true" class="form-control"  ng-model="nimsCompObj(col, row).numericValue" ng-change="updateNims(); updateAction(nimsCompObj(col, row))">
+          </td>
+
+
+          <!-- Compliance objective total -->
+          <td>
+            <table class="percent-amount" style="width:100%">
+              <tbody>
+                <tr>
+                  <td><input type="text" ui-maskmoney data-prefix="" data-decimal="." data-thousands="," data-allow-zero="true" class="form-control"  ng-model="nimsTotals.middle[$index].amount" ng-disabled="true"></td>
+                  <td style="font-size: 12px; text-align:right" width="20%">
+                    {{nimsTotals.middle[$index].percent}}%</td>
+                  </tr>
+                </tbody>
+              </table>
+            </td>
+          </tr>
+
+
+          <!-- Bottom line totals -->
+          <tr class="">
+            <td class="text-align-right bold compliance-col">Total:</td>
+            <td ng-repeat="col in nimsCategories"  class="nims-col" ng-if="col.action!='delete'">
+             <input type="text" ui-maskmoney data-prefix="" data-decimal="." data-thousands="," data-allow-zero="true" class="form-control"  ng-model="nimsTotals.bottom[$index].amount" disabled="true" ng-class="nimsTotals.bottom[$index].amount ==  nimsCategories[$index].numericValue  || nimsTotals.total.amount==0 ? '' : 'red'">
+           </td>
+           <td>
+            <table class="percent-amount" style="width:100%" ng-class="nimsTotals.total.amount == project.loanAmount ||nimsTotals.total.amount==0 ? '' : 'red'">
+              <tbody>
+                <tr>
+                  <td><input type="text" ui-maskmoney data-prefix="" data-decimal="." data-thousands="," data-allow-zero="true" class="form-control"  ng-model="nimsTotals.total.amount" ng-disabled="true"></td>
+                  <td style="font-size: 12px; text-align:right" width="20%">
+                    {{nimsTotals.total.percent}}%</td>
+                  </tr>
+                </tbody>
+              </table>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>

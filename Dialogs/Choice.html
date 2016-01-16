@@ -1,0 +1,9 @@
+﻿<div class="modal-header">
+    <h4 ng-bind="title"></h4>
+</div>
+<div class="modal-body">
+    <p ng-bind-html-unsafe="message | lineBreaks"></p>
+</div>
+<div class="modal-footer">
+    <a ng-repeat="choice in choices" href="" class="btn btn-default" ng-click="close(choice.response)" ng-bind="choice.text"></a>
+</div>

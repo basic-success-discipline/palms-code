@@ -1,0 +1,60 @@
+﻿<div id="AddressForm" class="modal-dialog" style="width: 450px; height: auto;">
+    <div class="modal-content">
+        <form name="AddressForm" novalidate>
+            <div class="modal-header">Address</div>
+            <div class="modal-body">
+
+                <div class="form-label">
+                    <label for="AddressType">Address Type</label>
+                </div>
+                <div class="form-field">
+                    <select id="AddressType" name="AddressType" ng-model="userAddress.Address.AddressTypeId" class="form-control">
+                        <option ng-repeat="type in addressTypes" value="{{type.AddressTypeId}}">{{type.AddressTypeName}}</option>
+                    </select>
+                </div>
+
+                <div class="form-label">
+                    <label for="Address1" class="required-label">Address</label>
+                </div>
+                <div class="form-field">
+                    <input class="form-control" required="required" type="text" id="Address1" name="Address1" ng-model="userAddress.Address.Address1" value="{{Address1}}" />
+                    <div class="error" ng-show="AddressForm.Address1.$dirty && AddressForm.Address1.$invalid">Address1 is required</div>
+                </div>
+                <div class="form-field">
+                    <input class="form-control" type="text" id="Address2" name="Address2" ng-model="userAddress.Address.Address2" value="{{Address2}}" />
+                </div>
+
+                <div class="form-label">
+                    <label for="City" class="required-label">City</label>
+                </div>
+                <div class="form-field">
+                    <input class="form-control" required="required" type="text" id="City" name="City" ng-model="userAddress.Address.City" value="{{City}}" />
+                    <div class="error" ng-show="AddressForm.City.$dirty && AddressForm.City.$invalid">City is required</div>
+                </div>
+
+                <div class="form-label">
+                    <label for="State">State</label>
+                </div>
+                <div class="form-field">
+                    <input class="form-control" type="text" id="State" name="State" ng-model="userAddress.Address.State" value="{{userAddress.Address.State}}" />
+                </div>
+
+                <div class="form-label">
+                    <label for="PostalCode">PostalCode</label>
+                </div>
+                <div class="form-field">
+                    <input class="form-control" type="text" id="PostalCode" name="PostalCode" ng-model="userAddress.Address.PostalCode" value="{{userAddress.Address.PostalCode}}" />
+                </div>
+
+                <div class="form-label">
+                    <label for="Country">Country</label>
+                </div>
+            </div>
+            <div om-button-container class="modal-footer">
+                <button class="btn btn-primary" data-ng-click="ok()">OK</button>
+                <button class="btn btn-default" data-ng-click="cancel()">Cancel</button>
+
+            </div>
+        </form>
+    </div>
+</div>

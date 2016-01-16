@@ -1,0 +1,30 @@
+ <div class="modal-header" >
+  <h3 class="modal-title">Upload Files</h3>
+</div>
+<div class="modal-body" >
+
+  <button class="btn btn-primary" ngf-model="files" ngf-select="queueUploads($files)" ngf-multiple="true" ngf-keep="true" ngf-keep-distinct="true">Select Files</button>
+  
+    <!-- Drop files: <div ngf-drop ng-model="files" class="drop-box">Drop</div> -->
+
+    <table class="table no-lines table-striped">
+      <tbody>
+        <tr ng-repeat="file in files" >
+          <td style="overflow:scroll; max-width: 550px">
+          <!-- <input type="text" ng-model="uploads[file.name].fileName"></td> -->
+          {{uploads[file.name].fileName}}
+          <td style="width: 150px"> 
+            <progressbar value="uploads[file.name].progress"><span style="color:white; white-space:nowrap;">{{uploads[file.name].progress}}</span></progressbar>
+            </td>
+          <td class="delete-col"><i class="fa fa-close red" ng-click="deleteFile($index)"></td>
+        </tr>
+      </tbody>
+    </table>
+
+
+
+  </div>
+  <div class="modal-footer">
+    <button class="btn btn-success" ng-click="upload()" ng-disabled="!files.length">Upload</button>
+    <button class="btn btn-warning" ng-click="cancel()">Cancel</button>
+  </div>

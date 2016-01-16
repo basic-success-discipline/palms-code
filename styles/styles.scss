@@ -1,0 +1,1226 @@
+$nav-height: 50px;
+$nav-margin: 20px;
+
+$foot-height: 50px;
+
+$active-color: rgb(215,215,215);
+
+$static-pane-width: 350px;
+
+
+//STICKY FOOTER
+* {
+  margin: 0;
+}
+html, body {
+  height: calc(100% - 60px);
+}
+.wrapper {
+  min-height: 100%;
+  height: auto !important; /* This line and the next line are not necessary unless you need IE6 support */
+  height: 100%;
+  margin: 0 auto -$foot-height; /* the bottom margin is the negative value of the footer's height */
+  
+}
+footer, .push {
+  height: $foot-height; /* .push must be the same height as .footer */
+}
+.push{
+  height: 0px;
+}
+
+
+
+
+// GENERAL
+
+body{
+  margin-top: $nav-height + $nav-margin;
+}
+
+.projects-wrapper td, .projects-wrapper th{
+  text-align: center;
+}
+.form.group{
+  max-width: 500px;
+}
+.active{
+  background-color: $active-color;
+}
+
+$red: #c0392b;
+.red{
+  color: $red;
+  input{
+    color: $red;
+  }
+}
+
+$green: #27ae60;
+.green{
+  color: $green;
+  input{
+    color: $green;
+  }
+}
+
+$blue: #3498db;
+.blue{
+  color: $blue;
+}
+$orange:#e67e22;
+.orange{
+  color: $orange;
+}
+$purple: #8e44ad;
+.purple{
+  color: $purple;
+}
+.bold{
+  font-weight: bold;
+}
+.underline{
+  text-decoration: underline;
+}
+.text-align-right{
+  text-align: right !important;
+
+  & input{
+    text-align: right;
+  }
+
+  & th{
+    text-align: right;
+  }
+}
+.center{
+  text-align:center;
+}
+button.center{
+  margin-left: auto;
+  margin-right: auto;
+}
+section{
+  clear:both;
+}
+.clear{
+  clear:both;
+}
+.float-right{
+  float:right;
+}
+.shim{
+  height: 1px;
+  clear:both;
+}
+.inline{
+  display: inline-block;
+}
+.padding{
+  padding: 5px;
+}
+.no-padding{
+  padding:0 !important;
+}
+.border{
+  border: 1px solid rgba(128,128,128, 0.5);
+}
+.no-border{
+  border: 0 !important;
+  th{
+   border: 0 !important;
+  }
+ }
+
+  .no-margin{
+  margin: 0 !important;
+ }
+
+ .table.no-lines th, .table.no-lines td { 
+   border-top: none; 
+ }
+ .border-top, .table td.border-top{
+  border-top: 1px solid black;
+}
+.border-bottom, .table td.border-bottom{
+  border-bottom: 2px solid #ddd;
+}
+
+.absolute{
+  position: absolute;
+}
+.fixed{
+  position: fixed;
+}
+
+.transparent{
+  background-color: transparent !important;
+  td{
+    background-color: transparent !important;
+  }
+}
+.normal-font-weight{
+  font-weight: normal;
+  th, td{
+    font-weight: normal;
+  }
+}
+
+
+.total-pad-right{
+  padding-right: 20px !important;
+}
+
+th, td{
+  vertical-align: inherit !important;
+}
+
+input[type=checkbox].form-control, input[type=radio].form-control{
+ border: none !important;
+ box-shadow: none !important;
+ -moz-box-shadow: none !important;
+ -webkit-box-shadow: none !important;
+ width: inherit !important;
+}
+.chosen-container{
+  width: 100% !important;
+  max-width: 300px !important;
+}
+
+input[type=number]::-webkit-inner-spin-button,
+input[type=number]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+input[type=number] {
+  -moz-appearance:textfield;
+}
+
+textarea{
+  resize: vertical;
+  overflow:auto;
+}
+input[ui-maskmoney], input[fcsa-number]{
+  text-align: right;
+}
+
+
+.read-only.form-control{
+  border: none;
+  box-shadow: none;
+  -webkit-box-shadow: none;
+  -moz-box-shadow: none;
+}
+
+tr.sort-by-thead th a{
+  color: black;
+  text-decoration: underline;
+
+  i{
+    margin-left: 5px;
+  }
+}
+tr.sort-by-thead th a:hover{
+  color: $blue;
+}
+
+.pointer{
+  cursor: pointer;
+}
+
+
+.delete-col{
+  width: 116px;
+  text-align:center;
+}
+th.delete-col{
+  color: $green;
+  border-top-left-radius: 7px;
+  border-top-right-radius: 7px;
+  cursor:pointer;
+  background-color: #f9f9f9;
+  font-weight: bold !important;
+
+}
+th.delete-col:hover{
+ background-color: rgb(242,242,242);
+}
+
+
+
+.pad-top{
+  padding-top: 30px;
+}
+.remove-pad-left{
+  padding-left: 0;
+}
+
+
+.chosen-container-single .chosen-single {
+  background-image: none;
+  border-radius: 4px;
+  -webkit-border-radius: 4px;
+}
+
+
+//PROJECT LIST
+.projects-wrapper label{
+  display: block;
+  width: 100%;
+}
+
+
+  // PROJECT
+  .view-title{
+    margin-top: 0;
+    float:left;
+  }
+  .view-title-btn{
+    margin-top: 4px;
+    margin-left: 5px;
+    float:right;
+  }
+  .view-title-shim{
+    float:right;
+    display: inline-block;
+    height: 40px;
+    width: 195px;
+  }
+
+  .btn-nav{
+    background-color: rgb(234, 234,234);
+  }
+
+  button.save-btn{
+    position: fixed;
+    right: 75px;
+    z-index: 2;
+    top: $nav-height + $nav-margin + 4px;
+  }
+
+  a.refresh-btn{
+    position: fixed;
+    right: 187px;
+    z-index: 2;
+    top: $nav-height + $nav-margin + 4px;
+    color: $green;
+    padding-top: 5px;
+    font-size: 18px;
+
+
+
+    i.fa-check{
+      opacity: 0; 
+    } 
+    i.fa-check.ng-enter{
+      transition: 1s linear all;
+      opacity:1;
+    }
+    i.fa-check.ng-enter.ng-enter-active{
+      transition-delay: 4s;
+      opacity:0;
+    }
+  }
+
+  .loading-spinner{
+    width: 100%;
+    text-align: center;
+    padding-top: 100px;
+    -webkit-transition-delay: 2s; /* Chrome, Safari, Opera */
+    transition-delay: 2s;
+
+  }
+
+ 
+
+
+
+// PROJECT -- SIDE MENU
+.side-menu-wrapper{
+  position: relative;
+  z-index:100;
+  text-align: center;
+}
+.side-menu{
+  width: 100%;
+  text-align: left;
+  box-shadow:none;
+  -moz-box-shadow:none;
+  -webkit-box-shadow: none;
+}
+
+.side-menu-wrapper .fixed{
+  width: 320px;
+}
+// .cost-wrapper {
+//   .side-menu-wrapper .fixed{
+//     width: 250px;
+//   }
+//   .col-md-3{
+//     width: 18%;
+//   }
+//   .col-md-9{
+//     width: 82%;
+//     padding-right: 0;
+//   }
+// }
+
+
+.side-menu-wrapper .collapsed-menu-save-btn{
+  margin-left: 50px;
+  padding: 10px 16px 10px 16px;
+}
+
+
+
+
+
+
+
+
+// PROJECT -- STATIC PANE
+
+.open-project-static-pane{
+  position: fixed; 
+  // right: 15px;
+  right: 30px;
+  padding: 7px 12px 5px 12px;
+  top: $nav-height + $nav-margin + 4px; 
+  z-index: 2;
+}
+.project.static-pane{
+  width: $static-pane-width; 
+  min-height: 100%; 
+  background-color: #E0E0E0;
+  position: fixed;
+  top: 0;
+  left: 100%;
+  right: -$static-pane-width;
+  transition-duration: 0.5s;
+  -webkit-transition-duration: 0.5s;
+  -moz-transition-duration: 0.5s;
+  -o-transition-duration: 0.5s;
+  z-index: 3;
+}
+.project.static-pane.open{
+  left: calc(100% - #{$static-pane-width});
+  right: 0;
+}
+
+.project.static-pane .close{
+  position: absolute; 
+  left: 15px; 
+  top: $nav-height + 10px;
+}
+.project.static-pane .scrollable{
+  position: relative;
+  min-height: 100%;
+  overflow: scroll;
+}
+
+.project.static-pane{
+  .contacts-table{
+    width: 90%;
+    margin-left: 5%;
+    position: relative;
+    table{
+      td{
+        padding-top: 0;
+        padding-bottom: 1px;
+      }
+      tbody tr{
+        cursor:pointer;
+      }
+      tbody tr:hover{
+        background-color:rgb(242,242,242);
+      }
+    }
+  }
+}
+
+
+
+
+
+// DETAILS
+
+.federal_grant_assignments{
+  th, td{
+    text-align: center;
+  }
+  .border-top{
+    border-top: 3px solid black;
+  }
+}
+
+
+// NIMS Categories
+
+
+.nims{
+
+
+  table.nims{
+    table-layout:fixed;
+    th {
+      text-align: center;
+    }
+  }
+  .line-item-col-1{
+    width: 30%;
+    max-width:30%;
+  }
+  .line-item-col-2{
+    width:20%;
+    max-width: 20%;
+  }
+  .line-item-col-3{
+    width: 10%;
+    max-width: 10%;
+  }
+  .line-item-col-4{
+    width:20%;
+    max-width: 20%;
+    & .btn{
+      width: 80px;
+    }
+  }
+  .line-item-col-5{
+    width:20%;
+    max-width: 20%;
+    & .btn{
+      width: 80px;
+    }
+  }
+  
+
+  .compliance-objectives{
+    background-color: rgba(230,230,255, 0.3);
+    box-shadow: inset 0 1px 1px rgba(0,0,50,.075);
+    -webkit-box-shadow: inset 0 1px 1px rgba(0,0,50,.075);
+    -moz-box-shadow: inset 0 1px 1px rgba(0,0,50,.075);
+    padding: 8px;
+    margin: 8px;
+    border-radius: 6px;
+    -webkit-border-radius: 6px;
+    table{
+      background-color: transparent;
+    }
+    th{
+      font-size: 12px;
+      font-weight: normal;
+      text-align: center;
+    }
+    .table-striped>tbody>tr:nth-of-type(odd){
+      // background-color: rgba(233,0,0, 1);
+    }
+  }
+}
+
+.nims-objectives{
+  width: 300px;
+}
+
+
+
+// $compliance-col-width: 200px;
+// $total-percent-col-width: 50px;
+// $total-amount-col-width: 100px;
+// $total-col-width: $compliance-col-width + $total-percent-col-width + $total-amount-col-width;
+// .nims .compliance-col{
+//   width: $compliance-col-width !important;
+// }
+// .nims .nims-col{
+//   width: calc(25% - #{$total-col-width}/4);
+//   max-width: calc(25% - #{$total-col-width}/4);
+// }
+// .nims .nims-col .chosen-container{
+//   max-width: 100% !important;
+//   width: 100% !important;
+// }
+// .nims .nims-percent-col{
+//   width: 30% !important;
+// }
+// .nims .nims-amount-col{
+//   width: 70% !important;
+// }
+// .nims .total-percent-col{
+//   width: $total-percent-col-width !important;
+// }
+// .nims .total-amount-col{
+//   width: $total-amount-col-width !important;
+// }
+
+
+
+a.delete-btn{
+  text-align: center;
+  padding-left: 15px;
+  padding-right: 15px;
+  color: $red;
+}
+
+a.add-btn{
+  text-align: center;
+  padding-left: 15px;
+  padding-right: 15px;
+  color: $green;
+}
+
+.nims .red .nims-total input{
+  color: red;
+}
+
+.nims .green .nims-total input{
+  color: green;
+}
+// FUNDING STATUS 
+.funding-status{
+  table{
+    width: auto;
+    margin: 0 auto;
+  }
+  .table td.border-top{
+    border-top: 1px solid black;
+  }
+
+  .top td{
+
+    padding-top: 3px !important;
+    padding-bottom: 3px !important;
+  }
+  .middle td, .bottom td{
+
+    text-align:right;
+    // width: 50%;
+    padding-top: 2px !important;
+    padding-bottom: 2px !important;
+  }
+
+  .top .right{
+    td:first-child{
+      text-align: right;
+    }
+    td:last-child{
+      text-align: left;
+    }
+  }
+  
+  .top,.middle{
+    border-bottom: 1px solid rgba(24,24,24,0.7);
+    padding-bottom: 20px;
+    margin-bottom: 25px;
+    position: relative;
+  }
+
+  .left, .right{
+    text-align: center;
+  }
+  .obligations , .disbursements {
+    margin-top: 18px;
+    display: inline-block;
+    width: auto;
+    background-color: #fafafa;
+    padding: 10px;
+    border-radius: 5px;
+    -webkit-border-radius: 5px;
+    h3{
+      margin-top: 0px;
+      text-align: center;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+  }
+}
+
+
+// Agreement History
+
+.agreement-history{
+
+  table{
+    table-layout:fixed;
+    margin-bottom: 5px;
+  }
+
+  $agreement-history-col-widths: 21%, 10%, 14%, 14%, 24%, 12%, 5%;
+      @for $i from  length($agreement-history-col-widths) through 1{
+        th:nth-child(#{$i}), td:nth-child(#{$i}){
+          width:nth($agreement-history-col-widths, $i) !important;
+          max-width:nth($agreement-history-col-widths, $i) !important;
+        }
+      }
+  
+
+  .documents-wrapper{
+    height: 100%;
+    position: relative;
+  }
+  .loan-documents, .other-documents{
+    background-color: rgba(230,230,255, 0.3);
+    box-shadow: inset 0 1px 1px rgba(0,0,50,.075);
+    -webkit-box-shadow: inset 0 1px 1px rgba(0,0,50,.075);
+    -moz-box-shadow: inset 0 1px 1px rgba(0,0,50,.075);
+    padding: 20px;
+    border-radius: 6px;
+    height: 100%;
+    -webkit-border-radius: 6px;
+    font-size: 12px;
+    table{
+      background-color: transparent;
+
+    }
+    th{
+      
+      font-weight: normal;
+      text-align: center;
+    }
+    h4{
+      text-align: left;
+    }
+    input{
+      font-size: 12px;
+    }
+    td{
+      word-wrap : break-word;
+    }
+
+
+    $document-col-widths: 25px, 55%, 40px, 20%, 25%, 20px;
+    @for $i from  length($document-col-widths) through 1{
+      th:nth-child(#{$i}), td:nth-child(#{$i}){
+        width:nth($document-col-widths, $i) !important;
+        max-width:nth($document-col-widths, $i) !important;
+      }
+    } 
+
+
+  }
+
+  .small-col{
+    width: 30px;
+    max-width: 30px;
+    a {
+      padding: 0;
+    }
+  }
+}
+
+
+//create loan documents
+
+.create-loan-documents{
+  margin-top: -($nav-height + $nav-margin);
+  .top{
+    padding-bottom: 20px;
+    margin-top: 20px;
+    border-bottom: 1px dashed gray;
+    .btn{
+      display: inline-block;
+    }
+
+    .buttons{
+      width: 100%;
+      padding-top: 15px;
+    }
+    .checkbox{
+      margin-top:15px;
+      text-align: center;
+    }
+    .copy-loan-info{
+      span:nth-child(1){
+        width: 300px;
+        margin-right: 3px;
+      }
+      .btn{
+        // width: 72px;
+      } 
+    }
+
+    .create-doc{
+      width: 100%;
+      text-align: center;
+      // padding-top: 96px;
+      padding-top: 27px;
+      .btn{
+        display: block;
+      }
+    }
+  }
+
+  $req: rgb(153, 230, 153);
+  $empty: rgb(255, 153, 153);
+  $opt: rgb(255, 255, 204);
+   .required-highlight{
+          background-color: $req;
+      }
+      .required-highlight.empty{
+          background-color: $empty;
+      }
+      .optional-highlight{
+          background-color: $opt;
+      }
+
+  .bottom{
+    margin-top: 20px;
+    // -webkit-column-count: 3; /* Chrome, Safari, Opera */
+    // -moz-column-count: 3; /* Firefox */
+    // column-count: 3;
+    position: relative;
+    width: 100%;
+
+    .section{
+      // -webkit-column-break-inside: avoid; /* Chrome, Safari */
+      // page-break-inside: avoid; /* Firefox */
+      // break-inside: avoid-column; /* CSS3, IE10+ */
+      // display: table;
+      width: 100%;
+      position: relative;
+
+      .panel{
+        box-shadow: none;
+        -webkit-box-shadow: none;
+
+      }
+      .panel-body{
+        position: relative;
+        padding-right: 10px;
+        padding-left: 10px;
+      }
+      div.field{
+        display: table;
+        width: 100%;
+        padding-right: 5px;
+        padding-left: 5px;
+        border-radius: 5px;
+
+
+        // margin-bottom: 10px;
+        label{
+          font-weight: normal;
+          display: table-cell;
+          vertical-align: middle !important;
+          padding-right: 5px;
+          margin-bottom: 5px;
+          width: 110px;
+        }
+        label.smaller{
+          font-size: 12px;
+        }
+        label.checkbox{
+          width: 240px;
+        }
+        label.bold{
+          font-weight: bold;
+        }
+
+        
+        input, textarea, .chosen-container{
+          @extend .form-control;
+          width: 100%;
+          margin-bottom: 3px;
+          margin-top: 3px;
+          padding: 2px;
+          height: auto;
+        }
+
+        input.smaller{
+          width: 50px;
+        }
+        input[type="checkbox"]{
+          margin-top: 5px;
+        }
+        input.percent{
+          width: 50px;
+          display: inline-block;
+        }
+      }
+    }
+    .section.eight {
+      div.field label{
+        width: 180px;
+      }
+    }
+    .section.ten{
+      div.field label{
+        width: 180px;
+      }
+    }
+    .section.fifteen{
+      div.field label{
+        width: 200px;
+        font-size: 12px;
+      }
+    }
+    .section.sixteen{
+      div.field label{
+        width: 180px;
+        font-size: 12px;
+      }
+    }
+    .section.seventeen{
+      div.field label{
+        width: 150px;
+        // font-size: 12px;
+      }
+    }
+    .section.twenty-one{
+      div.field label:not(.checkbox){
+        width: 150px;
+        font-size: 12px;
+      }
+    }
+    .section.twenty-two{
+      div.field{
+        margin-bottom: 10px;
+        label{
+          font-size: 12px;
+        }
+        label:not(.checkbox){
+          width: 180px;
+        }
+      }
+    }
+    .section.twenty-three{
+      div.field label:not(.checkbox){
+        width: 180px;
+        font-size: 12px;
+      }
+    }
+    .section.twenty-six{
+      div.field label:not(.checkbox){
+        width: 160px;
+        // font-size: 12px;
+      }
+    }
+    .section.twenty-eight{
+      div.field label:not(.checkbox){
+        width: 160px;
+        // font-size: 12px;
+      }
+    }
+    .section.twenty-nine{
+      div.field label:not(.checkbox){
+        width: 160px;
+        // font-size: 12px;
+      }
+    }
+    .section.thirty{
+      div.field label:not(.checkbox){
+        width: 160px;
+        font-size: 12px;
+      }
+    }
+  }
+}
+
+
+
+// FILE UPLOAD
+
+.drop-box{
+  background-color: red;
+  height: 100px;
+  width: 100%;
+  border: 3px dashed green;
+}
+
+// Funding Authorization
+
+.funding-auth.loanFA{
+  // th, td{
+  //   text-align: center;
+  // }
+
+  table.contract-line-items{
+    table-layout:fixed;
+    th:not(.bold){
+      font-weight: normal;
+    }
+  }
+
+  $funding-auth-col-widths: 10%, 20%, 20%, 11%, 11%, 17%, 10%;
+  @for $i from  length($funding-auth-col-widths) through 1{
+    th:nth-child(#{$i}), td:nth-child(#{$i}){
+      width:nth($funding-auth-col-widths, $i) ;
+      max-width:nth($funding-auth-col-widths, $i) ;
+    }
+  }
+
+  .contract-actions{
+    background-color: rgba(230,230,255, 0.3);
+    box-shadow: inset 0 1px 1px rgba(0,0,50,.075);
+    -webkit-box-shadow: inset 0 1px 1px rgba(0,0,50,.075);
+    -moz-box-shadow: inset 0 1px 1px rgba(0,0,50,.075);
+    padding: 8px;
+    margin: 8px;
+    border-radius: 6px;
+    -webkit-border-radius: 6px;
+
+    a.add-row{
+      margin-left: 15px;
+      font-size: 12px;
+      color: $green;
+    }
+    table{
+      // overflow-x:scroll;
+      background-color: transparent;
+    }
+    th{
+      font-size: 12px;
+      font-weight: normal;
+      text-align: center;
+    }
+    .table-striped>tbody>tr:nth-of-type(odd){
+      // background-color: rgba(233,0,0, 1);
+    }
+
+    .date-col{
+      width: 108px !important;
+      max-width:108px!important;
+      min-width: 108px!important;
+    }
+    .money-col{
+      width: 130px !important;
+      max-width:130px!important;
+      min-width: 130px!important;
+    }
+  }
+}
+
+.funding-auth.TAFA .top{
+  padding: 30px;
+
+  label{
+    display: inline-block;
+    margin-right: 20px;
+  }
+  input{
+    width: 200px;
+    display: inline-block;
+  }
+}
+
+
+
+// PAYMENT REQUESTS
+
+.payment-requests{
+  position: relative;
+}
+.payment-requests h1{
+  margin-bottom: 20px;
+}
+
+
+.payment-requests .top{
+  text-align:center;
+  nav button{
+    margin-left: 40px;
+  }
+}
+.payment-requests .balance-calculation .table{
+  width: auto;
+  margin: 0 auto;
+  margin-bottom: 20px;
+  text-align: right;
+}
+.payment-requests .balance-calculation .table>tbody>tr>td{
+  padding-top: 2px;
+  padding-bottom: 2px;
+}
+
+
+.payment-request{
+
+  padding-top: 20px;
+  border: 1px dashed gray;
+  border-radius: 5px;
+  h1{
+    margin-left: 20px;
+  }
+  .top{
+    text-align: inherit;
+  }
+  button.save-btn{
+    position: relative;
+    right: inherit;
+    top: inherit;
+    float:right; 
+    z-index: 1;
+    margin-right: 30px;
+    margin-top: 3px;
+  }
+  a.refresh-btn{
+    position: relative;
+    right: inherit;
+    top: inherit;
+    float:right;
+    z-index:1;
+    margin-right: 8px;
+    margin-top: 3px;
+  }
+}
+
+.payment-request.ng-enter{
+  transition:0.5s linear all;
+  opacity:0;
+}
+.payment-request.ng-enter.ng-enter-active {
+  opacity:1;
+}
+
+
+.payment-request .middle{
+  background-color: #fefefe;
+  padding: 10px;
+  border: 1px solid #efefef;
+  border-radius: 5px;
+
+  margin-bottom: 50px;
+}
+
+.payment-request .bottom .left{
+  text-align: center;
+  button{
+    margin-top: 60px;
+  }
+
+}
+
+.payment-requests .require-funding-auth{
+  position: absolute;
+  top:0;
+  right:0;
+  bottom:0;
+  left:0;
+  background-color: rgba(255,255,255, 0.9);
+  z-index: 1;
+  padding-top: 300px;
+  padding-left: 25%;
+  padding-right: 25%;
+  text-align: center;
+
+  p{
+    color: rgb(128,128,128);
+    font-size: 24px;
+  }
+}
+
+
+
+
+  // LOAN TERMS
+
+  .loan-terms{
+    .table tr td{
+      padding-top: 2px;
+      padding-bottom: 2px;
+      height: 34px;
+    } 
+    input{
+      display: inline-block;
+    }
+    input[type=checkbox]{
+      height: 20px;
+    }
+    input[type=radio]{
+      height: 20px;
+    }
+    .small{
+      width: 70px;
+    }
+    .medium{
+      width: 100px;
+    }
+    span.small{
+      display: inline-block;
+    }
+    label{
+      display: inline-block;
+    }
+    .big-enough{
+      min-width: 105px;
+    }
+
+    .disabled{
+      background-color: rgba(200,200,200, 0.5);
+    }
+  }
+
+  .financial-benefits{
+    input{
+      display: inline-block;
+    }
+    .small{
+      width: 70px;
+    }
+  }
+
+
+  .loan-schedule{
+    
+    .scroll-window{
+      overflow-y: scroll;
+      height:500px;
+    }
+
+    .same-col-widths:not(.billing){
+      table-layout:fixed;
+      th, td{
+        font-size: 10px;
+      }
+      th{
+        text-align: center;
+      }
+      .checkbox-col{
+        padding-left:0;
+        padding-right:0px;
+        text-align: center;
+        input[type=checkbox]{
+          background-color: rgba(0,0,0,0);
+          margin-left: auto;
+          margin-right: auto;
+
+;        }
+
+      }
+
+      $a: 25px; // checkboxes - 6
+      $b: 9%; // variable - 7
+      $c: 4.5%; //dates - 2
+      $d: 5.5%; //money - 3
+      $e: 3%; //ref num - 1
+      $loan-schedule-col-widths: $e, $c, $c, $a, $b, $a, $b, $a, $b, $a, $b, $a, $b, $d, $b, $b, $a, $d, $d;
+      @for $i from  length($loan-schedule-col-widths) through 1{
+        th:nth-child(#{$i}), td:nth-child(#{$i}){
+          width:nth($loan-schedule-col-widths, $i) !important;
+          max-width:nth($loan-schedule-col-widths, $i) !important;
+        }
+      }
+    }
+
+    .same-col-widths.billing{
+
+      th, td{
+        font-size: 12px
+      }
+      $loan-schedule-col-widths:  50px, 200px, 50px, 50px, 200px, 140px, 250px, 100px;
+      @for $i from  length($loan-schedule-col-widths) through 1{
+        th:nth-child(#{$i}), td:nth-child(#{$i}){
+          width:nth($loan-schedule-col-widths, $i) !important;
+          max-width:nth($loan-schedule-col-widths, $i) !important;
+        }
+      }
+
+    }
+
+
+  
+    .selected{
+      td{
+        background-color: #2980b9 !important 
+      }
+    }
+    
+  }

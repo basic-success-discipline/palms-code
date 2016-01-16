@@ -1,0 +1,40 @@
+
+<div class="project-wrapper">
+  <!-- <a href="javascript:;" ng-click="togglePane(true)" class="open-project-static-pane" > -->
+  <button class="btn btn-info open-project-static-pane" ng-click="togglePane(true)">
+    <i class="fa fa-newspaper-o fa-1x" title="Project Information"></i>
+  </button>
+  <!-- </a> -->
+  <div class="project static-pane" ng-class="{open: openPane}">
+    <a href="javascript:;" ng-click="togglePane(false)" class="close">&times;</a>
+    <h1 class="center" style="margin-top: 60px;"><i class="fa fa-newspaper-o" ></i></h1>
+    <h4 class="center" >Project Information</h4>
+    <div class="scrollable">
+      <p style="margin: 10px;">
+        Basic project information goes here, such as loan information (project details in LGTS) and project phase
+      </p>
+      <div class="contacts-table border padding">
+      <h4 class="center no-margin">Contacts</h4>
+      <table class="table no-lines no-margin">
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th class="text-align-right">Role</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr ng-repeat="contact in [1,2,3]" ng-click="openContacts(contact)" title="View Contact">
+            <td>John Doe</td>
+            <td class="text-align-right">Project Manager</td>
+          </tr>
+        </tbody>
+      </table>
+      </div>
+    </div>
+  </div>
+  <div ng-if="loading" class="loading-spinner fadein">
+    <i class="fa fa-refresh fa-spin fa-5x" ></i>
+  </div>
+  <div ui-view ng-if="!loading"></div>
+</div>
+</div>

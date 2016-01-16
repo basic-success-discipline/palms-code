@@ -1,0 +1,12 @@
+﻿<div class="modal-header">
+    <a class="close" data-dismiss="modal" ng-click="dismiss()">×</a>
+    <h4 ng-bind="title"></h4>
+</div>
+<div class="modal-body">
+    <p ng-bind="message"></p>
+    <input type="text" ng-model="response" class="form-control" placeholder="{{placeholderText}}" />
+</div>
+<div class="modal-footer">
+    <a href="" class="btn btn-primary" ng-click="close(response)" ng-bind="closeText"></a>
+    <a href="" class="btn btn-default" ng-click="dismiss()" ng-bind="dismissText"></a>
+</div>

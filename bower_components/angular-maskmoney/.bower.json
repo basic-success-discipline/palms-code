@@ -1,0 +1,31 @@
+{
+  "name": "angular-maskmoney",
+  "authors": [
+    "helderfarias <helderfarias@gmail.com>"
+  ],
+  "description": "A simple angular directive wrapper for jquery.maskMoney.js",
+  "main": [
+    "*.js"
+  ],
+  "keywords": [
+    "input",
+    "form",
+    "mask",
+    "money"
+  ],
+  "dependencies": {
+    "jquery": ">= 1.9.0"
+  },
+  "license": "MIT",
+  "homepage": "https://github.com/helderfarias/angular-maskmoney",
+  "_release": "8417377291",
+  "_resolution": {
+    "type": "branch",
+    "branch": "master",
+    "commit": "8417377291faf2a37ecb598b518f3050bea23224"
+  },
+  "_source": "git://github.com/helderfarias/angular-maskmoney.git",
+  "_target": "*",
+  "_originalSource": "angular-maskmoney",
+  "_direct": true
+}

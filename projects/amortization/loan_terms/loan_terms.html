@@ -1,0 +1,348 @@
+<!-- <page-status begun="true" complete="false"></page-status> -->
+<div class="loan-terms">
+  <h1 class="view-title">Loan Terms</h1>
+  <div class="view-title-shim"></div>
+
+  <a class="view-title-btn btn btn-nav" ui-sref="project.amortization.loan_schedule">Loan Schedule</a>
+  
+  <button class="view-title-btn btn btn-info" ng-click="openLoanSetupInstructions()">Loan Setup Instructions</button>
+  <button class="view-title-btn btn btn-warning" ng-click="toggleEditing()" >{{!disableEdit ? 'Refresh' : 'Enable Editing'}}</button>
+  
+  <a href="javascript:;" class="refresh-btn"  ng-click="loadData()" title="Refresh"><i class="fa fa-refresh " ng-if="unsavedChanges || !disableEdit"></i><i class="fa fa-check " ng-if="!unsavedChanges && justSaved"></i></a>
+  <button class="btn btn-primary save-btn"  ng-click="save()"  ng-disabled="loading || !unsavedChanges">Save Project</button>
+  <div class="shim clear-both">
+  </div>
+  <div class="col-md-4 left">
+  
+    <p class="red">API does not persist saved data</p>
+    <!-- <button class="btn btn-info">Loan Setup Intructions</button> -->
+    <table class="table no-lines">
+      <tbody>
+        <tr>
+          <td class="bold">Base Schedule on Either:</td>
+          <td></td>
+          <td class="underline text-align-right">Amount to Use</td>
+        </tr>
+        <tr>
+          <td>Actual Loan Disbursements</td>
+          <td><input type="radio" class="form-control" ng-model="terms.amortization_basis" ng-value="1" ng-change="updateAction(terms)"></td>
+          <td class="text-align-right">{{money(100000)}}</td>
+        </tr>
+        <tr>
+          <td>Disbursement Projection</td>
+          <td><input type="radio" class="form-control" ng-model="terms.amortization_basis" ng-value="2" ng-change="updateAction(terms)"></td>
+          <td class="text-align-right">{{money(100000)}}</td>
+        </tr>
+        <tr>
+          <td>Create Original Schedule</td>
+          <td><input type="radio" class="form-control" ng-model="terms.amortization_basis" ng-value="3" ng-change="updateAction(terms)"></td>
+          <td class="text-align-right">{{money(100000)}}</td>
+        </tr>
+        <tr>
+          <td>Closing Date</td>
+          <td colspan="2"><input date-input class="form-control" ng-model="terms.closing_date" ng-change="updateAction(terms)"></td>
+        </tr>
+        <tr>
+          <td>Interest Rate During Loan Repayment</td>
+          <td colspan="2"><input type="text" class="form-control percent medium" ng-model="terms.loan_interest_rate" ng-change="updateAction(terms)"> %</td>
+        </tr>
+      </tbody>
+    </table>
+    <div class="border padding administrative-fees" style="margin-bottom: 20px;">
+      <p class="bold">Administrative Fees</p>
+      <table class="table no-lines">
+        <tbody>
+          <tr>
+            <td>Fees are based on:</td>
+            <td><select chosen class="form-control" disable-search-threshold="10" ng-model="terms.adminFeeTypeId" ng-options="option.componentLookUpId as option.componentName for option in lookups['admin_fees_based_on']" ng-change="updateAction(terms)"><option value=""></option></select></td>
+          </tr>
+          <tr>
+            <td>Periodic Fee % or Dollar Amount:</td>
+            <td><input type="text" class="form-control percent small" ng-model="terms.admin_percent_or_amount_charged" ng-change="updateAction(terms)"></td>
+          </tr>
+          <tr>
+            <td>Annualized:</td>
+            <td>1.500000</td>
+          </tr>
+          <tr>
+            <td>Fees Paid Over:</td>
+            <td><select chosen class="form-control" disable-search-threshold="10" ng-model="terms.adminFeePaidOverId" ng-options="option.componentLookUpId as option.componentName for option in lookups['admin_fees_paid_over']" ng-change="updateAction(terms)"><option value=""></option></select></td>
+          </tr>
+          <tr>
+            <td>Charge Fees On:</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+
+
+    
+  </div>
+  <div ng-class="['col-md-8', 'padding', 'border', !disableEdit ? '': 'disabled']" >
+
+    <div class="col-md-6">
+      <table class="table no-lines no-margin">
+        <tbody>
+          <tr>
+            <td>Interest Rate Type</td>
+            <td><select chosen class="form-control" disable-search-threshold="10" ng-disabled="disableEdit" ng-model="terms.interestRateTypeId" ng-options="option.componentLookUpId as option.componentName for option in lookups['interest_rate_type']" ng-change="updateAction(terms)"><option value=""></option></select></td>
+          </tr>
+          <tr>
+            <td>Day of the Month Payments Will be Made:</td>
+            <td><select chosen class="form-control" disable-search-threshold="10" ng-disabled="disableEdit" ng-model="terms.day_of_payment" ng-options="option.otherVal as option.value for option in lookups['day_of_month_principal_paid']" ng-change="updateAction(terms)"><option value=""></option></select>{{}}</td>
+
+          </tr>
+          <tr>
+            <td>Date of First Principal Payment:</td>
+            <td> <input date-input class="form-control" ng-disabled="disableEdit" ng-model="terms.date_first_principal_payment" ng-change="updateAction(terms)"></td>
+          </tr>
+          <tr>
+
+            <td>Loan Principal Paid Every:</td>
+            <td><span class="small"><select chosen class="form-control" disable-search-threshold="10" ng-disabled="disableEdit" ng-options="option.otherVal as option.value for option in lookups['paid_every']"  ng-model="terms.principal_payment_plan" ng-change="calculateLoanTerm(); updateAction(terms);"><option value=""></option></select></span> months</td>
+          </tr>
+          <tr>
+            <td >Number of Principal Repayments:</td>
+            <td><span class="small"><input type="number" class="form-control small" ng-disabled="disableEdit" ng-model="terms.number_principal_payments" ng-change="calculateLoanTerm(); updateAction(terms)"></span> payments</td>
+          </tr>
+          <tr>
+            <td>Calculates to:</td>
+            <td>{{terms.loanTerm}} years</td>
+          </tr>
+          <tr>
+            <td>Loan Interest Paid Every</td>
+            <td><span class="small"><select chosen class="form-control" disable-search-threshold="10" ng-disabled="disableEdit" ng-options="option.otherVal as option.value for option in lookups['paid_every']" ng-model="terms.interest_payment_plan" ng-change="updateAction(terms)"><option value=""></option></select></span> months</td>
+          </tr>
+          <tr>
+            <td>Date of First Loan Interest Payment:</td>
+            <td><input date-input class="form-control" ng-disabled="disableEdit" ng-model="terms.date_first_interest_payment" ng-change="updateAction(terms)"></td>
+          </tr>
+
+          <tr>
+            <td>Calculated Periodic Amortization Amount:</td>
+            <td>{{money(1000000)}}</td>
+          </tr>
+          <tr>
+            <td>Annual Amortization Amount:</td>
+            <td>{{money(1000000)}}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="col-md-6">
+      <table class="table no-lines no-margin">
+        <tbody>
+          <tr>
+            <td>Loan Amortization Method</td>
+            <td><select chosen class="form-control small to-be-disabled" disable-search-threshold="10" ng-disabled="disableEdit" ng-model="terms.loanAmortizationMethodId"  ng-options="option.componentLookUpId as option.componentName for option in lookups['loan_amortization_method']" ng-change="updateAction(terms)"><option value=""></option></select></td>
+          </tr>
+          <tr>
+            <td>CIFR Rate:</td>
+            <td><input type="text" class="form-control percent medium"  ng-disabled="disableEdit" ng-model="terms.cifr_numeric" ng-change="updateAction(terms)"> %</td>
+          </tr>
+          <tr>
+            <td>Initial Disadvantaged Rate</td>
+            <td><input type="text" class="form-control percent medium"  ng-disabled="disableEdit" ng-model="terms.initial_disadvantaged_rate" ng-change="updateAction(terms)"> %</td>
+          </tr>
+          <tr>
+            <td>Forgivable Principal</td>
+            <td><input type="text" ui-maskmoney data-prefix="$" data-decimal="." data-thousands="," data-allow-zero="true" class="form-control" ng-disabled="disableEdit" ng-model="terms.forgivable_principal" ng-change="updateAction(terms)"></td>
+          </tr>
+          <tr>
+            <td>ARRA Reduced CIFR</td>
+            <td><input type="checkbox" class="form-control" ng-disabled="disableEdit" ng-model="terms.arra_reduced_cifr" ng-change="updateAction(terms)"></td>
+          </tr>
+          <tr>
+            <td>ARRA CIFR:</td>
+            <td><input type="text" class="form-control percent medium"  ng-disabled="disableEdit" ng-model="terms.arra_cifr_numeric" ng-change="updateAction(terms)"> %</td>
+          </tr>
+          <tr>
+            <td>ARRA Forgivable Principal</td>
+            <td><input type="text" ui-maskmoney data-prefix="$" data-decimal="." data-thousands="," data-allow-zero="true" class="form-control" ng-disabled="disableEdit" ng-model="terms.arra_forgivable_principal" ng-change="updateAction(terms)"></td>
+          </tr>
+          <tr>
+            <td>Round Principal to Nearest</td>
+            <td><input type="text" ui-maskmoney data-prefix="$" data-decimal="." data-thousands="," data-allow-zero="true" class="form-control small" ng-disabled="disableEdit" ng-model="terms.round_principal_factor" ng-change="updateAction(terms)"> dollars</td>
+          </tr>
+          <tr>
+            <td>Use standard 30/360day based interest calculations</td>
+            <td><input type="checkbox" class="form-control" ng-disabled="disableEdit" ng-model="terms.use_30360_day_count" ng-change="updateAction(terms)"></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="col-md-12 border padding">
+      <div class="reserves col-md-6">
+        <p class="bold">Reserves</p>
+        <table class="table no-lines no-margin">
+          <tbody>
+            <tr>
+              <td>Reserve Requirement:</td>
+              <td><select chosen class="form-control" disable-search-threshold="10" ng-disabled="disableEdit" ng-model="terms.debtServiceReserveRequirementId"  ng-options="option.componentLookUpId as option.componentName for option in lookups['dsr_requirements']" ng-change="updateAction(terms)"><option value=""></option></select></td>
+            </tr>
+            <tr>
+              <td>Adjust Reserve Amount for Prepayments</td>
+              <td><input type="checkbox" class="form-control" ng-disabled="disableEdit" ng-model="terms.adjust_reserve_amount_for_prepayments" ng-change="updateAction(terms)"></td>
+            </tr>
+            <tr>
+              <td>Date of First Reserve Deposit:</td>
+              <td><input date-input class="form-control" ng-disabled="disableEdit" ng-model="terms.date_first_reserve_deposit" ng-change="updateAction(terms)"></td>
+            </tr>
+            <tr>
+              <td>Reserve Deposit every:</td>
+              <td><span class="small"><select chosen class="form-control small" disable-search-threshold="10" ng-disabled="disableEdit" ng-options="option.otherVal as option.value for option in lookups['paid_every']" ng-model="terms.reserve_deposit_plan" ng-change="updateAction(terms)"><option value=""></option></select></span> months</td>
+            </tr>
+            <tr>
+              <td>Number of Reserve Deposits</td>
+              <td><input type="text" class="form-control small" ng-disabled="disableEdit" ng-model="terms.number_reserve_deposits" ng-change="updateAction(terms)"></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="col-md-6">
+        <table class="table no-lines no-margin">
+          <thead>
+            <tr>
+              <th colspan="2"></th>
+              <th class="underline">Total Due</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Calculated Reserve Deposit:</td>
+              <td>{{money(terms.calculated_reserve_deposit)}}</td>
+              <td>{{money(100000)}}</td>
+            </tr>
+            <tr>
+              <td>First Period Reserve Deposit:</td>
+              <td><input type="text" ui-maskmoney data-prefix="$" data-decimal="." data-thousands="," data-allow-zero="true" class="form-control medium" ng-disabled="disableEdit" ng-model="terms.amount_first_reserve_deposit" ng-change="updateAction(terms)"></td>
+              <td>{{money(10000)}}</td>
+            </tr>
+            <tr>
+              <td>Actual Periodic Reserve Deposit:</td>
+              <td><input type="text" ui-maskmoney data-prefix="$" data-decimal="." data-thousands="," data-allow-zero="true" class="form-control medium" ng-disabled="disableEdit" ng-model="terms.actual_periodic_reserve_deposit" ng-change="updateAction(terms)"></td>
+              <td>{{money(10000)}}</td>
+            </tr>
+          </tbody>
+        </table>
+        <div style="width: 100%; padding: 10px; position: relative; text-align: center">
+          <button class="btn btn-primary center" ng-disabled="disableEdit">Calculate Reserve Desposit</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+<div class="col-md-12 clear financial-benefits">
+  <h2>Financial Benefits Reporting</h2>
+  <div class="col-md-4">
+    <table class="table no-lines">
+      <thead>
+        <tr>
+          <th></th>
+          <th>Initial Amount</th>
+          <th>Final Amount</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Total Assistance:</td>
+          <td><input type="text" ui-maskmoney data-prefix="$" data-decimal="." data-thousands="," data-allow-zero="true" class="form-control" ng-model="terms.initial_total_assistance_amount" ng-change="updateAction(terms)"></td>
+          <td><input type="text" ui-maskmoney data-prefix="$" data-decimal="." data-thousands="," data-allow-zero="true" class="form-control" ng-model="terms.final_total_assistance_amount" ng-change="updateAction(terms)"></td>
+        </tr>
+        <tr>
+          <td class="red">Additional Subsidy Provided?</td>
+          <td><input type="checkbox" class="form-control" ng-model="test" ng-change="updateAction(terms)"></td>
+        </tr>
+        <tr>
+          <td>Grant Amount:</td>
+          <td><input type="text" ui-maskmoney data-prefix="$" data-decimal="." data-thousands="," data-allow-zero="true" class="form-control" ng-model="terms.initial_grant_amount" ng-change="updateAction(terms)"></td>
+          <td><input type="text" ui-maskmoney data-prefix="$" data-decimal="." data-thousands="," data-allow-zero="true" class="form-control" ng-model="terms.final_grant_amount" ng-change="updateAction(terms)"></td>
+        </tr>
+        <tr>
+          <td>Negative Interest:</td>
+          <td><input type="text" ui-maskmoney data-prefix="$" data-decimal="." data-thousands="," data-allow-zero="true" class="form-control" ng-model="terms.initial_negative_interest" ng-change="updateAction(terms)"></td>
+          <td><input type="text" ui-maskmoney data-prefix="$" data-decimal="." data-thousands="," data-allow-zero="true" class="form-control" ng-model="terms.final_negative_interest" ng-change="updateAction(terms)"></td>
+        </tr>
+        <tr>
+          <td>Principal Forgiveness:</td>
+          <td><input type="text" ui-maskmoney data-prefix="$" data-decimal="." data-thousands="," data-allow-zero="true" class="form-control" ng-model="terms.initial_principal_forgiveness" ng-change="updateAction(terms)"></td>
+          <td><input type="text" ui-maskmoney data-prefix="$" data-decimal="." data-thousands="," data-allow-zero="true" class="form-control" ng-model="terms.final_principal_forgiveness" ng-change="updateAction(terms)"></td>
+        </tr>
+        <tr class="red">
+          <td>Net Loan Amount</td>
+          <td>{{money(100000)}}</td>
+          <td>{{money(100000)}}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="col-md-4">
+    <table class="table no-lines">
+    <tbody>
+    <tr>
+    <td>Assistance Type:</td>
+    <td><select chosen class="form-control" disable-search-threshold="10" ng-model="terms.assistanceTypeId" ng-options="option.componentLookUpId as option.componentName for option in lookups['assistance_type']" ng-change="updateAction(terms)"><option value=""></option></select></td>
+    </tr>
+    
+    <tr>
+    <td>First Principal Due Date:</td>
+    <td> <input date-input class="form-control" ng-model="terms.date_first_principal_payment" ng-change="updateAction(terms)"></td>
+    </tr>
+    <tr>
+    <td>Loan Interest Rate:</td>
+    <td><input type="text" class="form-control small" ng-model="terms.loan_interest_rate" ng-change="updateAction(terms)"> %</td>
+    </tr>
+    <tr>
+    <td>State Market Interest Rate:</td>
+    <td><input type="text" class="form-control small" ng-model="terms.market_interest_rate" ng-change="updateAction(terms)"> %</td>
+    </tr>
+    <tr>
+    <td class="red">Loan Term:</td>
+    <td><input type="text" class="form-control small" ng-model="terms.loanTerm" ng-change="updateAction(terms)"> yrs</td>
+    </tr>
+    <tr>
+    <td>% Funded by {{DW ? 'DWSRF' : 'CWSRF'}}:</td>
+    <td><input type="text" class="form-control small" ng-model="terms.percent_funded_by_source" ng-change="updateAction(terms)"> %</td>
+    </tr>
+    </tbody>
+    </table>
+  </div>
+  <div class="col-md-4">
+    <table class="table no-lines">
+    <tbody>
+    <tr>
+    <td>Funding Source:</td>
+    <td><select chosen class="form-control" disable-search-threshold="10" ng-model="terms.fundingSourceId" ng-options="option.componentLookUpId as option.componentName for option in lookups['funding_source']" ng-change="updateAction(terms)"><option value=""></option></select></td>
+    </tr>
+    <tr>
+    <td class="red">Tracking #:</td>
+    <td><input type="text" class="form-control" ng-model="test" ng-change="updateAction(terms)"></td>
+    </tr>
+    <tr>
+    <td class="red">Other #:</td>
+    <td><input type="text" class="form-control" ng-model="test" ng-change="updateAction(terms)"></td>
+    </tr>
+    <tr>
+    <td>Incremental Funding?</td>
+    <td><input type="checkbox" class="form-control" ng-model="terms.incremental_funding" ng-change="updateAction(terms)"></td>
+    </tr>
+    <tr>
+    <td>Phase #:</td>
+    <td><input type="number" class="small form-control" ng-model="terms.phase_number" ng-change="updateAction(terms)"></td>
+    </tr>
+    <tr>
+    <td class="red">Original #:</td>
+    <td><select chosen class="form-control" disable-search-threshold="10" ng-model="test" ng-options="option.componentLookUpId as option.componentName for option in lookups['original_number']" ng-change="updateAction(terms)"><option value=""></option></select></td>
+    </tr>
+
+
+  </div>
+</div>
+
+

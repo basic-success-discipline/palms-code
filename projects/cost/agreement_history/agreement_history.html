@@ -1,0 +1,117 @@
+<!-- <page-status begun="true" complete="false"></page-status> -->
+<div class="agreement-history">
+  <h1 class="view-title">Document History</h1>
+  
+  <button class="btn btn-primary save-btn"  ng-click="save()"  ng-disabled="loading || !unsavedChanges">Save Project</button>
+  <a href="javascript:;" class="refresh-btn"  ng-click="loadData()" title="Refresh"><i class="fa fa-refresh" ng-if="unsavedChanges || !justSaved"></i><i class="fa fa-check " ng-if="!unsavedChanges && justSaved"></i></a>
+
+
+  <table class="table table-striped" >
+    <thead>
+      <tr>
+        <th>Type of Action</th>
+        <th>Amendment Number</th>
+        <th>Date</th>
+        <th class="purple">Current Loan Ceiling Amount*</th>
+        <th>Notes</th>
+        <th>Documents</th>
+        <th class="delete-col" ng-click="addRecord('action', agreementHistory)">Add Row</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr ng-repeat="row in agreementHistory | orderBy:row.action_number" ng-if="row.action!='delete'">
+        <td colspan="9" class="no-padding">
+          <table class="table transparent">
+            <tbody>
+              <tr>
+                <td><select chosen class="form-control" disable-search-threshold="10"  ng-model="row.actionTypeId" ng-options="option.componentLookUpId as option.componentName for option in lookups['agreement_history_action_type'] | orderBy:'componentOrder'" ng-change="updateAction(row)"><option value=""></option></select></td>
+                <td><input type="number" min="0" class="form-control" ng-model="row.amendmentNumber" ng-change="updateAction(row)"></td>
+                <td><input date-input-two placeholder="mm/dd/yyyy" class="form-control" ng-model="row.action_date" ng-change="updateAction(row)"></td>
+                <td><input type="text" ui-maskmoney data-prefix="" data-decimal="." data-thousands="," data-allow-zero="true"class="form-control" ng-model="row.ceiling_amount" ng-change="updateAction(row)"></td>
+                <td><textarea msd-elastic  class="form-control"  rows="1" ng-model="row.notes" ng-change="updateAction(row)"></textarea></td>
+                <td>
+                <button class="btn btn-primary" type="button" ng-click="togglePanel(row)" ng-if="!row.mustBeSaved">{{row.openPanel ? 'Close' : 'Open'}}</button> 
+                <span ng-if="!row.mustBeSaved" ng-attr-title="{{row.loanDocuments.length}} loan documents, {{row.userDocuments.length}} other documents" style="font-size:12px">({{row.loanDocuments.length}},{{row.userDocuments.length}})</span>
+                <span class="green" ng-if="row.mustBeSaved">Save Project to add Documents</span>
+                </td>
+                <td class="center"> <a href="javascript:;" style="text-align: center; color: #c0392b"><i class="fa fa-close" ng-click="deleteRecord(agreementHistory, $index)"></i></a></td>
+              </tr>
+            </tbody>
+          </table>
+
+          <div class="documents-wrapper" ng-if="row.openPanel">
+            <div class="loan-documents col-md-6 center" >
+              <h4 style="float:left">Loan Documents</h4>
+              <button type="add" class="btn btn-success" style="margin: 8px; float:right" ng-click="openCreateLoanDocuments(row)">Create Loan Documents</button>
+              <table class="table  no-lines table-striped center clear">
+                <thead>
+                  <tr>
+
+                    <th class="small-col"></th>
+                    <th>Reference Name</th>
+                    <th>Type</th>
+                    <th>Date Added</th>
+                    <th>Added By</th>
+                    <th class="small-col"></th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr ng-repeat="doc in row.loanDocuments" ng-if="doc.action!='delete'">
+                    <td class="small-col"><a href="javascript:;" ng-click="viewDocument(doc)"><i class="fa fa-eye" title="View Document"></i></a>
+                      <td>{{doc.documentName}}</td>
+                      <td>{{doc.contentType}}</td>
+                      <td>{{doc.loadDate | date}}</td>
+                      <td>{{optionString('assignedStaff',doc.uploadedBy)}}</td>
+                      <td class="small-col"> <a href="javascript:;" class="delete-btn"  ng-click="deleteRecord(row.loanDocuments, $index); updateAction(row);"><i class="fa fa-close"></i></a></td>
+                    </tr>
+                  </tbody>
+                </table>
+                
+
+                <div class="shim"></div>
+              </div>
+
+              <div class="other-documents col-md-6 center">
+                <h4 style="float:left">Other Documents</h4>
+                <button type="add" class="btn btn-success" style="margin: 8px; float:right" ng-click="openAddUserDocuments(row)">Add Other Documents</button>
+                <table class="table no-lines table-striped center clear">
+                  <thead>
+                    <tr>
+
+                      <th class="small-col"></th>
+                      <th>Reference Name</th>
+                      <th>Type</th>
+                      <th>Date Added</th>
+                      <th>Added By</th>
+                      <th class="small-col"></th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr ng-repeat="doc in row.userDocuments" ng-if="doc.action!='delete'">
+                      <td class="small-col"><a href="javascript:;" ng-click="viewDocument(doc)"><i class="fa fa-eye" title="View Document"></i></a>
+                        <td><input type="text" class="form-control" ng-model="doc.documentName" ng-change="updateAction(doc); updateAction(row);"></td>
+                        <td>{{doc.contentType}}</td>
+                        <td>{{doc.loadDate | date}}</td>
+                        <td>{{optionString('assignedStaff',doc.uploadedBy)}}</td>
+                        <td class="small-col"><a href="javascript:;" class="delete-btn"  ng-click="deleteRecord(row.userDocuments, $index); updateAction(row);"><i class="fa fa-close"></i></a></td>
+                      </tr>
+
+                    </tbody>
+                  </table>
+                  <p ng-if="row.showReloadMessage" class="green">Save or refresh project to see newly added documents</p>
+                  
+                  <div class="shim"></div>
+                </div>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+
+
+      
+      <p class="purple">Ceiling amount should be automatically input</p>
+
+
+
+    </div>

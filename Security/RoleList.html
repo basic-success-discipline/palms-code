@@ -1,0 +1,13 @@
+﻿<div style="position: relative">
+    <div class="page-title">
+        Roles and Permissions
+        <hr />
+    </div>
+    <button type="button" class="btn btn-primary" data-ng-click="createRole()" palms-permission-group="Role Management" om-role-permission="Add Role"><span translate>Add</span> <i class="fa fa-plus"></i></button>
+    <button type="button" class="btn btn-default" data-ng-click="editSelected()" data-ng-disabled="selectedRoles.length !== 1"><span translate>Edit</span> <i class="fa fa-pencil"></i></button>
+    <button type="button" class="btn btn-default" data-ng-click="deleteSelected()" data-ng-show="selectedRoles.length > 0 && selectedRoles[0].systemRole == false" palms-permission-group="Role Management" om-role-permission="Delete Role" palms-permission-behavior="hide"><span translate>Delete</span> <i class="fa fa-minus"></i></button>
+    <div class="grid-pane" style="position: relative;min-height: 500px;">
+        <div loading-overlay ng-show="loadingItems"></div>
+        <div class="gridStyle" ng-grid="gridOptions" style="min-height:450px"></div>
+    </div>
+</div>

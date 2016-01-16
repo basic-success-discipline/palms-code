@@ -1,0 +1,230 @@
+<!-- <page-status begun="true" complete="false"></page-status> -->
+<div ng-if="loading" class="loading-spinner fadein">
+    <i class="fa fa-refresh fa-spin fa-5x" ></i>
+  </div>
+<div class="payment-requests" ng-if="!loading">
+<h1>Payment Requests</h1>
+<div class="clear">
+
+<div class="col-md-7 top">
+<nav >
+  <ul class="pagination">
+    <li>
+      <a href="javascript:;" ng-click="viewPaymentRequest(currentNumber-1)" aria-label="Previous" >
+        <span aria-hidden="true">&laquo;</span>
+      </a>
+    </li>
+    <li ng-repeat="request in requests"><a href="javascript:;" ng-click="viewPaymentRequest($index +1)">{{$index +1}}</a></li>
+    <li>
+      <a href="javascript:;" ng-click="viewPaymentRequest(currentNumber+1)" aria-label="Next">
+        <span aria-hidden="true">&raquo;</span>
+      </a>
+    </li>
+    <button type="add" class="btn btn-primary" ng-click="addRecord()" ng-disabled="loading || addedAlready">Add</button>
+  </ul>
+  
+</nav>
+</div>
+<div class="col-md-5 balance-calculation">
+  <table class="table no-lines">
+    <tbody>
+      <tr>
+           <td>Authorized Budget:</td>
+           <td>{{money(authorized_budget)}}</td>
+         </tr>
+         <tr>
+           <td>Approved Invoices:</td>
+           <td>{{money(approvedInvoices)}}</td>
+         </tr>
+         <tr>
+           <td>Balance:</td>
+           <td class="border-top">{{money(authorized_budget - approvedInvoices)}}</td>
+         </tr>
+    </tbody>
+  </table>
+</div>
+</div>
+
+<div class="clear payment-request" ng-repeat="paymentRequest in requests" ng-if="currentNumber == paymentRequest.paymentRequestNumber">
+  
+
+
+  <h1 class="view-title">Payment Request: {{paymentRequest.paymentRequestNumber}}</h1>
+   
+  <button class="btn btn-primary save-btn"  ng-click="save(paymentRequest, false)"  ng-disabled="loading || !unsavedChanges">Save Payment Request</button>
+ <a href="javascript:;" class="refresh-btn"  ng-click="loadData()" title="Refresh"><i class="fa fa-refresh " ng-if="unsavedChanges"></i><i class="fa fa-check " ng-if="!unsavedChanges && justSaved"></i></a>
+  <div class="top clear">
+    <div class="col-md-6 left">
+      <table class="table no-lines">
+        <tbody>
+          <tr>
+            <td>Date Received:</td>
+            <td><input date-input class="form-control" ng-model="paymentRequest.date_received" ng-change="updateAction(paymentRequest)"></td>
+          </tr>
+          <tr>
+            <td>Date Logged in:</td>
+            <td><input date-input class="form-control" ng-model="paymentRequest.date_logged" ng-change="updateAction(paymentRequest)"></td>
+          </tr>
+          <tr>
+            <td class='purple'>Logged in by:</td>
+            <td><select chosen class="form-control" ng-model="paymentRequest.loggedInByUserId" disable-search-threshold="10" ng-options="option.userId as optionString('assignedStaff', option) for option in lookups['assigned_staff']" ng-change="updateAction(paymentRequest)"><option value=""></option></select></td>
+          </tr>
+        </tbody>
+      </table>
+      <p class="purple">Logged in by should be automatically populated when payment request is created</p>
+    </div>
+    <div class="col-md-6 right">
+      <table class="table no-lines">
+        <tbody>
+          <tr>
+            <td>Total Project Costs Incurred to Date:</td>
+            <td><input type="text" ui-maskmoney data-prefix="" data-decimal="." data-thousands="," data-allow-zero="true" class="form-control" ng-disabled="true" ng-model="paymentRequest.totalCostToDate"></td>
+          </tr>
+          <tr>
+            <td class="purple">Additional Cost from this Request:*</td>
+            <td><input type="text" ui-maskmoney data-prefix="" data-decimal="." data-thousands="," data-allow-zero="true" class="form-control" ng-model="paymentRequest.amount_requested" ng-change="updateAction(paymentRequest)"></td>
+          </tr>
+          <tr class="red">
+            <td>Notes:</td>
+            <td><textarea msd-elastic  class="form-control" rows="1" ng-model="paymentRequest.notes1" ng-change="updateAction(paymentRequest)"></textarea></td>
+          </tr>
+        </tbody>
+      </table>
+      <p class="purple">* In LGTS, Additional Cost per request is checked against both match and wifa for grants. In PALMS, it will only check against WIFA.</p>
+    </div>
+  </div>
+  <div class="middle clear" ng-if="loan">
+    <table class="table table-striped no-lines">
+      <thead>
+        <tr>
+          <th>Cost Category</th>
+          <th class="text-align-right">Authorized Budget</th>
+          <th class="text-align-right">Balance Remaining from this Source</th>
+          <th class="text-align-right">Total Project Costs Incurred to Date</th>
+          <th class="text-align-right">Additional Costs from this Request</th>
+          <th class="text-align-right">MBE Amount</th>
+          <th class="text-align-right">WBE Amount</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr ng-repeat="row in paymentRequest.paymentRequestDetails">
+          <td>{{row.fundingAuthorization.costCategory.componentName}}</td>
+          <td class="text-align-right">{{money(row.authorized_budget)}}</td>
+          <td class="text-align-right">{{money(row.balanceRemainingFromSource)}}</td>
+          <td class="text-align-right">{{money(row.totalProjectCostIncurred)}}</td>
+          <td><input type="text" ui-maskmoney data-prefix="" data-decimal="." data-thousands="," data-allow-zero="true" class="form-control text-align-right" ng-model="row.amount_requested" ng-change="updateAction(row); updateAction(paymentRequest); updateTotal(paymentRequest);"></td>
+          <td><input type="text" ui-maskmoney data-prefix="" data-decimal="." data-thousands="," data-allow-zero="true" class="form-control text-align-right" ng-model="row.mbe_amount" ng-change="updateAction(row); updateAction(paymentRequest);updateTotal(paymentRequest);"></td>
+          <td><input type="text" ui-maskmoney data-prefix="" data-decimal="." data-thousands="," data-allow-zero="true" class="form-control text-align-right" ng-model="row.wbe_amount" ng-change="updateAction(row); updateAction(paymentRequest);updateTotal(paymentRequest);"></td>
+        </tr>
+        <tr class="border-top bold">
+          <td>Total</td>
+          <td class="text-align-right">{{money(paymentRequest.totals.authorized_budget)}}</td>
+          <td class="text-align-right">{{money(paymentRequest.totals.balanceRemainingFromSource)}}</td>
+          <td class="text-align-right">{{money(paymentRequest.totals.totalProjectCostIncurred)}}</td>
+          <td class="text-align-right total-pad-right">{{money(paymentRequest.totals.amount_requested)}}</td>
+          <td class="text-align-right total-pad-right">{{money(paymentRequest.totals.mbe_amount)}}</td>
+          <td class="text-align-right total-pad-right">{{money(paymentRequest.totals.wbe_amount)}}</td>
+        </tr>
+      </tbody>
+    </table>
+    </div>
+
+    <div class="middle clear" ng-if="grant">
+
+    <ul class="nav nav-tabs"  >
+      <li role="presentation" ng-class="{'active' :thisSource}" ><a href="javascript:;" ng-click="toggleSource(true)">WIFA</a></li>
+      <li role="presentation" ng-class="{'active' :!thisSource}"><a href="javascript:;" ng-click="toggleSource(false)">Match Source</a></li>
+    </ul>
+    <table class="table table-striped no-lines" ng-if="grant">
+      <thead>
+        <tr>
+          <th>Budget Item</th>
+          <th ng-if="thisSource" class="text-align-right">Authorized Budget</th>
+          <th ng-if="thisSource" class="text-align-right">Remaining Balance</th>
+          <th ng-if="thisSource" class="text-align-right">Project Costs Incurred to Date</th>
+          <th ng-if="thisSource" class="text-align-right">Additional Costs from this Request</th>
+          <th ng-if="!thisSource" class="text-align-right">Authorized Budget</th>
+          <th ng-if="!thisSource" class="text-align-right">Remaining Balance</th>
+          <th ng-if="!thisSource" class="text-align-right">Project Costs Incurred to Date</th>
+          <th ng-if="!thisSource" class="text-align-right">Additional Costs from this Request</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr ng-repeat="row in paymentRequest.paymentRequestDetails">
+          <!-- <td>{{row.fundingAuthorization.costCategory.componentName}}</td>
+          <td class="text-align-right">{{money(row.authorized_budget)}}</td>
+          <td class="text-align-right">{{money(row.balanceRemainingFromSource)}}</td>
+          <td class="text-align-right">{{money(row.totalProjectCostIncurred)}}</td>
+          <td><input type="text" ui-maskmoney data-prefix="" data-decimal="." data-thousands="," data-allow-zero="true" class="form-control text-align-right" ng-model="row.amount_requested" ng-change="updateAction(row); updateAction(paymentRequest); updateTotal(paymentRequest);"></td>
+          <td><input type="text" ui-maskmoney data-prefix="" data-decimal="." data-thousands="," data-allow-zero="true" class="form-control text-align-right" ng-model="row.mbe_amount" ng-change="updateAction(row); updateAction(paymentRequest);updateTotal(paymentRequest);"></td>
+          <td><input type="text" ui-maskmoney data-prefix="" data-decimal="." data-thousands="," data-allow-zero="true" class="form-control text-align-right" ng-model="row.wbe_amount" ng-change="updateAction(row); updateAction(paymentRequest);updateTotal(paymentRequest);"></td> -->
+        </tr>
+        <tr class="border-top bold">
+          <!-- <td>Total</td>
+          <td class="text-align-right">{{money(paymentRequest.totals.authorized_budget)}}</td>
+          <td class="text-align-right">{{money(paymentRequest.totals.balanceRemainingFromSource)}}</td>
+          <td class="text-align-right">{{money(paymentRequest.totals.totalProjectCostIncurred)}}</td>
+          <td class="text-align-right total-pad-right">{{money(paymentRequest.totals.amount_requested)}}</td>
+          <td class="text-align-right total-pad-right">{{money(paymentRequest.totals.mbe_amount)}}</td>
+          <td class="text-align-right total-pad-right">{{money(paymentRequest.totals.wbe_amount)}}</td> -->
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="bottom">
+    <div class="left col-md-5">
+      <table class="table no-lines">
+        <thead>
+          <tr class="no-border">
+            <th></th>
+            <th>This Request</th>
+            <th>Cumulative</th>
+          </tr>
+        </thead>
+        <tbody>
+          <td>Total to pay:</td>
+          <td><input type="text" ui-maskmoney data-prefix="" data-decimal="." data-thousands="," data-allow-zero="true" class="form-control" ng-model="paymentRequest.total_to_pay" ng-change="updateAction(paymentRequest);"></td>
+          <!-- <td>"Total Project Costs Incurred to Date" column total + "Total to Pay"</td> -->
+          <td>{{money(paymentRequest.totals.totalProjectCostIncurred + paymentRequest.total_to_pay)}}</td>
+        </tbody>
+      </table>
+      <button type="delete" class="btn btn-danger" ng-click="deleteRecord($index)">Delete this Payment Request</button>
+    </div>
+    <div class="right col-md-7">
+      <table class="table no-lines">
+        <tbody>
+          <tr>
+            <td>Checked by:</td>
+            <td><select chosen class="form-control" ng-model="paymentRequest.checkedByUserId" disable-search-threshold="10" ng-options="option.userId as optionString('assignedStaff', option) for option in lookups['assigned_staff']" ng-change="updateAction(paymentRequest);"><option value=""></option></select></td>
+            <td>Date Checked:</td>
+            <td><input date-input class="form-control" ng-model="paymentRequest.date_checked" ng-change="updateAction(paymentRequest);"></td>
+          </tr>
+          <tr>
+            <td>Decision by:</td>
+            <td><select chosen class="form-control" ng-model="paymentRequest.decisionByUserId" disable-search-threshold="10" ng-options="option.userId as optionString('assignedStaff', option) for option in lookups['assigned_staff']" ng-change="updateAction(paymentRequest);"><option value=""></option></select></td>
+            <td>Decision Date:</td>
+            <td><input date-input class="form-control" ng-model="paymentRequest.decision_date" ng-change="updateAction(paymentRequest);"></td>
+          </tr>
+          <tr>
+            <td>Status:</td>
+            <td><select chosen class="form-control" disable-search-threshold="10" ng-model="paymentRequest.statusId" ng-change="updateAction(paymentRequest);" ng-options="option.componentLookUpId as option.componentName for option in lookups['payment_request_status']"><option value=""></option></select></td>
+            <td colspan="2">
+              <div class="checkbox">
+                <label><input type="checkbox" ng-model="paymentRequest.last_payment_request" ng-change="updateAction(paymentRequest);" >This is the last payment</label>
+              </div>
+            </td>
+          </tr>
+          <tr class="red">
+            <td>Notes:</td>
+            <td colspan="3"><textarea msd-elastic  rows="3" class="form-control" ng-model="paymentRequest.notes2" ng-change="updateAction(paymentRequest);"></textarea></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="shim"></div>
+  </div>
+</div>
+ <div class="require-funding-auth" ng-if="requireFundingAuth">
+    <p>You must first enter data into the funding authorization screen before entering payment request data</p>
+  </div>
+</div>

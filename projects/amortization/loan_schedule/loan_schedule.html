@@ -1,0 +1,99 @@
+<div class="loan-schedule">
+  <h1 class="view-title" >Loan Schedule</h1>
+  <div class="view-title-shim"></div>
+
+  <a class="view-title-btn btn btn-nav" ui-sref="project.amortization.loan_terms">Loan Terms</a>
+  <a href="javascript:;" class="refresh-btn"  ng-click="loadData()" title="Refresh"><i class="fa fa-refresh " ng-if="unsavedChanges"></i><i class="fa fa-check " ng-if="!unsavedChanges && justSaved"></i></a>
+  <button class="btn btn-primary save-btn"  ng-click="save()"  ng-disabled="loading || !unsavedChanges">Save Project</button>
+
+<ul class="nav nav-tabs"  >
+  <li role="presentation" ng-class="{'active' :!billing}"  style="margin-left: 50px;" ><a href="javascript:;" ng-click="toggleBilling(false)" style="height: 52px">Schedule</a></li>
+  <li role="presentation" ng-class="{'active' :billing}"><a href="javascript:;" ng-click="toggleBilling(true)"  style="height: 52px">Billing</a></li>
+</ul>
+
+    <table ng-class="['table', 'no-lines','no-margin', 'same-col-widths',billing ? 'billing' : '']" >
+      <thead>
+        <tr>
+          <th></th> <!--row number-->
+          <th ng-if="!billing">Due Date</th>
+          <th ng-if="!billing">Date Received</th>
+          <th ng-if="!billing" class="checkbox-col"><i class="fa fa-lock" title="Lock Principal Payment?"></th> <!--checkbox-->
+          <th ng-if="!billing">Principal Payment</th>
+          <th ng-if="!billing" class="checkbox-col"><i class="fa fa-lock" title="Lock Principal Payment?"></th> <!--checkbox-->
+          <th ng-if="!billing">DSR Payment</th>
+          <th ng-if="!billing" class="checkbox-col"><i class="fa fa-lock" title="Lock DSR Payment?"></th> <!--checkbox-->
+          <th ng-if="!billing">Interest Payment</th>
+          <th ng-if="!billing" class="checkbox-col"><i class="fa fa-lock" title="Lock Interest Payment?"></th> <!--checkbox-->
+          <th ng-if="!billing">Interest Rate</th>
+          <th ng-if="!billing" class="checkbox-col"><i class="fa fa-lock" title="Lock Interest Rate?"></th> <!--checkbox-->
+          <th ng-if="!billing" >Administrative Fee</th>
+          <th ng-if="!billing">Total Payment</th>
+          <th ng-if="!billing">Notes</th>
+          <th ng-if="!billing">Current Periodic Amortization</th>
+          <th ng-if="!billing" class="checkbox-col"><i class="fa fa-lock" title="Lock Amortization Amount?"></i></th>
+          <th ng-if="!billing">Ending Balance</th>
+          <th ng-if="!billing">DSR Balance</th>
+          <th ng-if="billing">Billing Date</th>
+          <th ng-if="billing">Billed?</th>
+          <th ng-if="billing">Possible Unbilled Int</th>
+          <th ng-if="billing">Calculated Poss. Unbilled</th>
+          <th ng-if="billing">Prior Unbilled Interest - in this bill</th>
+          <th ng-if="billing">Billing Notes</th>
+          <th ng-if="billing"></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="border-bottom">
+          <td colspan="{{billing? 8 : 19}}" class="no-padding">
+            <div class="scroll-window">
+            <table class="table no-lines table-striped same-col-widths">
+            <tbody>
+              <tr ng-repeat="row in [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20]" ng-click="selectRow(row, $event)" ng-class="{'selected': $index==selected-1}">
+              <td>{{$index +1}}</td><!--this will be an actual value though -- not just index-->
+              <td ng-if="!billing">1/1/2015</td>
+              <td ng-if="!billing">1/2/2015</td>
+              <td ng-if="!billing" class="checkbox-col"><div><input type="checkbox" class="form-control" title="Lock Date Received?" ></div></td>
+              <td ng-if="!billing"><input type="text" ng-model="test" ng-model="test" ui-maskmoney data-prefix="$" data-decimal="." data-thousands="," data-allow-zero="true" class="form-control"></td>
+              <td ng-if="!billing" class="checkbox-col"><div><input type="checkbox" class="form-control"></div></td>
+              <td ng-if="!billing"><input type="text" ng-model="test" ng-model="test" ui-maskmoney data-prefix="$" data-decimal="." data-thousands="," data-allow-zero="true" class="form-control"></td>
+              <td ng-if="!billing" class="checkbox-col"><div><input type="checkbox" class="form-control"></div></td>
+              <td ng-if="!billing"><input type="text" ng-model="test" ng-model="test" ui-maskmoney data-prefix="$" data-decimal="." data-thousands="," data-allow-zero="true" class="form-control"></td>
+              <td ng-if="!billing" class="checkbox-col"><div><input type="checkbox" class="form-control"></div></td>
+              <td ng-if="!billing"><input type="text" ng-model="test" ng-model="test" ui-maskmoney data-prefix="$" data-decimal="." data-thousands="," data-allow-zero="true" class="form-control"></td>
+              <td ng-if="!billing" class="checkbox-col"><div><input type="checkbox" class="form-control"></div></td>
+              <td ng-if="!billing"><input type="text" ng-model="test" ng-model="test" ui-maskmoney data-prefix="$" data-decimal="." data-thousands="," data-allow-zero="true" class="form-control"></td>
+              <td ng-if="!billing" class="text-align-right">{{money(100000)}}</td>
+              <td ng-if="!billing"><textarea msd-elastic  rows="1" class="form-control" ng-model="test"></textarea></td>
+              <td ng-if="!billing"><input type="text" ng-model="test" ng-model="test" ui-maskmoney data-prefix="$" data-decimal="." data-thousands="," data-allow-zero="true" class="form-control"></td>
+              <td ng-if="!billing" class="checkbox-col"><div><input type="checkbox" class="form-control"></div></td>
+              <td ng-if="!billing" class="text-align-right">{{money(100000)}}</td>
+              <td ng-if="!billing" class="text-align-right">{{money(100000)}}</td>
+              <td ng-if="billing"><input type="date" class="form-control"></td>
+              <td ng-if="billing"><div><input type="checkbox" class="form-control"></div></td>
+              <td ng-if="billing"><div><input type="checkbox" class="form-control"></div></td>
+              <td ng-if="billing" >{{money(0)}}</td>
+              <td ng-if="billing"><input type="text" ng-model="test" ng-model="test" ui-maskmoney data-prefix="$" data-decimal="." data-thousands="," data-allow-zero="true" class="form-control"></td>
+              <td ng-if="billing"><textarea msd-elastic  rows="1" class="form-control" ng-model="test"></textarea></td>
+              <td ng-if="billing"><button class="btn btn-primary" ng-click="createBillforSelectedPeriod(row)">Create Bill</button></td>
+            </tr>
+            </tbody>
+            </table>
+            </div>
+          </td>
+        </tr>
+        
+        <tr class="border-top"  ng-if="!billing">
+          <td colspan="4"></td>
+          <td class="text-align-right">{{money(100000)}}</td>
+          <td></td>
+          <td class="text-align-right">{{money(100000)}}</td>
+          <td></td>
+          <td class="text-align-right">{{money(100000)}}</td>
+          <td colspan="3"></td>
+          <td class="text-align-right">{{money(100000)}}</td>
+          <td class="text-align-right">{{money(100000)}}</td>
+          <td colspan="11"></td>
+        </tbody>
+      </table>
+    
+  </div>

@@ -1,0 +1,10 @@
+ <div class="modal-header" ng-if="message.head!=false">
+    <h3 class="modal-title">{{message.head ? message.head : 'Alert'}}</h3>
+</div>
+<div class="modal-body" ng-if="!message.htmlBody">
+  <p>{{message.body ? message.body : message}}</p>
+</div>
+<div class="modal-body" ng-if="message.htmlBody" ng-bind-html="message.htmlBody"></div>
+<div class="modal-footer">
+    <button class="btn btn-primary" ng-click="ok()">Ok</button>
+</div>

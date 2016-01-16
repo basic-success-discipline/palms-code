@@ -1,0 +1,6 @@
+Create folder for new screen
+Create html and js files in folder
+Add route to routes.js
+Add nav path to nav.js
+Add js file to index.html
+voila

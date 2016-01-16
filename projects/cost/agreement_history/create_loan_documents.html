@@ -1,0 +1,973 @@
+
+<div class="create-loan-documents">
+<!-- <page-status begun="false" complete="false" ></page-status> -->
+  <!-- Top section with all them buttons and such -->
+  <div class="top">
+    <div class="col-md-4">
+      <!-- <div class="form-group">
+        <label >Select Loan Type:</label><br>
+        <select chosen  data-placeholder="Select Loan Type" class="form-control" disable-search-threshold="10"><option value=""></option></select>
+      </div> -->
+      <div class="form-group">
+        <label >Select Document:</label><br>
+        <select chosen  data-placeholder="Select Document" class="form-control" disable-search-threshold="10" ng-model="docType" ng-options="option as option for option in docTypesSelectArray" ng-change="updateRequiredFields()"><option value=""></option></select>
+      </div>
+      <div class="form-group">
+        <label>Highlight meanings</label>
+        <ul class="list-inline" style="margin-left:5px">
+        <li class="required-highlight" style="border-radius:3px">Required</li>
+        <li class="required-highlight empty" style="border-radius:3px">Required (but empty)</li>
+        <li class="optional-highlight" style="border-radius:3px">Optional</li>
+        </ul>
+      </div>
+      <p class="red" ng-if="requiredFieldUpdateError">There was a problem while trying to determine what fields are required for this document</p>
+    </div>
+    <div class="col-md-5">
+      <div class="copy-loan-info">
+        <span class="form-group">
+          <label >Copy Loan Information from:</label><br>
+
+          <!-- todo: configure ng-options to get agreementactionId from list of agreement history actions -->
+          <select chosen  data-placeholder="Select Document" class="form-control" disable-search-threshold="10" ng-options="option.agreementHistoryActionId as optionString('copyFrom', option) for option in agreementHistory" ng-model="copyActionId"><option value=""></option></select>
+        </span>
+        <span>
+          <button class="btn btn-default" ng-click="loadData()" >Copy</button>
+        </span>
+      </div>
+      <div class="buttons">
+        <button class="btn btn-default center" ng-click="resetDefault()" >Reset Default</button>
+        <!-- <button class="btn btn-default center" >Edit Check</button> -->
+        <button class="btn btn-default center" ng-click="viewDocuments()" ng-disabled="!returnedDocs" >View Document(s)</button>
+      </div>
+      <div class="checkbox">
+       <label><input type="checkbox" ng-checked="true">View document(s) on creation</label>
+     </div>
+   </div>
+   <div class="col-md-3">
+    <div class="create-doc">
+      <button class="btn btn-primary center" ng-click="saveDetailsAndCreateDocument()" ng-disabled="!docType">Create Document</button>
+      <label style="opacity: 0">Easter egg</label>
+    </div>
+  </div>
+  <div class="shim"></div>
+</div>
+
+
+<!-- main section with all them data entry fields -->
+<div class="bottom">
+
+
+  <div class="left col-md-4">
+
+    <!-- General Information -->
+    <div cld-panel class="section one" title="General Information">
+
+      <!-- this is an example field for what all of the fields should have -->
+      <div class="field" ng-class="detailHighlight('Borrower_Name')" >
+        <label>Recipient Name</label>
+        <input type="text" class="form-control" ng-model="doc['Borrower_Name'].columnValue" ng-change="updateAction('Borrower_Name')">
+      </div>
+
+
+      <div class="field" ng-class="detailHighlight('Loan_Number')">
+        <label>Loan Number</label>
+        <input type="text" class="form-control" ng-model="doc['Loan_Number'].columnValue" ng-change="updateAction('Loan_Number')">
+      </div>
+      <div class="field" ng-class="detailHighlight('Closing_Date')">
+        <label>Closing Date</label>
+        <input date-input class="form-control" ng-model="doc['Closing_Date'].columnValue" ng-change="updateAction('Closing_Date')">
+      </div>
+      <div class="field" ng-class="detailHighlight('Loan_Amount_Numeric')">
+        <label>Loan Amount</label>
+        <input type="text" class="form-control" ng-model="doc['Loan_Amount_Numeric'].columnValue" ng-change="updateAction('Loan_Amount_Numeric')">
+      </div>
+      <div class="field" ng-class="detailHighlight('Loan_Years')">
+        <label style="width: 140px;">Loan Term in Years</label>
+        <input type="text" class="form-control smaller" ng-model="doc['Loan_Years'].columnValue" ng-change="updateAction('Loan_Years')">
+      </div>
+      <div class="field" ng-class="detailHighlight('Project_Description')">
+        <label>Project Description</label>
+        <textarea msd-elastic  msd-elastic  class="form-control" rows="2" ng-model="doc['Project_Description'].columnValue" ng-change="updateAction('Project_Description')"></textarea>
+      </div>
+      <div class="field" ng-class="detailHighlight('WR10_Prev_Board_Actions')">
+        <label class="smaller">Previous Board or Committee Actions</label>
+        <textarea msd-elastic  class="form-control" rows="2" ng-model="doc['WR10_Prev_Board_Actions'].columnValue" ng-change="updateAction('WR10_Prev_Board_Actions')"></textarea>
+      </div>
+      <div class="field" ng-class="detailHighlight('WR11_Fin_Comm_Recommendations')">
+        <label class="smaller">Project Finance Committee Recommendations</label>
+        <textarea msd-elastic  class="form-control" rows="3" ng-model="doc['WR11_Fin_Comm_Recommendations'].columnValue" ng-change="updateAction('WR11_Fin_Comm_Recommendations')"></textarea>
+      </div>
+      <div class="field" ng-class="detailHighlight('GOV_LA_15_System_Description')">
+        <label>System Description</label>
+        <select chosen class="form-control" disable-search-threshold="10" ng-options="option.componentLookUpId as option.componentName for option in lookups['system_description']" ng-model="doc['GOV_LA_15_System_Description'].columnValue" ng-change="updateAction('GOV_LA_15_System_Description')"><option value=""></option></select>
+      </div>
+      <div class="field" ng-class="detailHighlight('Type')">
+        <label>Loan Type</label>
+        <label>Read-only value</label>
+      </div>
+    </div>
+
+
+
+    <div cld-panel class="section two" title="Recipient Address and Contact Information">
+      <div class="field" ng-class="detailHighlight('LA1_Contact_Person')">
+        <label>Contact Name</label>
+        <input type="text" class="form-control" ng-model="doc['LA1_Contact_Person'].columnValue" ng-change="updateAction('LA1_Contact_Person')">
+      </div>
+      <div class="field" ng-class="detailHighlight('LA2_Title_of_Contact_Person')">
+        <label>Title of Contact</label>
+        <input type="text" class="form-control" ng-model="doc['LA2_Title_of_Contact_Person'].columnValue" ng-change="updateAction('LA2_Title_of_Contact_Person')">
+      </div>
+      <div class="field" ng-class="detailHighlight('LA3_Mailing_Address_Street')">
+        <label>Street</label>
+        <input type="text" class="form-control" ng-model="doc['LA3_Mailing_Address_Street'].columnValue" ng-change="updateAction('LA3_Mailing_Address_Street')">
+      </div>
+      <div class="field" ng-class="detailHighlight('LA4_Mailing_Address_City')">
+        <label>City</label>
+        <input type="text" class="form-control" ng-model="doc['LA4_Mailing_Address_City'].columnValue" ng-change="updateAction('LA4_Mailing_Address_City')">
+      </div>
+      <div class="field" ng-class="detailHighlight('LA5_Mailing_Address_Zip')">
+        <label>ZIP</label>
+        <input type="text" class="form-control" ng-model="doc['LA5_Mailing_Address_Zip'].columnValue" ng-change="updateAction('LA5_Mailing_Address_Zip')">
+      </div>
+      <div class="field" ng-class="detailHighlight('LA6_Telephone')">
+        <label>Phone Number</label>
+        <input type="text" class="form-control" ng-model="doc['LA6_Telephone'].columnValue" ng-change="updateAction('LA6_Telephone')">
+      </div>
+      <div class="field" ng-class="detailHighlight('LA7_Fax')">
+        <label>Fax Number</label>
+        <input type="text" class="form-control" ng-model="doc['LA7_Fax'].columnValue" ng-change="updateAction('LA7_Fax')">
+      </div>
+    </div>
+
+    <div cld-panel class="section three" title="Authorized Representative Information">
+
+    <!-- The field name says suffix, but the UI says prefix -->
+      <div class="field purple" ng-class="detailHighlight('Authorized_Rep_Suffix')">
+        <label>Prefix</label>
+        <input type="text" class="form-control smaller" ng-model="doc['Authorized_Rep_Suffix'].columnValue" ng-change="updateAction('Authorized_Rep_Suffix')">
+      </div>
+      <div class="field" ng-class="detailHighlight('Authorized_Rep_First_Name')">
+        <label>First Name</label>
+        <input type="text" class="form-control" ng-model="doc['Authorized_Rep_First_Name'].columnValue" ng-change="updateAction('Authorized_Rep_First_Name')">
+      </div>
+      <div class="field" ng-class="detailHighlight('Authorized_Rep_Middle_Name')">
+        <label>Middle Name</label>
+        <input type="text" class="form-control" ng-model="doc['Authorized_Rep_Middle_Name'].columnValue" ng-change="updateAction('Authorized_Rep_Middle_Name')">
+      </div>
+      <div class="field" ng-class="detailHighlight('Authorized_Rep_Last_Name')">
+        <label>Last Name</label>
+        <input type="text" class="form-control" ng-model="doc['Authorized_Rep_Last_Name'].columnValue" ng-change="updateAction('Authorized_Rep_Last_Name')">
+      </div>
+      <div class="field" ng-class="detailHighlight('LA9_Title_Auth_Rep')">
+        <label>Title</label>
+        <input type="text" class="form-control" ng-model="doc['LA9_Title_Auth_Rep'].columnValue" ng-change="updateAction('LA9_Title_Auth_Rep')">
+      </div>
+      <div class="field" ng-class="detailHighlight('LA10_Auth_Rep_Mailing_Street')">
+        <label>Street</label>
+        <input type="text" class="form-control" ng-model="doc['LA10_Auth_Rep_Mailing_Street'].columnValue" ng-change="updateAction('LA10_Auth_Rep_Mailing_Street')">
+      </div>
+      <div class="field" ng-class="detailHighlight('LA11_Auth_Rep_Mailing_City')">
+        <label>City</label>
+        <input type="text" class="form-control" ng-model="doc['LA11_Auth_Rep_Mailing_City'].columnValue" ng-change="updateAction('LA11_Auth_Rep_Mailing_City')">
+      </div>
+      <div class="field" ng-class="detailHighlight('LA12_Auth_Rep_Mailing_Zip')">
+        <label>Zip</label>
+        <input type="text" class="form-control" ng-model="doc['LA12_Auth_Rep_Mailing_Zip'].columnValue" ng-change="updateAction('LA12_Auth_Rep_Mailing_Zip')">
+      </div>
+      <div class="field" ng-class="detailHighlight('LA13_Auth_Rep_Telephone')">
+        <label>Phone Number</label>
+        <input type="text" class="form-control" ng-model="doc['LA13_Auth_Rep_Telephone'].columnValue" ng-change="updateAction('LA13_Auth_Rep_Telephone')">
+      </div>
+      <div class="field" ng-class="detailHighlight('LA14_Auth_Rep_Fax')">
+        <label>Fax Number</label>
+        <input type="text" class="form-control" ng-model="doc['LA14_Auth_Rep_Fax'].columnValue" ng-change="updateAction('LA14_Auth_Rep_Fax')">
+      </div>
+      <div class="field" ng-class="detailHighlight('NG_UCC_PG5_Auth_Rep_SS')">
+        <label>Social Security #</label>
+        <input type="text" class="form-control" ng-model="doc['NG_UCC_PG5_Auth_Rep_SS'].columnValue" ng-change="updateAction('NG_UCC_PG5_Auth_Rep_SS')" >
+      </div>
+
+    </div>
+
+    <div cld-panel class="section four" title="Technical Terms and Conditions">
+      <div class="field"  ng-class="detailHighlight('WR26_Observation_Schedule')">
+        <label class="smaller">Observation Schedule</label>
+        <select chosen class="form-control" disable-search-threshold="10" ng-options="option.componentLookUpId as option.componentName for option in lookups['observation_schedule']" ng-model="doc['WR26_Observation_Schedule'].columnValue" ng-change="updateAction('WR26_Observation_Schedule')"><option value=""></option></select>
+      </div>
+      <div class="field" ng-class="detailHighlight('WR27_Withholding_Percentage')">
+        <label class="smaller">Witholding Percentage</label>
+        <select chosen class="form-control" disable-search-threshold="10" ng-options="option.componentLookUpId as option.componentName for option in lookups['withholding_percentage']" ng-model="doc['WR27_Withholding_Percentage'].columnValue" ng-change="updateAction('WR27_Withholding_Percentage')"><option value=""></option></select>
+      </div>
+      <div class="field" ng-class="detailHighlight('WR27a_Obs1_Withholding_Perc')">
+        <label style="width: 200px;">Observation 1: Loan Disbursal</label>
+        <input type="text" class="form-control percent" ng-model="doc['WR27a_Obs1_Withholding_Perc'].columnValue" ng-change="updateAction('WR27a_Obs1_Withholding_Perc')"> %
+      </div>
+      <div class="field" ng-class="detailHighlight('WR27b_Obs2_Withholding_Perc')">
+        <label style="width: 200px;">Observation 2: Loan Disbursal</label>
+        <input type="text" class="form-control percent"  ng-model="doc['WR27b_Obs2_Withholding_Perc'].columnValue" ng-change="updateAction('WR27b_Obs2_Withholding_Perc')"> %
+      </div>
+      <div class="field" ng-class="detailHighlight('WR28_Req_Prior_to_Loan_Exec')">
+        <label class="checkbox">Req Prior to Loan Execution?</label>
+        <input type="checkbox" class="form-control" ng-model="doc['WR28_Req_Prior_to_Loan_Exec'].columnValue" ng-change="updateAction('WR28_Req_Prior_to_Loan_Exec')">
+      </div>
+      <div class="field" ng-class="detailHighlight('WR28a_Req_PLoan_Exec_Text')">
+        <textarea msd-elastic  class="form-control" rows="2" ng-model="doc['WR28a_Req_PLoan_Exec_Text'].columnValue" ng-change="updateAction('WR28a_Req_PLoan_Exec_Text')"></textarea>
+      </div>
+      <div class="field"  ng-class="detailHighlight('WR32_Tech_Policy_Exceptions')">
+        <label class="checkbox">Policy Exceptions?</label>
+        <input type="checkbox" class="form-control" ng-model="doc['WR32_Tech_Policy_Exceptions'].columnValue" ng-change="updateAction('WR32_Tech_Policy_Exceptions')">
+      </div>
+      <div class="field" ng-class="detailHighlight('WR32a_Tech_Pol_Excep_Text')">
+        <textarea msd-elastic  class="form-control" rows="2"  ng-model="doc['WR32a_Tech_Pol_Excep_Text'].columnValue" ng-change="updateAction('WR32a_Tech_Pol_Excep_Text')"></textarea>
+      </div>
+    </div>
+
+    <div cld-panel class="section five" title="Requirements Prior to Construction">
+      <div class="field" ng-class="detailHighlight('Req_Prior_to_Appr_Const_Bids')">
+        <label class="checkbox">Review/Approval of Const Bids?</label>
+        <input type="checkbox" class="form-control" ng-model="doc['Req_Prior_to_Appr_Const_Bids'].columnValue" ng-change="updateAction('Req_Prior_to_Appr_Const_Bids')">
+      </div>
+      <div class="field" ng-class="detailHighlight('Approve_Const_Bids_Text')">
+        <textarea msd-elastic  class="form-control" rows="2" ng-model="doc['Approve_Const_Bids_Text'].columnValue" ng-change="updateAction('Approve_Const_Bids_Text')"></textarea>
+      </div>
+      <div class="field" ng-class="detailHighlight('WR29_Other_Req_Prior_Const')">
+        <label class="checkbox">Other Requirements</label>
+        <input type="checkbox" class="form-control" ng-model="doc['WR29_Other_Req_Prior_Const'].columnValue" ng-change="updateAction('WR29_Other_Req_Prior_Const')">
+      </div>
+      <div class="field" ng-class="detailHighlight('WR29a_OthReq_PriorCon_Text')">
+        <textarea msd-elastic  class="form-control" rows="2" ng-model="doc['WR29a_OthReq_PriorCon_Text'].columnValue" ng-change="updateAction('WR29a_OthReq_PriorCon_Text')"></textarea>
+      </div>
+    </div>
+
+    <div cld-panel class="section six" title="Requirements During Construction">
+      <div class="field" ng-class="detailHighlight('Req_During_Const_Proj_Scope')">
+        <label class="checkbox">Review Changes in Project Scope?</label>
+        <input type="checkbox" class="form-control" ng-model="doc['Req_During_Const_Proj_Scope'].columnValue" ng-change="updateAction('Req_During_Const_Proj_Scope')">
+      </div>
+      <div class="field" ng-class="detailHighlight('Review_Chg_Proj_Scope_Text')">
+        <textarea msd-elastic  class="form-control" rows="2" ng-model="doc['Review_Chg_Proj_Scope_Text'].columnValue" ng-change="updateAction('Review_Chg_Proj_Scope_Text')"></textarea>
+      </div>
+      <div class="field" ng-class="detailHighlight('WR30_Other_Req_Const')">
+        <label class="checkbox">Other Requirements?</label>
+        <input type="checkbox" class="form-control" ng-model="doc['WR30_Other_Req_Const'].columnValue" ng-change="updateAction('WR30_Other_Req_Const')">
+      </div>
+      <div class="field" ng-class="detailHighlight('WR30a_Other_Req_Const_Text')">
+        <textarea msd-elastic  class="form-control" rows="2" ng-model="doc['WR30a_Other_Req_Const_Text'].columnValue" ng-change="updateAction('WR30a_Other_Req_Const_Text')"></textarea>
+      </div>
+    </div>
+
+    <div cld-panel class="section seven" title="Requirements Prior to Final Disburement">
+      <div class="field" ng-class="detailHighlight('Req_Prior_to_Final_Disb_Plan')">
+        <label class="checkbox">Require Plan of Operation</label>
+        <input type="checkbox" class="form-control" ng-model="doc['Req_Prior_to_Final_Disb_Plan'].columnValue" ng-change="updateAction('Req_Prior_to_Final_Disb_Plan')">
+      </div>
+      <div class="field" ng-class="detailHighlight('Req_Plan_of_Operation_Text')">
+        <textarea msd-elastic  class="form-control" rows="2" ng-model="doc['Req_Plan_of_Operation_Text'].columnValue" ng-change="updateAction('Req_Plan_of_Operation_Text')"></textarea>
+      </div>
+      <div class="field" ng-class="detailHighlight('Req_Final_Disb_Req_Final_Appr')">
+        <label class="checkbox">Require Final Approval</label>
+        <input type="checkbox" class="form-control" ng-model="doc['Req_Final_Disb_Req_Final_Appr'].columnValue" ng-change="updateAction('Req_Final_Disb_Req_Final_Appr')">
+      </div>
+      <div class="field" ng-class="detailHighlight('Require_Final_Approval_Text')">
+        <textarea msd-elastic  class="form-control" rows="2" ng-model="doc['Require_Final_Approval_Text'].columnValue" ng-change="updateAction('Require_Final_Approval_Text')"></textarea>
+      </div>
+      <div class="field" ng-class="detailHighlight('WR31_Oth_Req_Pr_Final_Disb')">
+        <label class="checkbox">Other Requirements?</label>
+        <input type="checkbox" class="form-control" ng-model="doc['WR31_Oth_Req_Pr_Final_Disb'].columnValue" ng-change="updateAction('WR31_Oth_Req_Pr_Final_Disb')">
+      </div>
+      <div class="field" ng-class="detailHighlight('WR31a_Oth_Pr_Fin_Disb_Text')">
+        <textarea msd-elastic  class="form-control" rows="2" ng-model="doc['WR31a_Oth_Pr_Fin_Disb_Text'].columnValue" ng-change="updateAction('WR31a_Oth_Pr_Fin_Disb_Text')"></textarea>
+      </div>
+    </div>
+
+    <div cld-panel class="section eight" title="Budget Items">
+      <div class="field" ng-class="detailHighlight('DR2_Budget_Design_Eng')">
+        <label>Design & Engineering</label>
+        <input type="text" ng-model="doc['DR2_Budget_Design_Eng'].columnValue" ng-change="updateAction('DR2_Budget_Design_Eng')"ui-maskmoney data-prefix="$" data-decimal="." data-thousands="," data-allow-zero="true" class="form-control">
+      </div>
+      <div class="field" ng-class="detailHighlight('DR3_Budget_Legal_Debt_Auth')">
+        <label>Legal / Debt Authorization</label>
+        <input type="text"  ng-model="doc['DR3_Budget_Legal_Debt_Auth'].columnValue" ng-change="updateAction('DR3_Budget_Legal_Debt_Auth')" ui-maskmoney data-prefix="$" data-decimal="." data-thousands="," data-allow-zero="true" class="form-control">
+      </div>
+      <div class="field" ng-class="detailHighlight('DR4_Budget_Financial_Advisor')">
+        <label>Financial Advisor</label>
+        <input type="text" ng-model="doc['DR4_Budget_Financial_Advisor'].columnValue" ng-change="updateAction('DR4_Budget_Financial_Advisor')" ui-maskmoney data-prefix="$" data-decimal="." data-thousands="," data-allow-zero="true" class="form-control">
+      </div>
+      <div class="field" ng-class="detailHighlight('DR5_Budget_Land_Sys_Acq')">
+        <label>Land / System Acquisition</label>
+        <input type="text" ng-model="doc['DR5_Budget_Land_Sys_Acq'].columnValue" ng-change="updateAction('DR5_Budget_Land_Sys_Acq')" ui-maskmoney data-prefix="$" data-decimal="." data-thousands="," data-allow-zero="true" class="form-control">
+      </div>
+      <div class="field" ng-class="detailHighlight('DR6_Budget_Equip_Materials')">
+        <label>Equipment / Materials</label>
+        <input type="text" ng-model="doc['DR6_Budget_Equip_Materials'].columnValue" ng-change="updateAction('DR6_Budget_Equip_Materials')" ui-maskmoney data-prefix="$" data-decimal="." data-thousands="," data-allow-zero="true" class="form-control">
+      </div>
+      <div class="field" ng-class="detailHighlight('DR7_Budget_Const_Inst_Impr')">
+        <label class="smaller">Construction / Installation / Improvement</label>
+        <input type="text" ng-model="doc['DR7_Budget_Const_Inst_Impr'].columnValue" ng-change="updateAction('DR7_Budget_Const_Inst_Impr')" ui-maskmoney data-prefix="$" data-decimal="." data-thousands="," data-allow-zero="true" class="form-control">
+      </div>
+      <div class="field" ng-class="detailHighlight('DR8_Budget_Insp_Const_Mgmt')">
+        <label class="smaller">Inspection & Construction Management</label>
+        <input type="text" ng-model="doc['DR8_Budget_Insp_Const_Mgmt'].columnValue" ng-change="updateAction('DR8_Budget_Insp_Const_Mgmt')" ui-maskmoney data-prefix="$" data-decimal="." data-thousands="," data-allow-zero="true" class="form-control">
+      </div>
+      <div class="field" ng-class="detailHighlight('DR10_Budget_Administration')">
+        <label>Administration</label>
+        <input type="text" ng-model="doc['DR10_Budget_Administration'].columnValue" ng-change="updateAction('DR10_Budget_Administration')" ui-maskmoney data-prefix="$" data-decimal="." data-thousands="," data-allow-zero="true" class="form-control">
+      </div>
+      <div class="field" ng-class="detailHighlight('DR1_Budget_Planning')">
+        <label>Planning</label>
+        <input type="text" ng-model="doc['DR1_Budget_Planning'].columnValue" ng-change="updateAction('DR1_Budget_Planning')" ui-maskmoney data-prefix="$" data-decimal="." data-thousands="," data-allow-zero="true" class="form-control">
+      </div>
+      <div class="field" ng-class="detailHighlight('DR9_Budget_Project_Officer')">
+        <label>Project Officer</label>
+        <input type="text"  ng-model="doc['DR9_Budget_Project_Officer'].columnValue" ng-change="updateAction('DR9_Budget_Project_Officer')" ui-maskmoney data-prefix="$" data-decimal="." data-thousands="," data-allow-zero="true" class="form-control">
+      </div>
+      <div class="field" ng-class="detailHighlight('DR11_Budget_Staff_Training')">
+        <label >Staff Training</label>
+        <input type="text"  ng-model="doc['DR11_Budget_Staff_Training'].columnValue" ng-change="updateAction('DR11_Budget_Staff_Training')" ui-maskmoney data-prefix="$" data-decimal="." data-thousands="," data-allow-zero="true" class="form-control">
+      </div>
+      <div class="field" ng-class="detailHighlight('DR12_Budget_Cap_Interest')">
+        <label>Capitalized Interest</label>
+        <input type="text"  ng-model="doc['DR12_Budget_Cap_Interest'].columnValue" ng-change="updateAction('DR12_Budget_Cap_Interest')"ui-maskmoney data-prefix="$" data-decimal="." data-thousands="," data-allow-zero="true" class="form-control">
+      </div>
+      <div class="field" ng-class="detailHighlight('DR13_Budget_Other')">
+        <label>Other</label>
+        <input type="text" ng-model="doc['DR13_Budget_Other'].columnValue" ng-change="updateAction('DR13_Budget_Other')" ui-maskmoney data-prefix="$" data-decimal="." data-thousands="," data-allow-zero="true" class="form-control">
+      </div>
+      <div class="field" ng-class="detailHighlight('DR15_Budget_Refinance')">
+        <label>Refinance Loan</label>
+        <input type="text" ng-model="doc['DR15_Budget_Refinance'].columnValue" ng-change="updateAction('DR15_Budget_Refinance')" ui-maskmoney data-prefix="$" data-decimal="." data-thousands="," data-allow-zero="true" class="form-control">
+      </div>
+      <div class="field" ng-class="detailHighlight('DR14_Budget_Total_Requested')">
+        <label class="bold">Total</label>
+        <input type="text" ng-model="doc['DR14_Budget_Total_Requested'].columnValue" ng-change="updateAction('DR14_Budget_Total_Requested')" ui-maskmoney data-prefix="$" data-decimal="." data-thousands="," data-allow-zero="true" class="form-control">
+      </div>
+    </div>
+
+  </div>
+  <!-- End left column -->
+
+
+  <div class="middle col-md-4">
+
+    <div cld-panel class="section nine" title="WIFA Information">
+      <div class="field" ng-class="detailHighlight('CIFR_Numeric')">
+        <label>CIFR (Numeric)</label>
+        <input type="text" class="form-control percent" ng-model="doc['CIFR_Numeric'].columnValue" ng-change="updateAction('CIFR_Numeric')"> %
+      </div>
+      <div class="field" ng-class="detailHighlight('NG_ExhF2_CIFR_Alpha')">
+        <label>CIFR (Alpha)</label>
+        <input type="text" class="form-control" ng-model="doc['NG_ExhF2_CIFR_Alpha'].columnValue" ng-change="updateAction('NG_ExhF2_CIFR_Alpha')">
+      </div>
+      <div class="field" ng-class="detailHighlight('NG_Loan_Amount_Alpha')">
+        <label>Loan Amount (Alpha)</label>
+        <input type="text" class="form-control" ng-model="doc['NG_Loan_Amount_Alpha'].columnValue" ng-change="updateAction('NG_Loan_Amount_Alpha')">
+      </div>
+      <div class="field" ng-class="detailHighlight('LA16_WIFA_Director')">
+        <label>WIFA Director</label>
+        <input type="text" class="form-control" ng-model="doc['LA16_WIFA_Director'].columnValue" ng-change="updateAction('LA16_WIFA_Director')">
+      </div>
+      <div class="field" ng-class="detailHighlight('WR3_Board_Meeting_Date')">
+        <label style="width: 210px;" class="smaller">WIFA Resolution Board Meeting Date</label>
+        <input type="date" class="form-control" ng-model="doc['WR3_Board_Meeting_Date'].columnValue" ng-change="updateAction('WR3_Board_Meeting_Date')">
+      </div>
+      <div class="field" ng-class="detailHighlight('Resolution_Number')">
+        <label style="width: 210px;">WIFA Resolution Number</label>
+        <input type="text" class="form-control" ng-model="doc['Resolution_Number'].columnValue" ng-change="updateAction('Resolution_Number')">
+      </div>
+      <div class="field" ng-class="detailHighlight('WR33_WIFA_to_Generate_PR')">
+        <label class="checkbox">WIFA to Generate Press Release</label>
+        <input type="checkbox" class="form-control" ng-model="doc['WR33_WIFA_to_Generate_PR'].columnValue" ng-change="updateAction('WR33_WIFA_to_Generate_PR')">
+      </div>
+    </div>
+
+
+    <div cld-panel class="section ten" title="ARRA Information">
+      <div class="field" ng-class="detailHighlight('ARRA_Reduced_CIFR')">
+        <label class="checkbox">ARRA Reduced CIFR</label>
+        <input type="checkbox" class="form-control" ng-model="doc['ARRA_Reduced_CIFR'].columnValue" ng-change="updateAction('ARRA_Reduced_CIFR')">
+      </div>
+      <div class="field" ng-class="detailHighlight('ARRA_CIFR')">
+        <label>ARRA CIFR</label>
+        <input type="text" class="form-control percent" ng-model="doc['ARRA_CIFR'].columnValue" ng-change="updateAction('ARRA_CIFR')"> %
+      </div>
+      <div class="field" ng-class="detailHighlight('ARRA_Forgivable_Principal')">
+        <label>ARRA Forgivable Principal</label>
+        <input type="text" class="form-control" ng-model="doc['ARRA_Forgivable_Principal'].columnValue" ng-change="updateAction('ARRA_Forgivable_Principal')">
+      </div>
+    </div>
+
+    <div cld-panel class="section thirty-one" title="Additional Subsidy">
+      <div class="field" ng-class="detailHighlight('Forgivable_Principal')">
+        <label>Forgivable Principal</label>
+        <input type="text" class="form-control" ng-model="doc['Forgivable_Principal'].columnValue" ng-change="updateAction('Forgivable_Principal')">
+      </div>
+    </div>
+
+
+    <div cld-panel class="section eleven" title="Financial Assistance Terms and Conditions">
+      <div class="field" ng-class="detailHighlight('WR13_Primary_Repayment_Source')">
+        <label class="smaller">Primary Repayment Source</label>
+        <select chosen class="form-control" disable-search-threshold="10" ng-options="option.componentLookUpId as option.componentName for option in lookups['primary_repayment_source']" ng-model="doc['WR13_Primary_Repayment_Source'].columnValue" ng-change="updateAction('WR13_Primary_Repayment_Source')"><option value=""></option></select>
+      </div>
+      <div class="field" ng-class="detailHighlight('WR14_Sec_Repay_Source')">
+        <label class="smaller">Secondary Repayment Source</label>
+        <select chosen class="form-control" disable-search-threshold="10" ng-options="option.componentLookUpId as option.componentName for option in lookups['secondary_repayment_source']" ng-model="doc['WR14_Sec_Repay_Source'].columnValue" ng-change="updateAction('WR14_Sec_Repay_Source')"><option value=""></option></select>
+      </div>
+      <div class="field" ng-class="detailHighlight('WR14a_Sec_Repay_Source_Other')">
+        <label class="smaller">Any Other Repayment Source</label>
+        <input type="text" class="form-control" ng-model="doc['WR14a_Sec_Repay_Source_Other'].columnValue" ng-change="updateAction('WR14a_Sec_Repay_Source_Other')">
+      </div>
+      <div class="field" ng-class="detailHighlight('WR15_Frequency_of_Repayment')">
+        <label class="smaller">Frequency of Repayment</label>
+        <select chosen class="form-control" disable-search-threshold="10" ng-options="option.componentLookUpId as option.componentName for option in lookups['frequency_of_repayment']" ng-model="doc['WR15_Frequency_of_Repayment'].columnValue" ng-change="updateAction('WR15_Frequency_of_Repayment')"><option value=""></option></select>
+      </div>
+      <div class="field" ng-class="detailHighlight('Repay_Frequency_Text')">
+        <textarea msd-elastic  class="form-control" rows="2"  ng-model="doc['Repay_Frequency_Text'].columnValue" ng-change="updateAction('Repay_Frequency_Text')"></textarea>
+      </div>
+      <div class="field" ng-class="detailHighlight('WR24_Loan_Category')">
+        <label>Loan Category</label>
+        <select chosen class="form-control" disable-search-threshold="10" ng-options="option.componentLookUpId as option.componentName for option in lookups['loan_category']" ng-model="doc['WR24_Loan_Category'].columnValue" ng-change="updateAction('WR24_Loan_Category')"><option value=""></option></select>
+      </div>
+      <div class="field" ng-class="detailHighlight('WR16_Loan_Structure')">
+        <label>Loan Structure</label>
+        <input type="text" class="form-control" ng-model="doc['WR16_Loan_Structure'].columnValue" ng-change="updateAction('WR16_Loan_Structure')">
+      </div>
+    </div>
+
+    <div cld-panel class="section twelve" title="Debt Service Reserve Information">
+      <div class="field" ng-class="detailHighlight('WR17_DSR_Requirements')">
+        <label>Requirements</label>
+        <select chosen class="form-control" disable-search-threshold="10" ng-options="option.componentLookUpId as option.componentName for option in lookups['dsr_requirements']" ng-model="doc['WR17_DSR_Requirements'].columnValue" ng-change="updateAction('WR17_DSR_Requirements')"><option value=""></option ></select>
+      </div>
+      <div class="field" ng-class="detailHighlight('ExhA5_Total_DSR_Amount')">
+        <label>Total Amount</label>
+        <input type="text"  ng-model="doc['ExhA5_Total_DSR_Amount'].columnValue" ng-change="updateAction('ExhA5_Total_DSR_Amount')" ui-maskmoney data-prefix="$" data-decimal="." data-thousands="," data-allow-zero="true" class="form-control">
+      </div>
+      <div class="field" ng-class="detailHighlight('ExhA6_DSR_Funded_by_Date')">
+        <label>Date Funded by</label>
+        <input type="date" class="form-control" ng-model="doc['ExhA6_DSR_Funded_by_Date'].columnValue" ng-change="updateAction('ExhA6_DSR_Funded_by_Date')">
+      </div>
+    </div>
+
+
+    <div cld-panel class="section thirteen" title="Repair and Replacement Fund Information">
+      <div class="field" ng-class="detailHighlight('WR18_RR_Fund_Requirements')">
+        <label>Requirements</label>
+        <select chosen class="form-control" disable-search-threshold="10" ng-model="doc['WR18_RR_Fund_Requirements'].columnValue"  ng-options="option.componentLookUpId as option.componentName for option in lookups['fund_requirements']"ng-change="updateAction('WR18_RR_Fund_Requirements')"><option value=""></option></select>
+      </div>
+      <div class="field" ng-class="detailHighlight('ExhA8_Annual_RR_Fund_Amt')">
+        <label style="width:150px;">Annual Fund Amount</label>
+        <input type="text" ng-model="doc['ExhA8_Annual_RR_Fund_Amt'].columnValue" ng-change="updateAction('ExhA8_Annual_RR_Fund_Amt')" ui-maskmoney data-prefix="$" data-decimal="." data-thousands="," data-allow-zero="true" class="form-control">
+      </div>
+      <div class="field" ng-class="detailHighlight('ExhA7_RR_Beg_Fund_on_Date')">
+        <label style="width:150px;">Date Funding Begins</label>
+        <input type="date" class="form-control" ng-model="doc['ExhA7_RR_Beg_Fund_on_Date'].columnValue" ng-change="updateAction('ExhA7_RR_Beg_Fund_on_Date')">
+      </div>
+    </div>
+
+
+    <!-- might not be needed since James hardcodes it into forms -->
+    <div cld-panel class="section fourteen" title="Wire Transfer Payment Instructions">
+      <div class="field" ng-class="detailHighlight('ExhA_Pay_Instr_Req')">
+        <label class="checkbox">Transfer Information Required</label>
+        <input type="checkbox" class="form-control" ng-model="doc['ExhA_Pay_Instr_Req'].columnValue" ng-change="updateAction('ExhA_Pay_Instr_Req')">
+      </div>
+      <div class="field" ng-class="detailHighlight('ExhA1_Pay_Instr_Bank')">
+        <label>Bank</label>
+        <input type="text" class="form-control" ng-model="doc['ExhA1_Pay_Instr_Bank'].columnValue" ng-change="updateAction('ExhA1_Pay_Instr_Bank')" >
+      </div>
+      <div class="field" ng-class="detailHighlight('ExhA2_Pay_Instr_Acct_Name')">
+        <label>Account Name</label>
+        <input type="text" class="form-control"  ng-model="doc['ExhA2_Pay_Instr_Acct_Name'].columnValue" ng-change="updateAction('ExhA2_Pay_Instr_Acct_Name')">
+      </div>
+      <div class="field" ng-class="detailHighlight('ExhA3_Pay_Instr_Acct_Num')">
+        <label>Account Number</label>
+        <input type="text" class="form-control" ng-model="doc['ExhA3_Pay_Instr_Acct_Num'].columnValue" ng-change="updateAction('ExhA3_Pay_Instr_Acct_Num')" >
+      </div>
+      <div class="field" ng-class="detailHighlight('ExhA4_Pay_Instr_ABA_Routing')">
+        <label>ABA Routing Number</label>
+        <input type="text" class="form-control"  ng-model="doc['ExhA4_Pay_Instr_ABA_Routing'].columnValue" ng-change="updateAction('ExhA4_Pay_Instr_ABA_Routing')">
+      </div>
+    </div>
+
+    <div cld-panel class="section fifteen" title="Semi-Annual Repayment Information">
+      <div class="field" ng-class="detailHighlight('ExhA_SA2_Tot_Num_Payments')">
+        <label>Total Number of Principal Payments</label>
+        <input type="text" class="form-control" ng-model="doc['ExhA_SA2_Tot_Num_Payments'].columnValue" ng-change="updateAction('ExhA_SA2_Tot_Num_Payments')" >
+      </div>
+      <div class="field" ng-class="detailHighlight('ExhA_SA1_First_Pay_Period')">
+        <label>Period Principal Payments Begin</label>
+        <input type="text" class="form-control"  ng-model="doc['ExhA_SA1_First_Pay_Period'].columnValue" ng-change="updateAction('ExhA_SA1_First_Pay_Period')">
+      </div>
+      <div class="field" ng-class="detailHighlight('ExhA_SA3_Prin_Pay_Begin_Dt')">
+        <label>First Payment Period Date</label>
+        <input type="date" class="form-control" ng-model="doc['ExhA_SA3_Prin_Pay_Begin_Dt'].columnValue" ng-change="updateAction('ExhA_SA3_Prin_Pay_Begin_Dt')">
+      </div>
+      <div class="field" ng-class="detailHighlight('ExhA_SA4_First_Prin_Repay_Dt')">
+        <label>First Principal Repayment Date</label>
+        <input type="date" class="form-control" ng-model="doc['ExhA_SA4_First_Prin_Repay_Dt'].columnValue" ng-change="updateAction('ExhA_SA4_First_Prin_Repay_Dt')">
+      </div>
+      <div class="field" ng-class="detailHighlight('ExhA_SA5_Fin_Prin_Repay_Dt')">
+        <label>Final Principal Repayment Date</label>
+        <input type="date" class="form-control" ng-model="doc['ExhA_SA5_Fin_Prin_Repay_Dt'].columnValue" ng-change="updateAction('ExhA_SA5_Fin_Prin_Repay_Dt')">
+      </div>
+      <div class="field" ng-class="detailHighlight('ExhA_SA6_First_CIFR_Repay_Dt')">
+        <label>First CIFR Repayment Date</label>
+        <input type="date" class="form-control" ng-model="doc['ExhA_SA6_First_CIFR_Repay_Dt'].columnValue" ng-change="updateAction('ExhA_SA6_First_CIFR_Repay_Dt')">
+      </div>
+      <div class="field" ng-class="detailHighlight('ExhA_SA7_Final_CIFR_Repay_Dt')">
+        <label>Final CIFR Repayment Date</label>
+        <input type="date" class="form-control"  ng-model="doc['ExhA_SA7_Final_CIFR_Repay_Dt'].columnValue" ng-change="updateAction('ExhA_SA7_Final_CIFR_Repay_Dt')">
+      </div>
+      <div class="field" ng-class="detailHighlight('ExhA_SA8_Annual_DSR_Amount')">
+        <label>Annual DS Reserve Amount</label>
+        <input type="text"  ng-model="doc['ExhA_SA8_Annual_DSR_Amount'].columnValue" ng-change="updateAction('ExhA_SA8_Annual_DSR_Amount')" ui-maskmoney data-prefix="$" data-decimal="." data-thousands="," data-allow-zero="true" class="form-control" >
+      </div>
+      <div class="field" ng-class="detailHighlight('ExhA_SA9_Semi_RR_Fund_Dep')">
+        <label>Semi-Annual Repair and Replacement Fund Monthly Deposit</label>
+        <input type="text"  ng-model="doc['ExhA_SA9_Semi_RR_Fund_Dep'].columnValue" ng-change="updateAction('ExhA_SA9_Semi_RR_Fund_Dep')"ui-maskmoney data-prefix="$" data-decimal="." data-thousands="," data-allow-zero="true" class="form-control" >
+      </div>
+    </div>
+
+    <div cld-panel class="section sixteen" title="Monthly Repayment Information">
+      <div class="field" ng-class="detailHighlight('ExhA_MP1_Orig_Loan_Amount')">
+        <label>Original Loan Amount</label>
+        <input type="text" ng-model="doc['ExhA_MP1_Orig_Loan_Amount'].columnValue" ng-change="updateAction('ExhA_MP1_Orig_Loan_Amount')" ui-maskmoney data-prefix="$" data-decimal="." data-thousands="," data-allow-zero="true" class="form-control" >
+      </div>
+      <div class="field" ng-class="detailHighlight('ExhA_MP3_First_Fix_Month_Pay')">
+        <label>First Monthly Payment Date</label>
+        <input type="date" class="form-control"  ng-model="doc['ExhA_MP3_First_Fix_Month_Pay'].columnValue" ng-change="updateAction('ExhA_MP3_First_Fix_Month_Pay')">
+      </div>
+      <div class="field" ng-class="detailHighlight('ExhA_MP4_Fin_Fix_Month_Pay')">
+        <label>Final Monthly Payment Date</label>
+        <input type="date" class="form-control" ng-model="doc['ExhA_MP4_Fin_Fix_Month_Pay'].columnValue" ng-change="updateAction('ExhA_MP4_Fin_Fix_Month_Pay')" >
+      </div>
+      <div class="field" ng-class="detailHighlight('ExhA_MP5_Fin_DSR_Monthly_Dep')">
+        <label>DSR Monthly Deposit</label>
+        <input type="text"  ng-model="doc['ExhA_MP5_Fin_DSR_Monthly_Dep'].columnValue" ng-change="updateAction('ExhA_MP5_Fin_DSR_Monthly_Dep')"ui-maskmoney data-prefix="$" data-decimal="." data-thousands="," data-allow-zero="true" class="form-control"  >
+      </div>
+      <div class="field" ng-class="detailHighlight('ExhA_MP6_RR_Fund_Month_Dep')">
+        <label>Repair and Replacement Fund Monthly Deposit</label>
+        <input type="text"  ng-model="doc['ExhA_MP6_RR_Fund_Month_Dep'].columnValue" ng-change="updateAction('ExhA_MP6_RR_Fund_Month_Dep')"ui-maskmoney data-prefix="$" data-decimal="." data-thousands="," data-allow-zero="true" class="form-control" >
+      </div>
+    </div>
+
+    <div cld-panel class="section seventeen" title="Monthly Payment Calculations">
+      <div class="field" ng-class="detailHighlight('ExhA_MP7_MP_7_1_DSR_Pay_Max')">
+        <label class="smaller" style="width: 180px">Period 7 - 1st DS Payment: Max</label>
+        <input type="text" ng-model="doc['ExhA_MP7_MP_7_1_DSR_Pay_Max'].columnValue" ng-change="updateAction('ExhA_MP7_MP_7_1_DSR_Pay_Max')" ui-maskmoney data-prefix="$" data-decimal="." data-thousands="," data-allow-zero="true" class="form-control" >
+      </div>
+      <div class="field" ng-class="detailHighlight('ExhA_MP8_MP_7_1_DSR_Pay_Min')">
+        <label class="smaller" style="width: 180px">Period 7 - 1st DS Payment: Min</label>
+        <input type="text"  ng-model="doc['ExhA_MP8_MP_7_1_DSR_Pay_Min'].columnValue" ng-change="updateAction('ExhA_MP8_MP_7_1_DSR_Pay_Min')"ui-maskmoney data-prefix="$" data-decimal="." data-thousands="," data-allow-zero="true" class="form-control" >
+      </div>
+      <div class="field" ng-class="detailHighlight('ExhA_MP9_MP_Period_8_to_66')">
+        <label>Period 8 to 66</label>
+        <input type="text" ng-model="doc['ExhA_MP9_MP_Period_8_to_66'].columnValue" ng-change="updateAction('ExhA_MP9_MP_Period_8_to_66')"ui-maskmoney data-prefix="$" data-decimal="." data-thousands="," data-allow-zero="true" class="form-control" >
+      </div>
+      <div class="field" ng-class="detailHighlight('ExhA_MP10_MP_Pr_67_to_120')">
+        <label>Period 67 to 120</label>
+        <input type="text" ng-model="doc['ExhA_MP10_MP_Pr_67_to_120'].columnValue" ng-change="updateAction('ExhA_MP10_MP_Pr_67_to_120')"ui-maskmoney data-prefix="$" data-decimal="." data-thousands="," data-allow-zero="true" class="form-control" >
+      </div>
+      <div class="field" ng-class="detailHighlight('ExhA_MP11_MP_Pr_121_to_180')">
+        <label>Period 121 to 180</label>
+        <input type="text" ng-model="doc['ExhA_MP11_MP_Pr_121_to_180'].columnValue" ng-change="updateAction('ExhA_MP11_MP_Pr_121_to_180')"ui-maskmoney data-prefix="$" data-decimal="." data-thousands="," data-allow-zero="true" class="form-control" >
+      </div>
+      <div class="field" ng-class="detailHighlight('ExhA_MP12_MP_Pr_181_to_240')">
+        <label>Period 181 to 240</label>
+        <input type="text" ng-model="doc['ExhA_MP12_MP_Pr_181_to_240'].columnValue" ng-change="updateAction('ExhA_MP12_MP_Pr_181_to_240')"ui-maskmoney data-prefix="$" data-decimal="." data-thousands="," data-allow-zero="true" class="form-control" >
+      </div>
+      <div class="field" ng-class="detailHighlight('ExhA_MP13_MP_Pr_241_to_300')">
+        <label>Period 241 to 300</label>
+        <input type="text" ng-model="doc['ExhA_MP13_MP_Pr_241_to_300'].columnValue" ng-change="updateAction('ExhA_MP13_MP_Pr_241_to_300')" ui-maskmoney data-prefix="$" data-decimal="." data-thousands="," data-allow-zero="true" class="form-control" >
+      </div>
+      <div class="field" ng-class="detailHighlight('ExhA_MP14_MP_Pr_301_to_360')">
+        <label>Period 301 to 360</label>
+        <input type="text" ng-model="doc['ExhA_MP14_MP_Pr_301_to_360'].columnValue" ng-change="updateAction('ExhA_MP14_MP_Pr_301_to_360')"ui-maskmoney data-prefix="$" data-decimal="." data-thousands="," data-allow-zero="true" class="form-control" >
+      </div>
+    </div>
+
+    <div cld-panel class="section eighteen" title="Loan Requirements">
+      <div class="field" ng-class="detailHighlight('WR19_Req_Prior_Loan_Lgl_Opn')">
+        <label class="checkbox">Prior to Loan Execution: Require Legal Opinion?</label>
+        <input type="checkbox" class="form-control" ng-model="doc['WR19_Req_Prior_Loan_Lgl_Opn'].columnValue" ng-change="updateAction('WR19_Req_Prior_Loan_Lgl_Opn')">
+      </div>
+      <div class="field" ng-class="detailHighlight('WR19a_Require_Lgl_Opinion_Text')">
+        <textarea msd-elastic  class="form-control" rows="2" ng-model="doc['WR19a_Require_Lgl_Opinion_Text'].columnValue" ng-change="updateAction('WR19a_Require_Lgl_Opinion_Text')"></textarea>
+      </div>
+      <div class="field" ng-class="detailHighlight('WR20_Other_Req_Prior_Loan_Exec')">
+        <label class="checkbox">Other Requirements Prior to Loan Execution?</label>
+        <input type="checkbox" class="form-control" ng-model="doc['WR20_Other_Req_Prior_Loan_Exec'].columnValue" ng-change="updateAction('WR20_Other_Req_Prior_Loan_Exec')">
+      </div>
+      <div class="field" ng-class="detailHighlight('WR20a_Oth_Req_Prior_Loan_Text')">
+        <textarea msd-elastic  class="form-control" rows="2" ng-model="doc['WR20a_Oth_Req_Prior_Loan_Text'].columnValue" ng-change="updateAction('WR20a_Oth_Req_Prior_Loan_Text')"></textarea>
+      </div>
+      <div class="field" ng-class="detailHighlight('WR21_Req_Prior_to_Construction')">
+        <label class="checkbox">Requirements Prior to Construction?</label>
+        <input type="checkbox" class="form-control" ng-model="doc['WR21_Req_Prior_to_Construction'].columnValue" ng-change="updateAction('WR21_Req_Prior_to_Construction')">
+      </div>
+      <div class="field" ng-class="detailHighlight('WR21a_Req_Prior_to_Const_Text')">
+        <textarea msd-elastic  class="form-control" rows="2" ng-model="doc['WR21a_Req_Prior_to_Const_Text'].columnValue" ng-change="updateAction('WR21a_Req_Prior_to_Const_Text')"></textarea>
+      </div>
+      <div class="field" ng-class="detailHighlight('WR22_Req_During_Construction')">
+        <label class="checkbox">Requirements During Construction?</label>
+        <input type="checkbox" class="form-control" ng-model="doc['WR22_Req_During_Construction'].columnValue" ng-change="updateAction('WR22_Req_During_Construction')">
+      </div>
+      <div class="field" ng-class="detailHighlight('WR22a_Req_During_Const_Text')">
+        <textarea msd-elastic  class="form-control" rows="2" ng-model="doc['WR22a_Req_During_Const_Text'].columnValue" ng-change="updateAction('WR22a_Req_During_Const_Text')"></textarea>
+      </div>
+      <div class="field" ng-class="detailHighlight('WR23_Req_Prior_to_Final_Disburs')">
+        <label class="checkbox">Requirements Prior to Final Disbursements?</label>
+        <input type="checkbox" class="form-control" ng-model="doc['WR23_Req_Prior_to_Final_Disburs'].columnValue" ng-change="updateAction('WR23_Req_Prior_to_Final_Disburs')">
+      </div>
+      <div class="field" ng-class="detailHighlight('WR23a_Req_Prior_Fin_Disb_Text')">
+        <textarea msd-elastic  class="form-control" rows="2" ng-model="doc['WR23a_Req_Prior_Fin_Disb_Text'].columnValue" ng-change="updateAction('WR23a_Req_Prior_Fin_Disb_Text')"></textarea>
+      </div>
+      <div class="field" ng-class="detailHighlight('WR25_Fin_Policy_Exceptions')">
+        <label class="checkbox">Policy Exceptions</label>
+        <input type="checkbox" class="form-control" ng-model="doc['WR25_Fin_Policy_Exceptions'].columnValue" ng-change="updateAction('WR25_Fin_Policy_Exceptions')">
+      </div>
+      <div class="field" ng-class="detailHighlight('WR25a_Fin_Policy_Excep_Text')">
+        <textarea msd-elastic  class="form-control" rows="2" ng-model="doc['WR25a_Fin_Policy_Excep_Text'].columnValue" ng-change="updateAction('WR25a_Fin_Policy_Excep_Text')"></textarea>
+      </div>
+      <div class="field" ng-class="detailHighlight('WR34_Other_Reporting_Req')">
+        <label class="checkbox">Additional Reporting Requirements?</label>
+        <input type="checkbox" class="form-control" ng-model="doc['WR34_Other_Reporting_Req'].columnValue" ng-change="updateAction('WR34_Other_Reporting_Req')">
+      </div>
+      <div class="field" ng-class="detailHighlight('WR34a_Other_Repo_Req_Text')">
+        <textarea msd-elastic  class="form-control" rows="2" ng-model="doc['WR34a_Other_Repo_Req_Text'].columnValue" ng-change="updateAction('WR34a_Other_Repo_Req_Text')"></textarea>
+      </div>
+    </div>
+
+    <div cld-panel class="section nineteen" title="Miscellaneous">
+      <div class="field" ng-class="detailHighlight('TaxID')">
+        <label>Recipient's Tax ID</label>
+        <input type="text" class="form-control" ng-model="doc['TaxID'].columnValue" ng-change="updateAction('TaxID')">
+      </div>
+      <div class="field" ng-class="detailHighlight('GOV_ExhD2D5_Sales_or_Excise')">
+        <label class="smaller" >Exhibit D: Excise Tax Definition</label>
+        <select chosen class="form-control" disable-search-threshold="10" ng-options="option.componentLookUpId as option.componentName for option in lookups['excise_tax_definition']" ng-model="doc['GOV_ExhD2D5_Sales_or_Excise'].columnValue" ng-change="updateAction('GOV_ExhD2D5_Sales_or_Excise')"><option value=""></option></select>
+      </div>
+      <p class="center bold" style="margin-top: 15px;">Recipient Counsel Form of Opinion:</p>
+      <div class="field" ng-class="detailHighlight('GOV_ExhG1_Date_of_Opinion')">
+        <label>Date of Opinion</label>
+        <input type="date" class="form-control" ng-model="doc['GOV_ExhG1_Date_of_Opinion'].columnValue" ng-change="updateAction('GOV_ExhG1_Date_of_Opinion')">
+      </div>
+      <div class="field" ng-class="detailHighlight('GOV_ExhG2_Election_Date')">
+        <label>Election Date</label>
+        <input type="date" class="form-control" ng-model="doc['GOV_ExhG2_Election_Date'].columnValue" ng-change="updateAction('GOV_ExhG2_Election_Date')">
+      </div>
+    </div>
+
+  </div>
+  <!-- end middle column -->
+
+  <div class="right col-md-4">
+    <div cld-panel class="section twenty" title="Project Priority Data">
+      <div class="field" ng-class="detailHighlight('WR2_Project_Number')">
+        <label>Project Number</label>
+        <input type="text" class="form-control" ng-model="doc['WR2_Project_Number'].columnValue" ng-change="updateAction('WR2_Project_Number')">
+      </div>
+      <div class="field" ng-class="detailHighlight('WR4_Priority_List_Rank')">
+        <label>Priority List Rank</label>
+        <input type="text" class="form-control" ng-model="doc['WR4_Priority_List_Rank'].columnValue" ng-change="updateAction('WR4_Priority_List_Rank')">
+      </div>
+      <div class="field" ng-class="detailHighlight('WR6_Fiscal_Year')">
+        <label>Fiscal Year</label>
+        <input type="text" class="form-control" ng-model="doc['WR6_Fiscal_Year'].columnValue" ng-change="updateAction('WR6_Fiscal_Year')">
+      </div>
+      <div class="field" ng-class="detailHighlight('WR7_Population_Served')">
+        <label style="width: 150px;">Population Served</label>
+        <input type="text" class="form-control" ng-model="doc['WR7_Population_Served'].columnValue" ng-change="updateAction('WR7_Population_Served')">
+      </div>
+      <div class="field" ng-class="detailHighlight('WR8_Subsidy_Rate_Index')">
+        <label  style="width: 190px;">Subsidy Rate Index</label>
+        <input type="text" class="form-control percent" ng-model="doc['WR8_Subsidy_Rate_Index'].columnValue" ng-change="updateAction('WR8_Subsidy_Rate_Index')"> %
+      </div>
+      <div class="field" ng-class="detailHighlight('Disadvantaged_Community')">
+        <label class="checkbox" style="width: 190px;">Disadvantaged Community</label>
+        <input type="checkbox" class="form-control" ng-model="doc['Disadvantaged_Community'].columnValue" ng-change="updateAction('Disadvantaged_Community')">
+      </div>
+      <div class="field" ng-class="detailHighlight('Disadvantaged_Initial_Rate')">
+        <label style="width: 190px;">Disadvantaged Initial Rate</label>
+        <input type="text" class="form-control percent" ng-model="doc['Disadvantaged_Initial_Rate'].columnValue" ng-change="updateAction('Disadvantaged_Initial_Rate')"> %
+      </div>
+      <div class="field" ng-class="detailHighlight('Disadvantaged_Rate_Type')">
+        <label style="width: 150px;" class="smaller">Disadvantaged Rate Type</label>
+        <select chosen class="form-control" disable-search-threshold="10"  ng-options="option.componentLookUpId as option.componentName for option in lookups['disadvantaged_rate_type']" ng-model="doc['Disadvantaged_Rate_Type'].columnValue" ng-change="updateAction('Disadvantaged_Rate_Type')"><option value=""></option></select>
+      </div>
+    </div>
+
+    <div cld-panel class="section twenty-one" title="Information Return for Tax-Exempt Governmental Obligations">
+      <div class="field" ng-class="detailHighlight('GOV_Form8038G_Required')">
+        <label class="checkbox bold">Form 8038-G Required</label>
+        <input type="checkbox" class="form-control" ng-model="doc['GOV_Form8038G_Required'].columnValue" ng-change="updateAction('GOV_Form8038G_Required')">
+      </div>
+      <div class="field" ng-class="detailHighlight('GOV_TE1_Name_of_Signator')">
+        <label>Name of Signator</label>
+        <input type="text" class="form-control"  ng-model="doc['GOV_TE1_Name_of_Signator'].columnValue" ng-change="updateAction('GOV_TE1_Name_of_Signator')">
+      </div>
+      <div class="field" ng-class="detailHighlight('GOV_TE2_Title_of_Signator')">
+        <label>Title of Signator</label>
+        <input type="text" class="form-control" ng-model="doc['GOV_TE2_Title_of_Signator'].columnValue" ng-change="updateAction('GOV_TE2_Title_of_Signator')">
+      </div>
+      <div class="field" ng-class="detailHighlight('GOV_TE3_Signator_Phone')">
+        <label class="smaller">Signator Phone Number</label>
+        <input type="text" class="form-control" ng-model="doc['GOV_TE3_Signator_Phone'].columnValue" ng-change="updateAction('GOV_TE3_Signator_Phone')">
+      </div>
+    </div>
+
+    <div cld-panel class="section twenty-two" title="Bond Information">
+      <div class="field" ng-class="detailHighlight('GOV_TE4_Bond_PAR_Amount')">
+        <label>PAR Amount</label>
+        <input type="text" ng-model="doc['GOV_TE4_Bond_PAR_Amount'].columnValue" ng-change="updateAction('GOV_TE4_Bond_PAR_Amount')" ui-maskmoney data-prefix="$" data-decimal="." data-thousands="," data-allow-zero="true" class="form-control" >
+      </div>
+      <div class="field" ng-class="detailHighlight('GOV_TE5_Bond_Fin_Maturity_Dt')">
+        <label>Final Maturity Date</label>
+        <input type="date" class="form-control" ng-model="doc['GOV_TE5_Bond_Fin_Maturity_Dt'].columnValue" ng-change="updateAction('GOV_TE5_Bond_Fin_Maturity_Dt')">
+      </div>
+      <div class="field" ng-class="detailHighlight('GOV_TE6_Bond_WAM')">
+        <label>Weighted Average Maturity</label>
+        <input type="text" class="form-control" ng-model="doc['GOV_TE6_Bond_WAM'].columnValue" ng-change="updateAction('GOV_TE6_Bond_WAM')">
+      </div>
+      <div class="field" ng-class="detailHighlight('GOV_TE13_BP_Cap_Alloc_141b5')">
+        <label>Amount of State Volume Cap Allocated under 141(b)(5)</label>
+        <input type="text" ng-model="doc['GOV_TE13_BP_Cap_Alloc_141b5'].columnValue" ng-change="updateAction('GOV_TE13_BP_Cap_Alloc_141b5')"ui-maskmoney data-prefix="$" data-decimal="." data-thousands="," data-allow-zero="true" class="form-control" >
+      </div>
+      <div class="field" ng-class="detailHighlight('GOV_TE14_BP_Inv_in_Guar_Invest')">
+        <label>Amount of Gross Proceeds Invested in Guaranteed Investment Contract</label>
+        <input type="text" ng-model="doc['GOV_TE14_BP_Inv_in_Guar_Invest'].columnValue" ng-change="updateAction('GOV_TE14_BP_Inv_in_Guar_Invest')"ui-maskmoney data-prefix="$" data-decimal="." data-thousands="," data-allow-zero="true" class="form-control" >
+      </div>
+      <div class="field" ng-class="detailHighlight('GOV_TE15_B_Date_Guar_Inv_Cont')">
+        <label>Final Maturity Date of Guaranteed Investment Contract</label>
+        <input type="date" class="form-control" ng-model="doc['GOV_TE15_B_Date_Guar_Inv_Cont'].columnValue" ng-change="updateAction('GOV_TE15_B_Date_Guar_Inv_Cont')">
+      </div>
+      <div class="field" ng-class="detailHighlight('GOV_TE16_BPFin_other_Gov_Loan')">
+        <label>Pooled Financing Proceeds to make other Governmental Loans</label>
+        <input type="text"  ng-model="doc['GOV_TE16_BPFin_other_Gov_Loan'].columnValue" ng-change="updateAction('GOV_TE16_BPFin_other_Gov_Loan')"ui-maskmoney data-prefix="$" data-decimal="." data-thousands="," data-allow-zero="true" class="form-control" >
+      </div>
+      <div class="field" ng-class="detailHighlight('GOV_TE17_BI_265b3BiIII_SmIssue')">
+        <label class="checkbox">Issue under 265(b)(3)(B)(i)(III)</label>
+        <input type="checkbox" class="form-control" ng-model="doc['GOV_TE17_BI_265b3BiIII_SmIssue'].columnValue" ng-change="updateAction('GOV_TE17_BI_265b3BiIII_SmIssue')">
+      </div>
+      <div class="field" ng-class="detailHighlight('GOV_TE18_BPenalty_Not_Arb_Reb')">
+        <label class="checkbox">Pay Penalty in lieu of Arbitrage Rebate</label>
+        <input type="checkbox" class="form-control" ng-model="doc['GOV_TE18_BPenalty_Not_Arb_Reb'].columnValue" ng-change="updateAction('GOV_TE18_BPenalty_Not_Arb_Reb')">
+      </div>
+      <div class="field" ng-class="detailHighlight('GOV_TE19_Bond_Identified_Hedge')">
+        <label class="checkbox">Issuer Identified a Hedge</label>
+        <input type="checkbox" class="form-control" ng-model="doc['GOV_TE19_Bond_Identified_Hedge'].columnValue" ng-change="updateAction('GOV_TE19_Bond_Identified_Hedge')">
+      </div>
+    </div>
+
+    <div cld-panel class="section twenty-three" title="Bond Proceeds for...">
+      <div class="field" ng-class="detailHighlight('GOV_TE7_BP_Accrued_Interest')">
+        <label>Accrued Interest</label>
+        <input type="text" ng-model="doc['GOV_TE7_BP_Accrued_Interest'].columnValue" ng-change="updateAction('GOV_TE7_BP_Accrued_Interest')"ui-maskmoney data-prefix="$" data-decimal="." data-thousands="," data-allow-zero="true" class="form-control" >
+      </div>
+      <div class="field" ng-class="detailHighlight('GOV_TE8_BP_Bond_Issu_Cost')">
+        <label>Bond Issuance Costs</label>
+        <input type="text" ng-model="doc['GOV_TE8_BP_Bond_Issu_Cost'].columnValue" ng-change="updateAction('GOV_TE8_BP_Bond_Issu_Cost')"ui-maskmoney data-prefix="$" data-decimal="." data-thousands="," data-allow-zero="true" class="form-control" >
+      </div>
+      <div class="field" ng-class="detailHighlight('GOV_TE9_BP_Credit_Enhancement')">
+        <label>Credit Enhancement</label>
+        <input type="text" ng-model="doc['GOV_TE9_BP_Credit_Enhancement'].columnValue" ng-change="updateAction('GOV_TE9_BP_Credit_Enhancement')"ui-maskmoney data-prefix="$" data-decimal="." data-thousands="," data-allow-zero="true" class="form-control" >
+      </div>
+      <div class="field" ng-class="detailHighlight('GOV_TE10_BP_Res_Rep_Fund')">
+        <label>Reserve or Replacement Fund</label>
+        <input type="text" ng-model="doc['GOV_TE10_BP_Res_Rep_Fund'].columnValue" ng-change="updateAction('GOV_TE10_BP_Res_Rep_Fund')"ui-maskmoney data-prefix="$" data-decimal="." data-thousands="," data-allow-zero="true" class="form-control" >
+      </div>
+      <div class="field" ng-class="detailHighlight('GOV_TE11_BP_Used_Ref_Prior_Iss')">
+        <label>Currently Refund Prior Issues</label>
+        <input type="text" ng-model="doc['GOV_TE11_BP_Used_Ref_Prior_Iss'].columnValue" ng-change="updateAction('GOV_TE11_BP_Used_Ref_Prior_Iss')"ui-maskmoney data-prefix="$" data-decimal="." data-thousands="," data-allow-zero="true" class="form-control" >
+      </div>
+      <div class="field" ng-class="detailHighlight('GOV_TE12_BP_Adv_Ref_Prior_Iss')">
+        <label>Advance Refund Prior Issues</label>
+        <input type="text" ng-model="doc['GOV_TE12_BP_Adv_Ref_Prior_Iss'].columnValue" ng-change="updateAction('GOV_TE12_BP_Adv_Ref_Prior_Iss')"ui-maskmoney data-prefix="$" data-decimal="." data-thousands="," data-allow-zero="true" class="form-control" >
+      </div>
+    </div>
+
+    <div cld-panel class="section twenty-four" title="Description of Refunded Bonds">
+      <div class="field" ng-class="detailHighlight('GOV_TE20_BR_WAM_Cur_Refund')">
+        <label class="smaller" style="width: 180px">WAM to be Currently Refunded</label>
+        <input type="text" class="form-control" ng-model="doc['GOV_TE20_BR_WAM_Cur_Refund'].columnValue" ng-change="updateAction('GOV_TE20_BR_WAM_Cur_Refund')">
+      </div>
+      <div class="field" ng-class="detailHighlight('GOV_TE21_BR_WAM_Adv_Refund')">
+        <label class="smaller" style="width: 180px">WAM to be Advance Refunded</label>
+        <input type="text" class="form-control" ng-model="doc['GOV_TE21_BR_WAM_Adv_Refund'].columnValue" ng-change="updateAction('GOV_TE21_BR_WAM_Adv_Refund')">
+      </div>
+      <div class="field" ng-class="detailHighlight('GOV_TE22_BR_Last_Dt_RB_Called')">
+        <label>Last Date Called</label>
+        <input type="date" class="form-control" ng-model="doc['GOV_TE22_BR_Last_Dt_RB_Called'].columnValue" ng-change="updateAction('GOV_TE22_BR_Last_Dt_RB_Called')">
+      </div>
+      <div class="field" ng-class="detailHighlight('GOV_TE23_BR_Dt_Ref_Bond_Iss')">
+        <label>Date Issued</label>
+        <input type="date" class="form-control" ng-model="doc['GOV_TE23_BR_Dt_Ref_Bond_Iss'].columnValue" ng-change="updateAction('GOV_TE23_BR_Dt_Ref_Bond_Iss')">
+      </div>
+    </div>
+
+    <div cld-panel class="section twenty-five" title="Intercreditor Agreement Information">
+      <div class="field" ng-class="detailHighlight('NG_Increditor')">
+        <label class="checkbox">Intercreditor Agreement Required</label>
+        <input type="checkbox" class="form-control" ng-model="doc['NG_Increditor'].columnValue" ng-change="updateAction('NG_Increditor')">
+      </div>
+      <div class="field" ng-class="detailHighlight('NG_IA9_Purpose_of_Loan')">
+        <label>Loan Description</label>
+        <textarea msd-elastic  class="form-control" rows="2" ng-model="doc['NG_IA9_Purpose_of_Loan'].columnValue" ng-change="updateAction('NG_IA9_Purpose_of_Loan')"></textarea>
+      </div>
+    </div>
+
+    <div cld-panel class="section twenty-six" title="Junior Lender Information">
+      <div class="field" ng-class="detailHighlight('NG_IA3_Junior_Lender_Name')">
+        <label>Junior Lender Name</label>
+        <input type="text" class="form-control" ng-model="doc['NG_IA3_Junior_Lender_Name'].columnValue" ng-change="updateAction('NG_IA3_Junior_Lender_Name')">
+      </div>
+      <div class="field" ng-class="detailHighlight('NG_IA4_Junior_Lender_Street')">
+        <label>Street</label>
+        <input type="text" class="form-control" ng-model="doc['NG_IA4_Junior_Lender_Street'].columnValue" ng-change="updateAction('NG_IA4_Junior_Lender_Street')">
+      </div>
+      <div class="field" ng-class="detailHighlight('NG_IA13_Jr_Lender_City')">
+        <label>City</label>
+        <input type="text" class="form-control" ng-model="doc['NG_IA13_Jr_Lender_City'].columnValue" ng-change="updateAction('NG_IA13_Jr_Lender_City')">
+      </div>
+      <div class="field" ng-class="detailHighlight('NG_IA14_Jr_Lender_Zip')">
+        <label>ZIP</label>
+        <input type="text" class="form-control" ng-model="doc['NG_IA14_Jr_Lender_Zip'].columnValue" ng-change="updateAction('NG_IA14_Jr_Lender_Zip')">
+      </div>
+      <div class="field" ng-class="detailHighlight('NG_IA15_Jr_Lender_Tel')">
+        <label>Telephone</label>
+        <input type="text" class="form-control" ng-model="doc['NG_IA15_Jr_Lender_Tel'].columnValue" ng-change="updateAction('NG_IA15_Jr_Lender_Tel')">
+      </div>
+      <div class="field" ng-class="detailHighlight('NG_IA16_Jr_Lender_Fax')">
+        <label>Fax</label>
+        <input type="text" class="form-control" ng-model="doc['NG_IA16_Jr_Lender_Fax'].columnValue" ng-change="updateAction('NG_IA16_Jr_Lender_Fax')">
+      </div>
+      <div class="field" ng-class="detailHighlight('NG_IA11_Jr_Lender_Auth_Rep')">
+        <label class="smaller">Authorized Representative</label>
+        <input type="text" class="form-control" ng-model="doc['NG_IA11_Jr_Lender_Auth_Rep'].columnValue" ng-change="updateAction('NG_IA11_Jr_Lender_Auth_Rep')">
+      </div>
+      <div class="field" ng-class="detailHighlight('NG_IA12_Jr_Lender_Title_ARep')">
+        <label class="smaller">Title of Auth. Representative</label>
+        <input type="text" class="form-control" ng-model="doc['NG_IA12_Jr_Lender_Title_ARep'].columnValue" ng-change="updateAction('NG_IA12_Jr_Lender_Title_ARep')">
+      </div>
+      <div class="field" ng-class="detailHighlight('NG_IA7_Jr_Lender_Loan_Amount')">
+        <label>Loan Amount</label>
+        <input type="text" ng-model="doc['NG_IA7_Jr_Lender_Loan_Amount'].columnValue" ng-change="updateAction('NG_IA7_Jr_Lender_Loan_Amount')"ui-maskmoney data-prefix="$" data-decimal="." data-thousands="," data-allow-zero="true" class="form-control" >
+      </div>
+      <div class="field" ng-class="detailHighlight('NG_IA8_Junior_Loan_Closing_Dt')">
+        <label>Closing Date</label>
+        <input type="date" class="form-control" ng-model="doc['NG_IA8_Junior_Loan_Closing_Dt'].columnValue" ng-change="updateAction('NG_IA8_Junior_Loan_Closing_Dt')">
+      </div>
+    </div>
+
+    <div class="panel panel-default section twenty-seven">
+      <div class="panel-body">
+        <div class="field" ng-class="detailHighlight('NG_UCC1_Type')">
+          <label class="bold">Security Level</label>
+          <select chosen class="form-control" disable-search-threshold="10" ng-options="option.componentLookUpId as option.componentName for option in lookups['security_level']" ng-model="doc['NG_UCC1_Type'].columnValue" ng-change="updateAction('NG_UCC1_Type')"><option value=""></option></select>
+        </div>
+      </div>
+    </div>
+    
+    <div cld-panel class="section twenty-eight" title="Deed of Trust: Trustee Information">
+      <div class="field" ng-class="detailHighlight('NG_DT1_Title_Insurer_Trustee')">
+        <label>Title Insurer or Trustee</label>
+        <input type="text" class="form-control" ng-model="doc['NG_DT1_Title_Insurer_Trustee'].columnValue" ng-change="updateAction('NG_DT1_Title_Insurer_Trustee')">
+      </div>
+      <div class="field" ng-class="detailHighlight('NG_DT2_Trustee_Street')">
+        <label>Street</label>
+        <input type="text" class="form-control" ng-model="doc['NG_DT2_Trustee_Street'].columnValue" ng-change="updateAction('NG_DT2_Trustee_Street')">
+      </div>
+      <div class="field" ng-class="detailHighlight('NG_DT3_Trustee_City')">
+        <label>City</label>
+        <input type="text" class="form-control" ng-model="doc['NG_DT3_Trustee_City'].columnValue" ng-change="updateAction('NG_DT3_Trustee_City')">
+      </div>
+      <div class="field" ng-class="detailHighlight('NG_DT4_Trustee_State')">
+        <label>State</label>
+        <input type="text" class="form-control" ng-model="doc['NG_DT4_Trustee_State'].columnValue" ng-change="updateAction('NG_DT4_Trustee_State')">
+      </div>
+      <div class="field" ng-class="detailHighlight('NG_DT5_Trustee_ZIP')">
+        <label>ZIP</label>
+        <input type="text" class="form-control" ng-model="doc['NG_DT5_Trustee_ZIP'].columnValue" ng-change="updateAction('NG_DT5_Trustee_ZIP')">
+      </div>
+      <div class="field" ng-class="detailHighlight('NG_DT6_ArticleIX_Applicable')">
+        <label class="checkbox smaller">Article IX (Senior Deed of Trust) Applicable?</label>
+        <input type="checkbox" class="form-control" ng-model="doc['NG_DT6_ArticleIX_Applicable'].columnValue" ng-change="updateAction('NG_DT6_ArticleIX_Applicable')">
+      </div>
+      <div class="field" ng-class="detailHighlight('NG_DT7_Add_Trustor_Provisions')">
+        <label class="checkbox smaller">Additional Trustor Provisions Applicable?</label>
+        <input type="checkbox" class="form-control" ng-model="doc['NG_DT7_Add_Trustor_Provisions'].columnValue" ng-change="updateAction('NG_DT7_Add_Trustor_Provisions')">
+      </div>
+    </div>
+
+    <div cld-panel class="section twenty-nine" title="Guaranty Information">
+      <div class="field" ng-class="detailHighlight('NG_G1_Guarantor')">
+        <label>Guarantor</label>
+        <input type="text" class="form-control" ng-model="doc['NG_G1_Guarantor'].columnValue" ng-change="updateAction('NG_G1_Guarantor')">
+      </div>
+      <div class="field" ng-class="detailHighlight('NG_G2_Guarantor_2')">
+        <label>Guarantor #2</label>
+        <input type="text" class="form-control" ng-model="doc['NG_G2_Guarantor_2'].columnValue" ng-change="updateAction('NG_G2_Guarantor_2')">
+      </div>
+      <div class="field" ng-class="detailHighlight('NG_G3_Guarantor_State')">
+        <label>Guarantor's State</label>
+        <input type="text" class="form-control" ng-model="doc['NG_G3_Guarantor_State'].columnValue" ng-change="updateAction('NG_G3_Guarantor_State')">
+      </div>
+      <div class="field" ng-class="detailHighlight('NG_G4_Type_of_Guarantor')">
+        <label>Type of Guarantor</label>
+        <select chosen class="form-control" disable-search-threshold="10"  ng-options="option.componentLookUpId as option.componentName for option in lookups['type_of_guarantor']" ng-model="doc['NG_G4_Type_of_Guarantor'].columnValue" ng-change="updateAction('NG_G4_Type_of_Guarantor')"><option value=""></option></select>
+      </div>
+      <div class="field" ng-class="detailHighlight('NG_G5_Guarantor_Street')">
+        <label>Street</label>
+        <input type="text" class="form-control" ng-model="doc['NG_G5_Guarantor_Street'].columnValue" ng-change="updateAction('NG_G5_Guarantor_Street')">
+      </div>
+      <div class="field" ng-class="detailHighlight('NG_G6_Guarantor_City')">
+        <label>City</label>
+        <input type="text" class="form-control" ng-model="doc['NG_G6_Guarantor_City'].columnValue" ng-change="updateAction('NG_G6_Guarantor_City')">
+      </div>
+      <div class="field" ng-class="detailHighlight('NG_G7_Guarantor_State')">
+        <label>State</label>
+        <input type="text" class="form-control" ng-model="doc['NG_G7_Guarantor_State'].columnValue" ng-change="updateAction('NG_G7_Guarantor_State')">
+      </div>
+      <div class="field" ng-class="detailHighlight('NG_G8_Guarantor_Zip')">
+        <label>ZIP</label>
+        <input type="text" class="form-control" ng-model="doc['NG_G8_Guarantor_Zip'].columnValue" ng-change="updateAction('NG_G8_Guarantor_Zip')">
+      </div>
+      <div class="field" ng-class="detailHighlight('NG_G9_Spouse_Guarantor')">
+        <label>Spouse of Guarantor</label>
+        <input type="text" class="form-control" ng-model="doc['NG_G9_Spouse_Guarantor'].columnValue" ng-change="updateAction('NG_G9_Spouse_Guarantor')">
+      </div>
+      <div class="field" style="margin-bottom: 5px; margin-top: 5px;" ng-class="detailHighlight('NG_G10_Guarantors_Auth_Rep')">
+        <label class="smaller">Guarantor's Authorized Representative</label>
+        <input type="text" class="form-control" ng-model="doc['NG_G10_Guarantors_Auth_Rep'].columnValue" ng-change="updateAction('NG_G10_Guarantors_Auth_Rep')">
+      </div>
+      <div class="field" ng-class="detailHighlight('NG_G11_Title_Guar_Auth_Rep')">
+        <label class="smaller">Title of Authorized Representative</label>
+        <input type="text" class="form-control" ng-model="doc['NG_G11_Title_Guar_Auth_Rep'].columnValue" ng-change="updateAction('NG_G11_Title_Guar_Auth_Rep')">
+      </div>
+    </div>
+
+    <div cld-panel class="section thirty" title="Other Non-Governmental Information">
+      <div class="field" ng-class="detailHighlight('NG_ExhE1_Type_Debt_Consent')">
+        <label>Exhibit E Type: Debt Consent</label>
+        <select chosen class="form-control" disable-search-threshold="10"  ng-options="option.componentLookUpId as option.componentName for option in lookups['debt_consent']" ng-model="doc['NG_ExhE1_Type_Debt_Consent'].columnValue" ng-change="updateAction('NG_ExhE1_Type_Debt_Consent')"><option value=""></option></select>
+      </div>
+      <div class="field" ng-class="detailHighlight('NG_ExhE2_Debt')">
+        <label>Amount of Debt Borrower may Incur</label>
+        <input type="text" ng-model="doc['NG_ExhE2_Debt'].columnValue" ng-change="updateAction('NG_ExhE2_Debt')"ui-maskmoney data-prefix="$" data-decimal="." data-thousands="," data-allow-zero="true" class="form-control">
+      </div>
+      <div class="field" style="margin-bottom: 5px; margin-top: 5px;" ng-class="detailHighlight('NG_SA1_Person_Sub_Debt_Pay')">
+        <label class="smaller">Person to subordinate debt payable to themselves to debt payable to WIFA</label>
+        <input type="text" class="form-control" ng-model="doc['NG_SA1_Person_Sub_Debt_Pay'].columnValue" ng-change="updateAction('NG_SA1_Person_Sub_Debt_Pay')">
+      </div>
+      <div class="field" ng-class="detailHighlight('NG_CSA1_Collateral_Location')">
+        <label>Locations of Collateral</label>
+        <textarea msd-elastic  class="form-control" rows="2" ng-model="doc['NG_CSA1_Collateral_Location'].columnValue" ng-change="updateAction('NG_CSA1_Collateral_Location')"></textarea>
+      </div>
+    </div>
+  </div>
+  <!-- end right column -->
+
+</div>
+</div>

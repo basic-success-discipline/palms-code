@@ -1,0 +1,889 @@
+* {
+  margin: 0; }
+
+html, body {
+  height: calc(100% - 60px); }
+
+.wrapper {
+  min-height: 100%;
+  height: auto !important;
+  /* This line and the next line are not necessary unless you need IE6 support */
+  height: 100%;
+  margin: 0 auto-50px;
+  /* the bottom margin is the negative value of the footer's height */ }
+
+footer, .push {
+  height: 50px;
+  /* .push must be the same height as .footer */ }
+
+.push {
+  height: 0px; }
+
+body {
+  margin-top: 70px; }
+
+.projects-wrapper td, .projects-wrapper th {
+  text-align: center; }
+
+.form.group {
+  max-width: 500px; }
+
+.active {
+  background-color: #d7d7d7; }
+
+.red {
+  color: #c0392b; }
+  .red input {
+    color: #c0392b; }
+
+.green {
+  color: #27ae60; }
+  .green input {
+    color: #27ae60; }
+
+.blue {
+  color: #3498db; }
+
+.orange {
+  color: #e67e22; }
+
+.purple {
+  color: #8e44ad; }
+
+.bold {
+  font-weight: bold; }
+
+.underline {
+  text-decoration: underline; }
+
+.text-align-right {
+  text-align: right !important; }
+  .text-align-right input {
+    text-align: right; }
+  .text-align-right th {
+    text-align: right; }
+
+.center {
+  text-align: center; }
+
+button.center {
+  margin-left: auto;
+  margin-right: auto; }
+
+section {
+  clear: both; }
+
+.clear {
+  clear: both; }
+
+.float-right {
+  float: right; }
+
+.shim {
+  height: 1px;
+  clear: both; }
+
+.inline {
+  display: inline-block; }
+
+.padding {
+  padding: 5px; }
+
+.no-padding {
+  padding: 0 !important; }
+
+.border {
+  border: 1px solid rgba(128, 128, 128, 0.5); }
+
+.no-border {
+  border: 0 !important; }
+  .no-border th {
+    border: 0 !important; }
+
+.no-margin {
+  margin: 0 !important; }
+
+.table.no-lines th, .table.no-lines td {
+  border-top: none; }
+
+.border-top, .table td.border-top {
+  border-top: 1px solid black; }
+
+.border-bottom, .table td.border-bottom {
+  border-bottom: 2px solid #ddd; }
+
+.absolute {
+  position: absolute; }
+
+.fixed {
+  position: fixed; }
+
+.transparent {
+  background-color: transparent !important; }
+  .transparent td {
+    background-color: transparent !important; }
+
+.normal-font-weight {
+  font-weight: normal; }
+  .normal-font-weight th, .normal-font-weight td {
+    font-weight: normal; }
+
+.total-pad-right {
+  padding-right: 20px !important; }
+
+th, td {
+  vertical-align: inherit !important; }
+
+input[type=checkbox].form-control, .create-loan-documents .bottom .section div.field input[type=checkbox], input[type=radio].form-control, .create-loan-documents .bottom .section div.field input[type=radio] {
+  border: none !important;
+  box-shadow: none !important;
+  -moz-box-shadow: none !important;
+  -webkit-box-shadow: none !important;
+  width: inherit !important; }
+
+.chosen-container {
+  width: 100% !important;
+  max-width: 300px !important; }
+
+input[type=number]::-webkit-inner-spin-button,
+input[type=number]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0; }
+
+input[type=number] {
+  -moz-appearance: textfield; }
+
+textarea {
+  resize: vertical;
+  overflow: auto; }
+
+input[ui-maskmoney], input[fcsa-number] {
+  text-align: right; }
+
+.read-only.form-control, .create-loan-documents .bottom .section div.field input.read-only, .create-loan-documents .bottom .section div.field textarea.read-only, .create-loan-documents .bottom .section div.field .read-only.chosen-container {
+  border: none;
+  box-shadow: none;
+  -webkit-box-shadow: none;
+  -moz-box-shadow: none; }
+
+tr.sort-by-thead th a {
+  color: black;
+  text-decoration: underline; }
+  tr.sort-by-thead th a i {
+    margin-left: 5px; }
+
+tr.sort-by-thead th a:hover {
+  color: #3498db; }
+
+.pointer {
+  cursor: pointer; }
+
+.delete-col {
+  width: 116px;
+  text-align: center; }
+
+th.delete-col {
+  color: #27ae60;
+  border-top-left-radius: 7px;
+  border-top-right-radius: 7px;
+  cursor: pointer;
+  background-color: #f9f9f9;
+  font-weight: bold !important; }
+
+th.delete-col:hover {
+  background-color: #f2f2f2; }
+
+.pad-top {
+  padding-top: 30px; }
+
+.remove-pad-left {
+  padding-left: 0; }
+
+.chosen-container-single .chosen-single {
+  background-image: none;
+  border-radius: 4px;
+  -webkit-border-radius: 4px; }
+
+.projects-wrapper label {
+  display: block;
+  width: 100%; }
+
+.view-title {
+  margin-top: 0;
+  float: left; }
+
+.view-title-btn {
+  margin-top: 4px;
+  margin-left: 5px;
+  float: right; }
+
+.view-title-shim {
+  float: right;
+  display: inline-block;
+  height: 40px;
+  width: 195px; }
+
+.btn-nav {
+  background-color: #eaeaea; }
+
+button.save-btn {
+  position: fixed;
+  right: 75px;
+  z-index: 2;
+  top: 74px; }
+
+a.refresh-btn {
+  position: fixed;
+  right: 187px;
+  z-index: 2;
+  top: 74px;
+  color: #27ae60;
+  padding-top: 5px;
+  font-size: 18px; }
+  a.refresh-btn i.fa-check {
+    opacity: 0; }
+  a.refresh-btn i.fa-check.ng-enter {
+    transition: 1s linear all;
+    opacity: 1; }
+  a.refresh-btn i.fa-check.ng-enter.ng-enter-active {
+    transition-delay: 4s;
+    opacity: 0; }
+
+.loading-spinner {
+  width: 100%;
+  text-align: center;
+  padding-top: 100px;
+  -webkit-transition-delay: 2s;
+  /* Chrome, Safari, Opera */
+  transition-delay: 2s; }
+
+.side-menu-wrapper {
+  position: relative;
+  z-index: 100;
+  text-align: center; }
+
+.side-menu {
+  width: 100%;
+  text-align: left;
+  box-shadow: none;
+  -moz-box-shadow: none;
+  -webkit-box-shadow: none; }
+
+.side-menu-wrapper .fixed {
+  width: 320px; }
+
+.side-menu-wrapper .collapsed-menu-save-btn {
+  margin-left: 50px;
+  padding: 10px 16px 10px 16px; }
+
+.open-project-static-pane {
+  position: fixed;
+  right: 30px;
+  padding: 7px 12px 5px 12px;
+  top: 74px;
+  z-index: 2; }
+
+.project.static-pane {
+  width: 350px;
+  min-height: 100%;
+  background-color: #E0E0E0;
+  position: fixed;
+  top: 0;
+  left: 100%;
+  right: -350px;
+  transition-duration: 0.5s;
+  -webkit-transition-duration: 0.5s;
+  -moz-transition-duration: 0.5s;
+  -o-transition-duration: 0.5s;
+  z-index: 3; }
+
+.project.static-pane.open {
+  left: calc(100% - 350px);
+  right: 0; }
+
+.project.static-pane .close {
+  position: absolute;
+  left: 15px;
+  top: 60px; }
+
+.project.static-pane .scrollable {
+  position: relative;
+  min-height: 100%;
+  overflow: scroll; }
+
+.project.static-pane .contacts-table {
+  width: 90%;
+  margin-left: 5%;
+  position: relative; }
+  .project.static-pane .contacts-table table td {
+    padding-top: 0;
+    padding-bottom: 1px; }
+  .project.static-pane .contacts-table table tbody tr {
+    cursor: pointer; }
+  .project.static-pane .contacts-table table tbody tr:hover {
+    background-color: #f2f2f2; }
+
+.federal_grant_assignments th, .federal_grant_assignments td {
+  text-align: center; }
+.federal_grant_assignments .border-top {
+  border-top: 3px solid black; }
+
+.nims table.nims {
+  table-layout: fixed; }
+  .nims table.nims th {
+    text-align: center; }
+.nims .line-item-col-1 {
+  width: 30%;
+  max-width: 30%; }
+.nims .line-item-col-2 {
+  width: 20%;
+  max-width: 20%; }
+.nims .line-item-col-3 {
+  width: 10%;
+  max-width: 10%; }
+.nims .line-item-col-4 {
+  width: 20%;
+  max-width: 20%; }
+  .nims .line-item-col-4 .btn {
+    width: 80px; }
+.nims .line-item-col-5 {
+  width: 20%;
+  max-width: 20%; }
+  .nims .line-item-col-5 .btn {
+    width: 80px; }
+.nims .compliance-objectives {
+  background-color: rgba(230, 230, 255, 0.3);
+  box-shadow: inset 0 1px 1px rgba(0, 0, 50, 0.075);
+  -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 50, 0.075);
+  -moz-box-shadow: inset 0 1px 1px rgba(0, 0, 50, 0.075);
+  padding: 8px;
+  margin: 8px;
+  border-radius: 6px;
+  -webkit-border-radius: 6px; }
+  .nims .compliance-objectives table {
+    background-color: transparent; }
+  .nims .compliance-objectives th {
+    font-size: 12px;
+    font-weight: normal;
+    text-align: center; }
+
+.nims-objectives {
+  width: 300px; }
+
+a.delete-btn {
+  text-align: center;
+  padding-left: 15px;
+  padding-right: 15px;
+  color: #c0392b; }
+
+a.add-btn {
+  text-align: center;
+  padding-left: 15px;
+  padding-right: 15px;
+  color: #27ae60; }
+
+.nims .red .nims-total input {
+  color: red; }
+
+.nims .green .nims-total input {
+  color: green; }
+
+.funding-status table {
+  width: auto;
+  margin: 0 auto; }
+.funding-status .table td.border-top {
+  border-top: 1px solid black; }
+.funding-status .top td {
+  padding-top: 3px !important;
+  padding-bottom: 3px !important; }
+.funding-status .middle td, .funding-status .bottom td {
+  text-align: right;
+  padding-top: 2px !important;
+  padding-bottom: 2px !important; }
+.funding-status .top .right td:first-child {
+  text-align: right; }
+.funding-status .top .right td:last-child {
+  text-align: left; }
+.funding-status .top, .funding-status .middle {
+  border-bottom: 1px solid rgba(24, 24, 24, 0.7);
+  padding-bottom: 20px;
+  margin-bottom: 25px;
+  position: relative; }
+.funding-status .left, .funding-status .right {
+  text-align: center; }
+.funding-status .obligations, .funding-status .disbursements {
+  margin-top: 18px;
+  display: inline-block;
+  width: auto;
+  background-color: #fafafa;
+  padding: 10px;
+  border-radius: 5px;
+  -webkit-border-radius: 5px; }
+  .funding-status .obligations h3, .funding-status .disbursements h3 {
+    margin-top: 0px;
+    text-align: center;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale; }
+
+.agreement-history table {
+  table-layout: fixed;
+  margin-bottom: 5px; }
+.agreement-history th:nth-child(7), .agreement-history td:nth-child(7) {
+  width: 5% !important;
+  max-width: 5% !important; }
+.agreement-history th:nth-child(6), .agreement-history td:nth-child(6) {
+  width: 12% !important;
+  max-width: 12% !important; }
+.agreement-history th:nth-child(5), .agreement-history td:nth-child(5) {
+  width: 24% !important;
+  max-width: 24% !important; }
+.agreement-history th:nth-child(4), .agreement-history td:nth-child(4) {
+  width: 14% !important;
+  max-width: 14% !important; }
+.agreement-history th:nth-child(3), .agreement-history td:nth-child(3) {
+  width: 14% !important;
+  max-width: 14% !important; }
+.agreement-history th:nth-child(2), .agreement-history td:nth-child(2) {
+  width: 10% !important;
+  max-width: 10% !important; }
+.agreement-history th:nth-child(1), .agreement-history td:nth-child(1) {
+  width: 21% !important;
+  max-width: 21% !important; }
+.agreement-history .documents-wrapper {
+  height: 100%;
+  position: relative; }
+.agreement-history .loan-documents, .agreement-history .other-documents {
+  background-color: rgba(230, 230, 255, 0.3);
+  box-shadow: inset 0 1px 1px rgba(0, 0, 50, 0.075);
+  -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 50, 0.075);
+  -moz-box-shadow: inset 0 1px 1px rgba(0, 0, 50, 0.075);
+  padding: 20px;
+  border-radius: 6px;
+  height: 100%;
+  -webkit-border-radius: 6px;
+  font-size: 12px; }
+  .agreement-history .loan-documents table, .agreement-history .other-documents table {
+    background-color: transparent; }
+  .agreement-history .loan-documents th, .agreement-history .other-documents th {
+    font-weight: normal;
+    text-align: center; }
+  .agreement-history .loan-documents h4, .agreement-history .other-documents h4 {
+    text-align: left; }
+  .agreement-history .loan-documents input, .agreement-history .other-documents input {
+    font-size: 12px; }
+  .agreement-history .loan-documents td, .agreement-history .other-documents td {
+    word-wrap: break-word; }
+  .agreement-history .loan-documents th:nth-child(6), .agreement-history .loan-documents td:nth-child(6), .agreement-history .other-documents th:nth-child(6), .agreement-history .other-documents td:nth-child(6) {
+    width: 20px !important;
+    max-width: 20px !important; }
+  .agreement-history .loan-documents th:nth-child(5), .agreement-history .loan-documents td:nth-child(5), .agreement-history .other-documents th:nth-child(5), .agreement-history .other-documents td:nth-child(5) {
+    width: 25% !important;
+    max-width: 25% !important; }
+  .agreement-history .loan-documents th:nth-child(4), .agreement-history .loan-documents td:nth-child(4), .agreement-history .other-documents th:nth-child(4), .agreement-history .other-documents td:nth-child(4) {
+    width: 20% !important;
+    max-width: 20% !important; }
+  .agreement-history .loan-documents th:nth-child(3), .agreement-history .loan-documents td:nth-child(3), .agreement-history .other-documents th:nth-child(3), .agreement-history .other-documents td:nth-child(3) {
+    width: 40px !important;
+    max-width: 40px !important; }
+  .agreement-history .loan-documents th:nth-child(2), .agreement-history .loan-documents td:nth-child(2), .agreement-history .other-documents th:nth-child(2), .agreement-history .other-documents td:nth-child(2) {
+    width: 55% !important;
+    max-width: 55% !important; }
+  .agreement-history .loan-documents th:nth-child(1), .agreement-history .loan-documents td:nth-child(1), .agreement-history .other-documents th:nth-child(1), .agreement-history .other-documents td:nth-child(1) {
+    width: 25px !important;
+    max-width: 25px !important; }
+.agreement-history .small-col {
+  width: 30px;
+  max-width: 30px; }
+  .agreement-history .small-col a {
+    padding: 0; }
+
+.create-loan-documents {
+  margin-top: -70px; }
+  .create-loan-documents .top {
+    padding-bottom: 20px;
+    margin-top: 20px;
+    border-bottom: 1px dashed gray; }
+    .create-loan-documents .top .btn {
+      display: inline-block; }
+    .create-loan-documents .top .buttons {
+      width: 100%;
+      padding-top: 15px; }
+    .create-loan-documents .top .checkbox {
+      margin-top: 15px;
+      text-align: center; }
+    .create-loan-documents .top .copy-loan-info span:nth-child(1) {
+      width: 300px;
+      margin-right: 3px; }
+    .create-loan-documents .top .create-doc {
+      width: 100%;
+      text-align: center;
+      padding-top: 27px; }
+      .create-loan-documents .top .create-doc .btn {
+        display: block; }
+  .create-loan-documents .required-highlight {
+    background-color: #99e699; }
+  .create-loan-documents .required-highlight.empty {
+    background-color: #ff9999; }
+  .create-loan-documents .optional-highlight {
+    background-color: #ffffcc; }
+  .create-loan-documents .bottom {
+    margin-top: 20px;
+    position: relative;
+    width: 100%; }
+    .create-loan-documents .bottom .section {
+      width: 100%;
+      position: relative; }
+      .create-loan-documents .bottom .section .panel {
+        box-shadow: none;
+        -webkit-box-shadow: none; }
+      .create-loan-documents .bottom .section .panel-body {
+        position: relative;
+        padding-right: 10px;
+        padding-left: 10px; }
+      .create-loan-documents .bottom .section div.field {
+        display: table;
+        width: 100%;
+        padding-right: 5px;
+        padding-left: 5px;
+        border-radius: 5px; }
+        .create-loan-documents .bottom .section div.field label {
+          font-weight: normal;
+          display: table-cell;
+          vertical-align: middle !important;
+          padding-right: 5px;
+          margin-bottom: 5px;
+          width: 110px; }
+        .create-loan-documents .bottom .section div.field label.smaller {
+          font-size: 12px; }
+        .create-loan-documents .bottom .section div.field label.checkbox {
+          width: 240px; }
+        .create-loan-documents .bottom .section div.field label.bold {
+          font-weight: bold; }
+        .create-loan-documents .bottom .section div.field input, .create-loan-documents .bottom .section div.field textarea, .create-loan-documents .bottom .section div.field .chosen-container {
+          width: 100%;
+          margin-bottom: 3px;
+          margin-top: 3px;
+          padding: 2px;
+          height: auto; }
+        .create-loan-documents .bottom .section div.field input.smaller {
+          width: 50px; }
+        .create-loan-documents .bottom .section div.field input[type="checkbox"] {
+          margin-top: 5px; }
+        .create-loan-documents .bottom .section div.field input.percent {
+          width: 50px;
+          display: inline-block; }
+    .create-loan-documents .bottom .section.eight div.field label {
+      width: 180px; }
+    .create-loan-documents .bottom .section.ten div.field label {
+      width: 180px; }
+    .create-loan-documents .bottom .section.fifteen div.field label {
+      width: 200px;
+      font-size: 12px; }
+    .create-loan-documents .bottom .section.sixteen div.field label {
+      width: 180px;
+      font-size: 12px; }
+    .create-loan-documents .bottom .section.seventeen div.field label {
+      width: 150px; }
+    .create-loan-documents .bottom .section.twenty-one div.field label:not(.checkbox) {
+      width: 150px;
+      font-size: 12px; }
+    .create-loan-documents .bottom .section.twenty-two div.field {
+      margin-bottom: 10px; }
+      .create-loan-documents .bottom .section.twenty-two div.field label {
+        font-size: 12px; }
+      .create-loan-documents .bottom .section.twenty-two div.field label:not(.checkbox) {
+        width: 180px; }
+    .create-loan-documents .bottom .section.twenty-three div.field label:not(.checkbox) {
+      width: 180px;
+      font-size: 12px; }
+    .create-loan-documents .bottom .section.twenty-six div.field label:not(.checkbox) {
+      width: 160px; }
+    .create-loan-documents .bottom .section.twenty-eight div.field label:not(.checkbox) {
+      width: 160px; }
+    .create-loan-documents .bottom .section.twenty-nine div.field label:not(.checkbox) {
+      width: 160px; }
+    .create-loan-documents .bottom .section.thirty div.field label:not(.checkbox) {
+      width: 160px;
+      font-size: 12px; }
+
+.drop-box {
+  background-color: red;
+  height: 100px;
+  width: 100%;
+  border: 3px dashed green; }
+
+.funding-auth.loanFA table.contract-line-items {
+  table-layout: fixed; }
+  .funding-auth.loanFA table.contract-line-items th:not(.bold) {
+    font-weight: normal; }
+.funding-auth.loanFA th:nth-child(7), .funding-auth.loanFA td:nth-child(7) {
+  width: 10%;
+  max-width: 10%; }
+.funding-auth.loanFA th:nth-child(6), .funding-auth.loanFA td:nth-child(6) {
+  width: 17%;
+  max-width: 17%; }
+.funding-auth.loanFA th:nth-child(5), .funding-auth.loanFA td:nth-child(5) {
+  width: 11%;
+  max-width: 11%; }
+.funding-auth.loanFA th:nth-child(4), .funding-auth.loanFA td:nth-child(4) {
+  width: 11%;
+  max-width: 11%; }
+.funding-auth.loanFA th:nth-child(3), .funding-auth.loanFA td:nth-child(3) {
+  width: 20%;
+  max-width: 20%; }
+.funding-auth.loanFA th:nth-child(2), .funding-auth.loanFA td:nth-child(2) {
+  width: 20%;
+  max-width: 20%; }
+.funding-auth.loanFA th:nth-child(1), .funding-auth.loanFA td:nth-child(1) {
+  width: 10%;
+  max-width: 10%; }
+.funding-auth.loanFA .contract-actions {
+  background-color: rgba(230, 230, 255, 0.3);
+  box-shadow: inset 0 1px 1px rgba(0, 0, 50, 0.075);
+  -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 50, 0.075);
+  -moz-box-shadow: inset 0 1px 1px rgba(0, 0, 50, 0.075);
+  padding: 8px;
+  margin: 8px;
+  border-radius: 6px;
+  -webkit-border-radius: 6px; }
+  .funding-auth.loanFA .contract-actions a.add-row {
+    margin-left: 15px;
+    font-size: 12px;
+    color: #27ae60; }
+  .funding-auth.loanFA .contract-actions table {
+    background-color: transparent; }
+  .funding-auth.loanFA .contract-actions th {
+    font-size: 12px;
+    font-weight: normal;
+    text-align: center; }
+  .funding-auth.loanFA .contract-actions .date-col {
+    width: 108px !important;
+    max-width: 108px !important;
+    min-width: 108px !important; }
+  .funding-auth.loanFA .contract-actions .money-col {
+    width: 130px !important;
+    max-width: 130px !important;
+    min-width: 130px !important; }
+
+.funding-auth.TAFA .top {
+  padding: 30px; }
+  .funding-auth.TAFA .top label {
+    display: inline-block;
+    margin-right: 20px; }
+  .funding-auth.TAFA .top input {
+    width: 200px;
+    display: inline-block; }
+
+.payment-requests {
+  position: relative; }
+
+.payment-requests h1 {
+  margin-bottom: 20px; }
+
+.payment-requests .top {
+  text-align: center; }
+  .payment-requests .top nav button {
+    margin-left: 40px; }
+
+.payment-requests .balance-calculation .table {
+  width: auto;
+  margin: 0 auto;
+  margin-bottom: 20px;
+  text-align: right; }
+
+.payment-requests .balance-calculation .table > tbody > tr > td {
+  padding-top: 2px;
+  padding-bottom: 2px; }
+
+.payment-request {
+  padding-top: 20px;
+  border: 1px dashed gray;
+  border-radius: 5px; }
+  .payment-request h1 {
+    margin-left: 20px; }
+  .payment-request .top {
+    text-align: inherit; }
+  .payment-request button.save-btn {
+    position: relative;
+    right: inherit;
+    top: inherit;
+    float: right;
+    z-index: 1;
+    margin-right: 30px;
+    margin-top: 3px; }
+  .payment-request a.refresh-btn {
+    position: relative;
+    right: inherit;
+    top: inherit;
+    float: right;
+    z-index: 1;
+    margin-right: 8px;
+    margin-top: 3px; }
+
+.payment-request.ng-enter {
+  transition: 0.5s linear all;
+  opacity: 0; }
+
+.payment-request.ng-enter.ng-enter-active {
+  opacity: 1; }
+
+.payment-request .middle {
+  background-color: #fefefe;
+  padding: 10px;
+  border: 1px solid #efefef;
+  border-radius: 5px;
+  margin-bottom: 50px; }
+
+.payment-request .bottom .left {
+  text-align: center; }
+  .payment-request .bottom .left button {
+    margin-top: 60px; }
+
+.payment-requests .require-funding-auth {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  background-color: rgba(255, 255, 255, 0.9);
+  z-index: 1;
+  padding-top: 300px;
+  padding-left: 25%;
+  padding-right: 25%;
+  text-align: center; }
+  .payment-requests .require-funding-auth p {
+    color: gray;
+    font-size: 24px; }
+
+.loan-terms .table tr td {
+  padding-top: 2px;
+  padding-bottom: 2px;
+  height: 34px; }
+.loan-terms input {
+  display: inline-block; }
+.loan-terms input[type=checkbox] {
+  height: 20px; }
+.loan-terms input[type=radio] {
+  height: 20px; }
+.loan-terms .small {
+  width: 70px; }
+.loan-terms .medium {
+  width: 100px; }
+.loan-terms span.small {
+  display: inline-block; }
+.loan-terms label {
+  display: inline-block; }
+.loan-terms .big-enough {
+  min-width: 105px; }
+.loan-terms .disabled {
+  background-color: rgba(200, 200, 200, 0.5); }
+
+.financial-benefits input {
+  display: inline-block; }
+.financial-benefits .small {
+  width: 70px; }
+
+.loan-schedule .scroll-window {
+  overflow-y: scroll;
+  height: 500px; }
+.loan-schedule .same-col-widths:not(.billing) {
+  table-layout: fixed; }
+  .loan-schedule .same-col-widths:not(.billing) th, .loan-schedule .same-col-widths:not(.billing) td {
+    font-size: 10px; }
+  .loan-schedule .same-col-widths:not(.billing) th {
+    text-align: center; }
+  .loan-schedule .same-col-widths:not(.billing) .checkbox-col {
+    padding-left: 0;
+    padding-right: 0px;
+    text-align: center; }
+    .loan-schedule .same-col-widths:not(.billing) .checkbox-col input[type=checkbox] {
+      background-color: transparent;
+      margin-left: auto;
+      margin-right: auto; }
+  .loan-schedule .same-col-widths:not(.billing) th:nth-child(19), .loan-schedule .same-col-widths:not(.billing) td:nth-child(19) {
+    width: 5.5% !important;
+    max-width: 5.5% !important; }
+  .loan-schedule .same-col-widths:not(.billing) th:nth-child(18), .loan-schedule .same-col-widths:not(.billing) td:nth-child(18) {
+    width: 5.5% !important;
+    max-width: 5.5% !important; }
+  .loan-schedule .same-col-widths:not(.billing) th:nth-child(17), .loan-schedule .same-col-widths:not(.billing) td:nth-child(17) {
+    width: 25px !important;
+    max-width: 25px !important; }
+  .loan-schedule .same-col-widths:not(.billing) th:nth-child(16), .loan-schedule .same-col-widths:not(.billing) td:nth-child(16) {
+    width: 9% !important;
+    max-width: 9% !important; }
+  .loan-schedule .same-col-widths:not(.billing) th:nth-child(15), .loan-schedule .same-col-widths:not(.billing) td:nth-child(15) {
+    width: 9% !important;
+    max-width: 9% !important; }
+  .loan-schedule .same-col-widths:not(.billing) th:nth-child(14), .loan-schedule .same-col-widths:not(.billing) td:nth-child(14) {
+    width: 5.5% !important;
+    max-width: 5.5% !important; }
+  .loan-schedule .same-col-widths:not(.billing) th:nth-child(13), .loan-schedule .same-col-widths:not(.billing) td:nth-child(13) {
+    width: 9% !important;
+    max-width: 9% !important; }
+  .loan-schedule .same-col-widths:not(.billing) th:nth-child(12), .loan-schedule .same-col-widths:not(.billing) td:nth-child(12) {
+    width: 25px !important;
+    max-width: 25px !important; }
+  .loan-schedule .same-col-widths:not(.billing) th:nth-child(11), .loan-schedule .same-col-widths:not(.billing) td:nth-child(11) {
+    width: 9% !important;
+    max-width: 9% !important; }
+  .loan-schedule .same-col-widths:not(.billing) th:nth-child(10), .loan-schedule .same-col-widths:not(.billing) td:nth-child(10) {
+    width: 25px !important;
+    max-width: 25px !important; }
+  .loan-schedule .same-col-widths:not(.billing) th:nth-child(9), .loan-schedule .same-col-widths:not(.billing) td:nth-child(9) {
+    width: 9% !important;
+    max-width: 9% !important; }
+  .loan-schedule .same-col-widths:not(.billing) th:nth-child(8), .loan-schedule .same-col-widths:not(.billing) td:nth-child(8) {
+    width: 25px !important;
+    max-width: 25px !important; }
+  .loan-schedule .same-col-widths:not(.billing) th:nth-child(7), .loan-schedule .same-col-widths:not(.billing) td:nth-child(7) {
+    width: 9% !important;
+    max-width: 9% !important; }
+  .loan-schedule .same-col-widths:not(.billing) th:nth-child(6), .loan-schedule .same-col-widths:not(.billing) td:nth-child(6) {
+    width: 25px !important;
+    max-width: 25px !important; }
+  .loan-schedule .same-col-widths:not(.billing) th:nth-child(5), .loan-schedule .same-col-widths:not(.billing) td:nth-child(5) {
+    width: 9% !important;
+    max-width: 9% !important; }
+  .loan-schedule .same-col-widths:not(.billing) th:nth-child(4), .loan-schedule .same-col-widths:not(.billing) td:nth-child(4) {
+    width: 25px !important;
+    max-width: 25px !important; }
+  .loan-schedule .same-col-widths:not(.billing) th:nth-child(3), .loan-schedule .same-col-widths:not(.billing) td:nth-child(3) {
+    width: 4.5% !important;
+    max-width: 4.5% !important; }
+  .loan-schedule .same-col-widths:not(.billing) th:nth-child(2), .loan-schedule .same-col-widths:not(.billing) td:nth-child(2) {
+    width: 4.5% !important;
+    max-width: 4.5% !important; }
+  .loan-schedule .same-col-widths:not(.billing) th:nth-child(1), .loan-schedule .same-col-widths:not(.billing) td:nth-child(1) {
+    width: 3% !important;
+    max-width: 3% !important; }
+.loan-schedule .same-col-widths.billing th, .loan-schedule .same-col-widths.billing td {
+  font-size: 12px; }
+.loan-schedule .same-col-widths.billing th:nth-child(8), .loan-schedule .same-col-widths.billing td:nth-child(8) {
+  width: 100px !important;
+  max-width: 100px !important; }
+.loan-schedule .same-col-widths.billing th:nth-child(7), .loan-schedule .same-col-widths.billing td:nth-child(7) {
+  width: 250px !important;
+  max-width: 250px !important; }
+.loan-schedule .same-col-widths.billing th:nth-child(6), .loan-schedule .same-col-widths.billing td:nth-child(6) {
+  width: 140px !important;
+  max-width: 140px !important; }
+.loan-schedule .same-col-widths.billing th:nth-child(5), .loan-schedule .same-col-widths.billing td:nth-child(5) {
+  width: 200px !important;
+  max-width: 200px !important; }
+.loan-schedule .same-col-widths.billing th:nth-child(4), .loan-schedule .same-col-widths.billing td:nth-child(4) {
+  width: 50px !important;
+  max-width: 50px !important; }
+.loan-schedule .same-col-widths.billing th:nth-child(3), .loan-schedule .same-col-widths.billing td:nth-child(3) {
+  width: 50px !important;
+  max-width: 50px !important; }
+.loan-schedule .same-col-widths.billing th:nth-child(2), .loan-schedule .same-col-widths.billing td:nth-child(2) {
+  width: 200px !important;
+  max-width: 200px !important; }
+.loan-schedule .same-col-widths.billing th:nth-child(1), .loan-schedule .same-col-widths.billing td:nth-child(1) {
+  width: 50px !important;
+  max-width: 50px !important; }
+.loan-schedule .selected td {
+  background-color: #2980b9 !important; }
+
+/*# sourceMappingURL=styles.css.map */
